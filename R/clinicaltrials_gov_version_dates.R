@@ -16,6 +16,7 @@
 #'
 #' @examples
 #' versions <- clinicaltrials_gov_version_dates("NCT00942747")
+#' 
 clinicaltrials_gov_version_dates <- function (nctid) {
     out <- tryCatch({
 

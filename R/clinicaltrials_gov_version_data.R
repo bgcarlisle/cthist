@@ -19,6 +19,7 @@
 #'
 #' @examples
 #' version <- clinicaltrials_gov_version_data ("NCT00942747", 1)
+#' 
 clinicaltrials_gov_version_data <- function (nctid, versionno) {
 
     out <- tryCatch({

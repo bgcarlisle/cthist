@@ -24,4 +24,5 @@ entry was updated
 }
 \examples{
 versions <- clinicaltrials_gov_version_dates("NCT00942747")
+
 }

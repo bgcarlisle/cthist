@@ -6,12 +6,14 @@ Authors@R:
            comment = c(ORCID = "0000-0001-8975-0649"))
 Description: Retrieves historical versions of clinical trial registry entries.
 Imports:
+    rlang,
     tidyverse,
     magrittr,
+    readr,
     dplyr,
     tibble,
-    rvest,
     stringr,
+    rvest,
     jsonlite
 License: AGPL (>= 3)
 Encoding: UTF-8

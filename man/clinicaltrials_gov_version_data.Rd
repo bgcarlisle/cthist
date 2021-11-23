@@ -26,4 +26,5 @@ Download a registry entry version from ClinicalTrials.gov
 }
 \examples{
 version <- clinicaltrials_gov_version_data ("NCT00942747", 1)
+
 }
