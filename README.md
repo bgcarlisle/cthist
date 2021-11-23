@@ -1,4 +1,4 @@
-# Clinical Trials Registry History
+# Clinical Trial Registry History
 
 ## How to install
 
