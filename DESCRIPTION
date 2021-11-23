@@ -5,7 +5,18 @@ Authors@R:
     person("Benjamin Gregory", "Carlisle", , "murph@bgcarlisle.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8975-0649"))
 Description: Retrieves historical versions of clinical trial registry entries.
+Imports:
+    tidyverse,
+    magrittr,
+    dplyr,
+    tibble,
+    rvest,
+    stringr,
+    jsonlite
 License: AGPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
