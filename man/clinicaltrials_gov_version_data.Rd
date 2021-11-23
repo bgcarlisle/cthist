@@ -7,10 +7,12 @@
 clinicaltrials_gov_version_data(nctid, versionno)
 }
 \arguments{
-\item{nctid}{A character vector including a well-formed
-ClinicalTrials.gov NCT Number}
+\item{nctid}{A character string including a well-formed
+ClinicalTrials.gov NCT Number, e.g. "NCT00942747". (A
+capitalized "NCT" followed by eight numerals with no spaces or
+hyphens.)}
 
-\item{versionno}{An integer version number}
+\item{versionno}{An integer version number, e.g. 1}
 }
 \value{
 A list containing the overall status, enrolment, start

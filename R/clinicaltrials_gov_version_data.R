@@ -1,6 +1,6 @@
 #' Download a registry entry version from ClinicalTrials.gov
 #'
-#' @param nctid A character vector including a well-formed
+#' @param nctid A character string including a well-formed
 #'     ClinicalTrials.gov NCT Number, e.g. "NCT00942747". (A
 #'     capitalized "NCT" followed by eight numerals with no spaces or
 #'     hyphens.)
