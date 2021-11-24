@@ -21,7 +21,7 @@
 #'
 #' @examples
 #' clinicaltrials_gov_download (c("NCT00942747",
-#'     "NCT03281616"), "/tmp/historical_versions.csv")
+#'     "NCT03281616"), "/tmp/clinicaltrials_gov.csv")
 #'
 clinicaltrials_gov_download <- function (nctids, output_filename) {
 
