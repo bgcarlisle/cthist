@@ -8,6 +8,7 @@ To install through `git`, you will need to install `devtools` first:
 install.packages("devtools")
 library(devtools)
 install_github("bgcarlisle/cthist")
+library(cthist)
 ```
 
 ## ClinicalTrials.gov
