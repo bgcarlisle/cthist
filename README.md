@@ -1,5 +1,8 @@
 # cthist
 
+This package provides functions for mass-downloading historical
+clinical trial registry entry data.
+
 ## How to install
 
 To install through `git`, you will need to install `devtools` first:
