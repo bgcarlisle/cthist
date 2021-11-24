@@ -64,3 +64,46 @@ Mass-download clinical trial registry entry versions for many trials:
 ```{r}
 drks_de_download(c("DRKS00005219", "DRKS00003170"), "versions.csv")
 ```
+
+## What data is extracted?
+
+| Item                             | ClinicalTrials.gov | DRKS.de |
+|----------------------------------|-------------------:|--------:|
+| Version number (1, 2, 3, etc.)   |                  ✓ |       ✓ |
+| Version date (ISO-8601)          |                  ✓ |       ✓ |
+| Overall status                   |                  ✓ |       ✓ |
+| Start date                       |                  ✓ |       ✓ |
+| Primary completion date          |                  ✓ |       ✓ |
+| Enrolment                        |                  ✓ |       ✓ |
+| Enrolment type                   |                  ✓ |       ✓ |
+| Outcome measures                 |                  ✓ |       ✓ |
+| Inclusion and exclusion criteria |                  ✓ |       ✓ |
+| Contacts                         |                  ✓ |       ✓ |
+| Sponsors                         |                  ✓ |       - |
+
+## Note on use
+
+Please note that this script is provided under AGPL v 3, and so you
+may use it for any purpose, however if you modify it, you must provide
+access to your modified version or you are in violation of the terms
+of the license.
+
+## Citing `cthist`
+
+```
+@Manual{bgcarlisle-ClinicalTrialRegistryHistory,
+  Title          = {cthist},
+  Author         = {Carlisle, Benjamin Gregory},
+  Organization   = {The Grey Literature},
+  Address        = {Berlin, Germany},
+  url            = {https://github.org/bgcarlisle/cthist},
+  year           = 2020
+}
+```
+
+If you used my package in your research and you found it useful, I
+would take it as a kindness if you cited it.
+
+Best,
+
+Benjamin Gregory Carlisle PhD
