@@ -10,6 +10,8 @@ library(devtools)
 install_github("bgcarlisle/cthist")
 ```
 
+## ClinicalTrials.gov
+
 Download clinical trial version dates:
 
 ```{r}
@@ -34,3 +36,14 @@ Mass-download clinical trial registry entry versions for many trials:
 ```{r}
 clinicaltrials_gov_download(c("NCT02110043", "NCT03281616"), "versions.csv")
 ```
+
+## DRKS.de
+
+Download clinical trial version dates:
+
+```{r}
+## Get all the dates when the registry entry for DRKS00005219 changed
+drks_de_version_dates("DRKS00005219")
+## [1] "2014-02-17" "2014-04-17"
+```
+

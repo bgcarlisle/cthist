@@ -14,7 +14,7 @@
 #' @importFrom magrittr %>%
 #'
 #' @examples
-#' versions <- drks_de_version_dates("NCT00942747")
+#' versions <- drks_de_version_dates("DRKS00005219")
 #' 
 drks_de_version_dates <- function (drksid) {
     
