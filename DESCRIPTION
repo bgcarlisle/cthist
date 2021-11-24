@@ -5,9 +5,10 @@ Authors@R:
     person("Benjamin Gregory", "Carlisle", , "murph@bgcarlisle.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8975-0649"))
 Description: Retrieves historical versions of clinical trial registry entries.
+URL: https://github.com/bgcarlisle/cthist
+BugReports: https://github.com/bgcarlisle/cthist/issues
 Imports:
     rlang,
-    tidyverse,
     magrittr,
     readr,
     dplyr,
