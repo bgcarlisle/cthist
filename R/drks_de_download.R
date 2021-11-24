@@ -60,7 +60,10 @@ drks_de_download <- function (drksids, output_filename) {
                         )
         
         error_trns <- check %>%
-            dplyr::filter(as.character(.data$version_date) == "Error" | as.character(.data$recruitment_status) == "Error") %>%
+            dplyr::filter(
+                       as.character(.data$version_date) == "Error" |
+                       as.character(.data$recruitment_status) == "Error"
+                   ) %>%
             dplyr::group_by(drksid) %>%
             dplyr::slice_head() %>%
             dplyr::select(drksid)
@@ -78,7 +81,9 @@ drks_de_download <- function (drksids, output_filename) {
         check %>%
             dplyr::filter(!remove) %>% ## Remove errors
             dplyr::mutate(remove = NULL) %>%
-            dplyr::filter(.data$total_versions == .data$dl_versions) %>% ## Remove incomplete dl's
+            dplyr::filter(
+                       .data$total_versions == .data$dl_versions
+                   ) %>% ## Remove incomplete dl's
             dplyr::mutate(dl_versions = NULL) %>%
             readr::write_csv(output_filename) ## Write to disc
         
@@ -90,7 +95,9 @@ drks_de_download <- function (drksids, output_filename) {
 
     input <- tibble::as_tibble_col(drksids, column_name="drksid")
 
-    input$notdone <- ! input$drksid %in% readr::read_csv(output_filename, col_types=output_cols)$drksid
+    input$notdone <- ! input$drksid %in% readr::read_csv(
+                          output_filename, col_types=output_cols
+                       )$drksid
 
     while (sum (input$notdone) > 0) {
 
@@ -163,7 +170,13 @@ drks_de_download <- function (drksids, output_filename) {
                 readr::write_csv(file=output_filename, append=TRUE)
 
             if (length(versions) > 10) {
-                message(paste0(drksid, " - ", versionno, " of ", length(versions)))
+                message(paste0(
+                    drksid,
+                    " - ",
+                    versionno,
+                    " of ",
+                    length(versions)
+                ))
             }
 
             versionno <- versionno + 1
@@ -182,7 +195,18 @@ drks_de_download <- function (drksids, output_filename) {
 
         progress <- format(100 * numer / denom, digits=2)
 
-        message(paste0(Sys.time(), " ", drksid, " processed (", length(versions), " versions ", progress, "%)"))
+        message(
+            paste0(
+                Sys.time(),
+                " ",
+                drksid,
+                " processed (",
+                length(versions),
+                " versions ",
+                progress,
+                "%)"
+            )
+        )
         
     }
 
@@ -193,7 +217,10 @@ drks_de_download <- function (drksids, output_filename) {
     )
     
     error_trns <- check %>%
-        dplyr::filter(as.character(.data$version_date) == "Error" | as.character(.data$recruitment_status) == "Error") %>%
+        dplyr::filter(
+                   as.character(.data$version_date) == "Error" |
+                   as.character(.data$recruitment_status) == "Error"
+               ) %>%
         dplyr::group_by(drksid) %>%
         dplyr::slice_head() %>%
         dplyr::select(drksid)
@@ -215,11 +242,29 @@ drks_de_download <- function (drksids, output_filename) {
         return(TRUE)
     } else {
         if (errors_n > 0) {
-            message(paste(errors_n, "error(s) detected among your downloaded data. If you re-run this script, it will remove any data tagged as an error and try to download again."))
+            message(
+                paste(
+                    errors_n,
+                    "error(s) detected among your downloaded data.",
+                    "If you re-run this script,",
+                    "it will remove any data tagged as an error",
+                    "and try to download again."
+                )
+            )
             return(FALSE)
         }
         if (incomplete_dl_n) {
-            message(paste(incomplete_dl_n, "incomplete download(s) detected among your downloaded data. If you re-run this script, it will remove any data that has not been downloaded completely and try to download again."))
+            message(
+                paste(
+                    incomplete_dl_n,
+                    "incomplete download(s) detected",
+                    "among your downloaded data.",
+                    "If you re-run this script,",
+                    "it will remove any data",
+                    "that has not been downloaded completely",
+                    "and try to download again."
+                )
+            )
             return(FALSE)
         }
     }

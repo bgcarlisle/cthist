@@ -39,18 +39,18 @@ clinicaltrials_gov_version_dates <- function (nctid) {
         message(paste("Error downloading NCT ID:", nctid))
         message("Here's the original error message:")
         message(paste(cond, "\n"))
-                                        # Choose a return value in case of error
+        ## Choose a return value in case of error
         return ("Error")
     },
     warning=function(cond) {
         message(paste("NCT ID caused a warning:", nctid))
         message("Here's the original warning message:")
         message(paste(cond, "\n"))
-                                        # Choose a return value in case of warning
+        ## Choose a return value in case of warning
         return("Warning")
     },
     finally={
-                                        # To execute regardless of success or failure
+        ## To execute regardless of success or failure
     })
     
     return(out)

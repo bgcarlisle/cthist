@@ -200,7 +200,10 @@ drks_de_version_data <- function (drksid, versionno) {
             telephone <- NA
             telephone <- address %>%
                 rvest::html_nodes(
-                    xpath=paste(selectr::css_to_xpath(".address-telephone"), "/node()[not(self::label)]")
+                           xpath=paste(
+                               selectr::css_to_xpath(".address-telephone"),
+                               "/node()[not(self::label)]"
+                           )
                 ) %>%
                 rvest::html_text2() %>%
                 paste(collapse=" ") %>%
@@ -209,7 +212,10 @@ drks_de_version_data <- function (drksid, versionno) {
             fax <- NA
             fax <- address %>%
                 rvest::html_nodes(
-                    xpath=paste(selectr::css_to_xpath(".address-fax"), "/node()[not(self::label)]")
+                           xpath=paste(
+                               selectr::css_to_xpath(".address-fax"),
+                               "/node()[not(self::label)]"
+                           )
                 ) %>%
                 rvest::html_text2() %>%
                 paste(collapse=" ") %>%
@@ -218,7 +224,10 @@ drks_de_version_data <- function (drksid, versionno) {
             email <- NA
             email <- address %>%
                 rvest::html_nodes(
-                    xpath=paste(selectr::css_to_xpath(".address-email"), "/node()[not(self::label)]")
+                           xpath=paste(
+                               selectr::css_to_xpath(".address-email"),
+                               "/node()[not(self::label)]"
+                           )
                 ) %>%
                 rvest::html_text2() %>%
                 paste(collapse=" ") %>%
@@ -227,20 +236,35 @@ drks_de_version_data <- function (drksid, versionno) {
             url <- NA
             url <- address %>%
                 rvest::html_nodes(
-                    xpath=paste(selectr::css_to_xpath(".address-url"), "/node()[not(self::label)]")
-                ) %>%
+                           xpath=paste(
+                               selectr::css_to_xpath(".address-url"),
+                               "/node()[not(self::label)]"
+                           )
+                       ) %>%
                 rvest::html_text2() %>%
                 paste(collapse=" ") %>%
                 trimws()
 
             contacts <- contacts %>%
                 dplyr::bind_rows(
-                    tibble::tribble(
-                        ~label, ~affiliation, ~name, ~telephone, ~fax, ~email, ~url,
-                        label, affiliation, address_name, telephone, fax, email, url
-                        
-                    )
-                )
+                           tibble::tribble(
+                                       ~label,
+                                       ~affiliation,
+                                       ~name,
+                                       ~telephone,
+                                       ~fax,
+                                       ~email,
+                                       ~url,
+                                       label,
+                                       affiliation,
+                                       address_name,
+                                       telephone,
+                                       fax,
+                                       email,
+                                       url
+                                       
+                                   )
+                       )
             
         }
         
@@ -269,20 +293,27 @@ drks_de_version_data <- function (drksid, versionno) {
         
     },
     error=function(cond) {
-        message(paste("Version caused an error:", drksid, "version", versionno))
+        message(paste(
+            "Version caused an error:",
+            drksid, "version", versionno
+        ))
         message("Here's the original error message:")
         message(paste(cond, "\n"))
-                                        # Choose a return value in case of error
-        return (NA)
+        ## Choose a return value in case of error
+        return ("Error")
     },
     warning=function(cond) {
-        message(paste("Version caused a warning:", drksid, "version", versionno))
+        message(paste(
+            "Version caused a warning:",
+            drksid, "version", versionno
+        ))
         message("Here's the original warning message:")
         message(paste(cond, "\n"))
-                                        # Choose a return value in case of warning
-        return(NULL)
+        ## Choose a return value in case of warning
+        return("Warning")
     },
     finally={
+        ## To execute regardless of success or failure
     })
 
     return(out)

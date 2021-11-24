@@ -49,7 +49,11 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
                 stringr::str_extract("Overall Status: ([A-Za-z, ]+)")
             
             if ( ! is.na (ostatus_row) ) {
-                ostatus <- sub("Overall Status: ([A-Za-z, ]+)", "\\1", ostatus_row)
+                ostatus <- sub(
+                    "Overall Status: ([A-Za-z, ]+)",
+                    "\\1",
+                    ostatus_row
+                )
             }
         }
 
@@ -86,10 +90,16 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
         
         for (startdate_row in startdate_rows) {
             startdate_row <- startdate_row %>%
-                 stringr::str_extract("Study Start: ([A-Za-z0-9, ]+)")
+                stringr::str_extract(
+                             "Study Start: ([A-Za-z0-9, ]+)"
+                         )
 
             if ( ! is.na (startdate_row) ) {
-                startdate_raw <- sub("Study Start: ([A-Za-z0-9, ]+)", "\\1", startdate_row)
+                startdate_raw <- sub(
+                    "Study Start: ([A-Za-z0-9, ]+)",
+                    "\\1",
+                    startdate_row
+                )
             }
         }
 
@@ -121,10 +131,16 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
         
         for (pcdate_row in pcdate_rows) {
             pcdate_row <- pcdate_row %>%
-                stringr::str_extract("Primary Completion: ([A-Za-z0-9, \\[\\]]+)")
+                stringr::str_extract(
+                             "Primary Completion: ([A-Za-z0-9, \\[\\]]+)"
+                         )
 
             if ( ! is.na (pcdate_row) ) {
-                pcdate_raw <- sub("Primary Completion: ([A-Za-z0-9, ]+)", "\\1", pcdate_row)
+                pcdate_raw <- sub(
+                    "Primary Completion: ([A-Za-z0-9, ]+)",
+                    "\\1",
+                    pcdate_row
+                )
             }
         }
 
@@ -166,7 +182,11 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
                 stringr::str_extract("Minimum Age: [0-9]+ Years")
 
             if (! is.na(elig_row))  {
-                min_age <- sub("Minimum Age: ([0-9]+) Years", "\\1", elig_row)
+                min_age <- sub(
+                    "Minimum Age: ([0-9]+) Years",
+                    "\\1",
+                    elig_row
+                )
             }
         }
 
@@ -176,7 +196,11 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
                 stringr::str_extract("Maximum Age: [0-9]+ Years")
 
             if (! is.na(elig_row))  {
-                max_age <- sub("Maximum Age: ([0-9]+) Years", "\\1", elig_row)
+                max_age <- sub(
+                    "Maximum Age: ([0-9]+) Years",
+                    "\\1",
+                    elig_row
+                )
             }
         }
 
@@ -196,17 +220,27 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
                 stringr::str_extract("Gender based: [A-Za-z]+")
 
             if (! is.na(elig_row))  {
-                gender_based <- sub("Gender based: ([A-Za-z]+)", "\\1", elig_row)
+                gender_based <- sub(
+                    "Gender based: ([A-Za-z]+)",
+                    "\\1",
+                    elig_row
+                )
             }
         }
         
         accepts_healthy_volunteers <- NA
         for (elig_row in eligibility_rows) {
             elig_row <- elig_row %>%
-                stringr::str_extract("Accepts Healthy Volunteers: [A-Za-z]+")
+                stringr::str_extract(
+                             "Accepts Healthy Volunteers: [A-Za-z]+"
+                         )
 
             if (! is.na(elig_row))  {
-                accepts_healthy_volunteers <- sub("Accepts Healthy Volunteers: ([A-Za-z]+)", "\\1", elig_row)
+                accepts_healthy_volunteers <- sub(
+                    "Accepts Healthy Volunteers: ([A-Za-z]+)",
+                    "\\1",
+                    elig_row
+                )
             }
         }
 
@@ -438,21 +472,35 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
         
     },
     error=function(cond) {
-        message(paste("Error downloading version:", nctid, "version", versionno))
+        message(
+            paste(
+                "Error downloading version:",
+                nctid,
+                "version",
+                versionno
+            )
+        )
         message("Here's the original error message:")
         message(paste(cond, "\n"))
-                                        # Choose a return value in case of error
+        ## Choose a return value in case of error
         return ("Error")
     },
     warning=function(cond) {
-        message(paste("Version caused a warning:", nctid, "version", versionno))
+        message(
+            paste(
+                "Version caused a warning:",
+                nctid,
+                "version",
+                versionno
+            )
+        )
         message("Here's the original warning message:")
         message(paste(cond, "\n"))
-                                        # Choose a return value in case of warning
+        ## Choose a return value in case of warning
         return("Warning")
     },
     finally={
-                                        # To execute regardless of success or failure
+        ## To execute regardless of success or failure
     })
 
     return(out)

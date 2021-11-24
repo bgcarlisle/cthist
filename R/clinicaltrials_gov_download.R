@@ -68,7 +68,10 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
         )
         
         error_ncts <- check %>%
-            dplyr::filter(as.character(.data$version_date) == "Error" | as.character(.data$overall_status) == "Error") %>%
+            dplyr::filter(
+                       as.character(.data$version_date) == "Error" |
+                       as.character(.data$overall_status) == "Error"
+                   ) %>%
             dplyr::group_by(nctid) %>%
             dplyr::slice_head() %>%
             dplyr::select(nctid)
@@ -86,7 +89,9 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
         check %>%
             dplyr::filter(!remove) %>% ## Remove errors
             dplyr::mutate(remove = NULL) %>%
-            dplyr::filter(.data$total_versions == .data$dl_versions) %>% ## Remove incomplete dl's
+            dplyr::filter( ## Remove incomplete dl's
+                       .data$total_versions == .data$dl_versions
+                   ) %>%
             dplyr::mutate(dl_versions = NULL) %>%
             readr::write_csv(output_filename) ## Write to disc
         
@@ -98,7 +103,9 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
 
     input <- tibble::as_tibble_col(nctids, column_name="nctid")
 
-    input$notdone <- ! input$nctid %in% readr::read_csv(output_filename, col_types=output_cols)$nctid
+    input$notdone <- ! input$nctid %in% readr::read_csv(
+                           output_filename, col_types=output_cols
+                        )$nctid
 
     while (sum (input$notdone) > 0) {
 
@@ -164,7 +171,11 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
 
             
             if (length(versions) > 10) {
-                message(paste0(nctid, " - ", versionno, " of ", length(versions)))
+                message(
+                    paste0(
+                        nctid, " - ", versionno, " of ", length(versions)
+                    )
+                )
             }
         
             versionno <- versionno + 1
@@ -183,7 +194,18 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
 
         progress <- format(100 * numer / denom, digits=2)
 
-        message(paste0(Sys.time(), " ", nctid, " processed (", length(versions), " versions, ", progress, "%)"))
+        message(
+            paste0(
+                Sys.time(),
+                " ",
+                nctid,
+                " processed (",
+                length(versions),
+                " versions, ",
+                progress,
+                "%)"
+            )
+        )
         
     }
 
@@ -194,7 +216,10 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
     )
     
     error_ncts <- check %>%
-        dplyr::filter(as.character(.data$version_date) == "Error" | as.character(.data$overall_status) == "Error") %>%
+        dplyr::filter(
+                   as.character(.data$version_date) == "Error"
+                   | as.character(.data$overall_status) == "Error"
+               ) %>%
         dplyr::group_by(nctid) %>%
         dplyr::slice_head() %>%
         dplyr::select(nctid)
@@ -217,11 +242,29 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
         return(TRUE)
     } else {
         if (errors_n > 0) {
-            message(paste(errors_n, "error(s) detected among your downloaded data. If you re-run this script, it will remove any data tagged as an error and try to download again."))
+            message(
+                paste(
+                    errors_n,
+                    "error(s) detected among your downloaded data.",
+                    "If you re-run this script,",
+                    "it will remove any data tagged as an error",
+                    "and try to download again."
+                )
+            )
             return(FALSE)
         }
         if (incomplete_dl_n) {
-            message(paste(incomplete_dl_n, "incomplete download(s) detected among your downloaded data. If you re-run this script, it will remove any data that has not been downloaded completely and try to download again."))
+            message(
+                paste(
+                    incomplete_dl_n,
+                    "incomplete download(s) detected",
+                    "among your downloaded data.",
+                    "If you re-run this script,",
+                    "it will remove any data that",
+                    "has not been downloaded completely",
+                    "and try to download again."
+                )
+            )
             return(FALSE)
         }
     }

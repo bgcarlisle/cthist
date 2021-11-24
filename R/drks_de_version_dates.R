@@ -21,7 +21,8 @@ drks_de_version_dates <- function (drksid) {
     out <- tryCatch({
 
         url <- paste0(
-            "https://drks.de/drks_web/navigate.do?navigationId=trial.history&TRIAL_ID=",
+            "https://drks.de/drks_web/navigate.do?",
+            "navigationId=trial.history&TRIAL_ID=",
             drksid
         )
 
@@ -40,18 +41,18 @@ drks_de_version_dates <- function (drksid) {
         message(paste("DRKS ID does not seem to exist:", drksid))
         message("Here's the original error message:")
         message(paste(cond, "\n"))
-                                        # Choose a return value in case of error
+        ## Choose a return value in case of error
         return ("Error")
     },
     warning=function(cond) {
         message(paste("DRKS ID caused a warning:", drksid))
         message("Here's the original warning message:")
         message(paste(cond, "\n"))
-                                        # Choose a return value in case of warning
+        ## Choose a return value in case of warning
         return("Warning")
     },
     finally={
-                                        # To execute regardless of success or failure
+        ## To execute regardless of success or failure
     })
     
     return(out)
