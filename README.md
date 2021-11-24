@@ -57,6 +57,7 @@ version_data <- drks_de_version_data("DRKS00003170", 4)
 ## Get the 4th item (enrolment) for that version
 version_data[4]
 ## [1] "60"
+```
 
 Mass-download clinical trial registry entry versions for many trials:
 
