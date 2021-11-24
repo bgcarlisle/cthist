@@ -22,6 +22,6 @@ Download a vector of dates on which a drks.de registry entry was
 updated
 }
 \examples{
-versions <- drks_de_version_dates("NCT00942747")
+versions <- drks_de_version_dates("DRKS00005219")
 
 }
