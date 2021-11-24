@@ -1,6 +1,7 @@
 test_that("DRKS.de history entries mass-download correctly", {
-    if (file.exists("/tmp/history.csv")) {
-        file.remove("/tmp/history.csv")
+    filename <- tempfile()
+    if (file.exists(filename)) {
+        file.remove(filename)
     }
-    expect_equal(drks_de_download(c("DRKS00005219", "DRKS00003170"), "/tmp/drks-history.csv"), TRUE)
+    expect_equal(drks_de_download(c("DRKS00005219", "DRKS00003170"), filename), TRUE)
 })

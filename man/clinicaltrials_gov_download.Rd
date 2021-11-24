@@ -27,7 +27,9 @@ Mass-download registry entry historical versions from
 ClinicalTrials.gov
 }
 \examples{
+
+filename <- tempfile()
 clinicaltrials_gov_download (c("NCT00942747",
-    "NCT03281616"), "/tmp/clinicaltrials_gov.csv")
+    "NCT03281616"), filename)
 
 }

@@ -18,8 +18,11 @@
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
 #'
-#' @examples drks_de_download (c("DRKS00005219", "DRKS00003170"),
-#'     "/tmp/drks_de.csv")
+#' @examples
+#' 
+#' filename <- tempfile()
+#' drks_de_download (c("DRKS00005219", "DRKS00003170"), filename)
+#' 
 drks_de_download <- function (drksids, output_filename) {
 
     output_cols <- "ciiccDDiccccccccc"

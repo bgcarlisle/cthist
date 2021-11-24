@@ -25,6 +25,8 @@ historical versions again.
 Mass-download registry entry historical versions from DRKS.de
 }
 \examples{
-drks_de_download (c("DRKS00005219", "DRKS00003170"),
-    "/tmp/drks_de.csv")
+
+filename <- tempfile()
+drks_de_download (c("DRKS00005219", "DRKS00003170"), filename)
+
 }
