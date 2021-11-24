@@ -70,7 +70,7 @@ drks_de_download <- function (drksids, output_filename) {
             dplyr::rename(dl_versions = .data$n)
 
         check <- check %>%
-            dplyr::left_join(dl_counts)
+            dplyr::left_join(dl_counts, by="drksid")
 
         check %>%
             dplyr::filter(!remove) %>% ## Remove errors
@@ -203,13 +203,12 @@ drks_de_download <- function (drksids, output_filename) {
         dplyr::rename(dl_versions = .data$n)
 
     check <- check %>%
-        dplyr::left_join(dl_counts)
+        dplyr::left_join(dl_counts, by="drksid")
 
     incomplete_dl_n <- sum(check$total_versions != check$dl_versions)
     all_dl_complete <- incomplete_dl_n == 0
 
     if (no_errors & all_dl_complete) {
-        message("All done!")
         return(TRUE)
     } else {
         if (errors_n > 0) {

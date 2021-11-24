@@ -79,7 +79,7 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
             dplyr::rename(dl_versions = .data$n)
 
         check <- check %>%
-            dplyr::left_join(dl_counts)
+            dplyr::left_join(dl_counts, by="nctid")
 
         check %>%
             dplyr::filter(!remove) %>% ## Remove errors
@@ -205,14 +205,13 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
         dplyr::rename(dl_versions = .data$n)
 
     check <- check %>%
-        dplyr::left_join(dl_counts)
+        dplyr::left_join(dl_counts, by="nctid")
 
     incomplete_dl_n <- sum(check$total_versions != check$dl_versions)
     all_dl_complete <- incomplete_dl_n == 0
 
     
     if (no_errors & all_dl_complete) {
-        message("All done!")
         return(TRUE)
     } else {
         if (errors_n > 0) {
