@@ -117,6 +117,11 @@ of the license.
 }
 ```
 
+Please open an issue in the issue tracker above if you find a bug,
+need this package to download some historical trial data that it
+currently does not capture, or if you would like to collaborate on a
+project that uses this tool.
+
 If you used my package in your research and you found it useful, I
 would take it as a kindness if you cited it.
 
