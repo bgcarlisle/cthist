@@ -12,15 +12,15 @@
 #'     minimum age, maximum age, sex, gender-based, accepts healthy
 #'     volunteers, inclusion/exclusion criteria, outcome measures,
 #'     contacts and sponsors
-#' 
+#'
 #' @export
 #'
 #' @importFrom magrittr %>%
 #'
 #' @examples
-#' version <- clinicaltrials_gov_version_data ("NCT00942747", 1)
-#' 
-clinicaltrials_gov_version_data <- function (nctid, versionno) {
+#' version <- clinicaltrials_gov_version("NCT00942747", 1)
+#'
+clinicaltrials_gov_version <- function(nctid, versionno) {
 
     out <- tryCatch({
 
@@ -47,8 +47,8 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
 
             ostatus_row <- ostatus_row %>%
                 stringr::str_extract("Overall Status: ([A-Za-z, ]+)")
-            
-            if ( ! is.na (ostatus_row) ) {
+
+            if (! is.na(ostatus_row)) {
                 ostatus <- sub(
                     "Overall Status: ([A-Za-z, ]+)",
                     "\\1",
@@ -72,7 +72,7 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
             enrol_row <- enrol_row %>%
                  stringr::str_extract("Enrollment: ([A-Za-z0-9 \\[\\]]+)")
 
-            if ( ! is.na (enrol_row) ) {
+            if (! is.na(enrol_row)) {
                 enrol <- sub("Enrollment: ([A-Za-z0-9]+)", "\\1", enrol_row)
             }
         }
@@ -87,14 +87,14 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
             trimws()
 
         startdate_raw <- NA
-        
+
         for (startdate_row in startdate_rows) {
             startdate_row <- startdate_row %>%
                 stringr::str_extract(
                              "Study Start: ([A-Za-z0-9, ]+)"
                          )
 
-            if ( ! is.na (startdate_row) ) {
+            if (! is.na(startdate_row)) {
                 startdate_raw <- sub(
                     "Study Start: ([A-Za-z0-9, ]+)",
                     "\\1",
@@ -104,15 +104,15 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
         }
 
         startdate_full <- startdate_raw %>%
-            as.Date(format="%B %d, %Y") %>%
+            as.Date(format = "%B %d, %Y") %>%
             format("%Y-%m-%d")
 
         startdate_month <- startdate_raw %>%
             paste(1) %>%
-            as.Date(format="%B %Y %d") %>%
+            as.Date(format = "%B %Y %d") %>%
             format("%Y-%m-%d")
 
-        if ( ! is.na (startdate_full) ) {
+        if (! is.na(startdate_full)) {
             startdate <- startdate_full
         } else {
             startdate <- startdate_month
@@ -128,14 +128,14 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
             trimws()
 
         pcdate_raw <- NA
-        
+
         for (pcdate_row in pcdate_rows) {
             pcdate_row <- pcdate_row %>%
                 stringr::str_extract(
                              "Primary Completion: ([A-Za-z0-9, \\[\\]]+)"
                          )
 
-            if ( ! is.na (pcdate_row) ) {
+            if (! is.na(pcdate_row)) {
                 pcdate_raw <- sub(
                     "Primary Completion: ([A-Za-z0-9, ]+)",
                     "\\1",
@@ -147,17 +147,17 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
         pcdate_full <- pcdate_raw %>%
             stringr::str_extract("[A-Za-z0-9 ,]+") %>%
             trimws() %>%
-            as.Date(format="%B %d, %Y") %>%
+            as.Date(format = "%B %d, %Y") %>%
             format("%Y-%m-%d")
 
         pcdate_month <- pcdate_raw %>%
             stringr::str_extract("[A-Za-z0-9 ,]+") %>%
             trimws() %>%
             paste(1) %>%
-            as.Date(format="%B %Y %d") %>%
+            as.Date(format = "%B %Y %d") %>%
             format("%Y-%m-%d")
 
-        if ( ! is.na (pcdate_full) ) {
+        if (! is.na(pcdate_full)) {
             pcdate <- pcdate_full
         } else {
             pcdate <- pcdate_month
@@ -227,7 +227,7 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
                 )
             }
         }
-        
+
         accepts_healthy_volunteers <- NA
         for (elig_row in eligibility_rows) {
             elig_row <- elig_row %>%
@@ -252,21 +252,24 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
 
             elig_row_cells <- elig_row %>% rvest::html_nodes("td")
 
-            if (length (elig_row_cells) > 0) {
-                
-                if ( elig_row_cells[1] %>% rvest::html_text() == "Criteria:") {
+            if (length(elig_row_cells) > 0) {
+
+                if (
+                    elig_row_cells[1] %>% rvest::html_text() ==
+                    "Criteria:"
+                ) {
                     criteria <- elig_row_cells[2] %>%
                         rvest::html_text2() %>%
                         paste(collapse = " ")
                 }
-                
+
             }
-            
+
         }
 
         criteria <- criteria %>%
             jsonlite::toJSON()
-        
+
         ## Read the outcome measures
 
         outcomes_link <- NA
@@ -286,23 +289,23 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
             omlabel <- NA
             omcontent <- NA
             for (om_row in om_rows) {
-                
+
                 om_row_cells <- om_row %>% rvest::html_nodes("td")
 
-                if (length (om_row_cells) > 0) {
+                if (length(om_row_cells) > 0) {
 
-                    if ( length (om_row_cells) == 2 ) {
+                    if (length(om_row_cells) == 2) {
 
                         if (om_row_cells[2] %>% rvest::html_text() == "") {
                             omsection <- om_row_cells[1] %>%
                                 rvest::html_text() %>%
                                 trimws()
-                            
+
                         } else {
                             omlabel <- om_row_cells[1] %>%
                                 rvest::html_text() %>%
                                 trimws()
-                            
+
                             omcontent <- om_row_cells[2] %>%
                                 rvest::html_text2() %>%
                                 trimws()
@@ -314,7 +317,7 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
 
                             om_data <- dplyr::bind_rows(om_data, new_om_data)
                         }
-                        
+
                     } else {
 
                         omlabel <- om_row_cells[1] %>%
@@ -324,8 +327,8 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
                         omcontent <- om_row_cells[1] %>%
                             rvest::html_nodes("li") %>%
                             rvest::html_text2() %>%
-                            paste(collapse=" ")
-                        
+                            paste(collapse = " ")
+
                         new_om_data <- tibble::tribble(
                             ~section, ~label, ~content,
                             omsection, omlabel, omcontent
@@ -333,20 +336,20 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
 
                         om_data <- dplyr::bind_rows(om_data, new_om_data)
                     }
-                    
+
                 }
-                
+
             }
 
             om_data <- om_data %>%
                 jsonlite::toJSON()
-            
+
         } else {
             om_data <- outcomes_link
         }
 
         ## Read the Contacts
-        
+
         cl_rows <- version %>%
             rvest::html_nodes("#ContactsLocationsBody tr")
 
@@ -356,13 +359,13 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
 
         cl_label <- NA
         cl_content <- NA
-        contact_section <- TRUE 
+        contact_section <- TRUE
         for (cl_row in cl_rows) {
 
             cl_row_cells <- cl_row %>%
                 rvest::html_nodes("td")
 
-            if ( length (cl_row_cells) > 0 ) {
+            if (length(cl_row_cells) > 0) {
 
                 ## Contacts and locations are in the same table, so this
                 ## switches off processing once we hit the locations rows
@@ -372,14 +375,14 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
 
                 if (contact_section) {
                     ## If we're still in the contact section ...
-                    
+
                     if (cl_row_cells[1] %>% rvest::html_text() != "") {
                         ## First cell isn't empty
 
                         cl_label <- cl_row_cells[1] %>%
                             rvest::html_text2() %>%
                             trimws()
-                        
+
                     }
 
                     cl_content <- cl_row_cells[2] %>%
@@ -393,11 +396,11 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
                                 cl_label, cl_content
                             )
                         )
-                    
+
                 }
 
             }
-            
+
         }
 
         contacts_data <- contacts_data %>%
@@ -420,7 +423,7 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
             sc_row_cells <- sc_row %>%
                 rvest::html_nodes("td")
 
-            if ( length (sc_row_cells) > 0 ) {
+            if (length(sc_row_cells) > 0) {
 
                 if (sc_row_cells[1] %>% rvest::html_text() != "") {
                     ## First cell isn't empty
@@ -441,9 +444,9 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
                             sc_label, sc_content
                         )
                     )
-                
+
             }
-            
+
         }
 
         sponsor_data <- sponsor_data %>%
@@ -469,9 +472,9 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
         )
 
         return(data)
-        
+
     },
-    error=function(cond) {
+    error = function(cond) {
         message(
             paste(
                 "Error downloading version:",
@@ -483,9 +486,9 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
         message("Here's the original error message:")
         message(paste(cond, "\n"))
         ## Choose a return value in case of error
-        return ("Error")
+        return("Error")
     },
-    warning=function(cond) {
+    warning = function(cond) {
         message(
             paste(
                 "Version caused a warning:",
@@ -499,10 +502,10 @@ clinicaltrials_gov_version_data <- function (nctid, versionno) {
         ## Choose a return value in case of warning
         return("Warning")
     },
-    finally={
+    finally = {
         ## To execute regardless of success or failure
     })
 
     return(out)
-    
+
 }

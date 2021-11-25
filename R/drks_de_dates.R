@@ -14,10 +14,10 @@
 #' @importFrom magrittr %>%
 #'
 #' @examples
-#' versions <- drks_de_version_dates("DRKS00005219")
-#' 
-drks_de_version_dates <- function (drksid) {
-    
+#' versions <- drks_de_dates("DRKS00005219")
+#'
+drks_de_dates <- function(drksid) {
+
     out <- tryCatch({
 
         url <- paste0(
@@ -31,30 +31,30 @@ drks_de_version_dates <- function (drksid) {
         index %>%
             rvest::html_nodes("tr:not(.bgHighlight) > td:nth-child(1)") %>%
             rvest::html_text() %>%
-            as.Date(format="%m-%d-%Y") %>%
+            as.Date(format = "%m-%d-%Y") %>%
             sort() %>%
             format("%Y-%m-%d") %>%
             return()
 
     },
-    error=function(cond) {
+    error = function(cond) {
         message(paste("DRKS ID does not seem to exist:", drksid))
         message("Here's the original error message:")
         message(paste(cond, "\n"))
         ## Choose a return value in case of error
-        return ("Error")
+        return("Error")
     },
-    warning=function(cond) {
+    warning = function(cond) {
         message(paste("DRKS ID caused a warning:", drksid))
         message("Here's the original warning message:")
         message(paste(cond, "\n"))
         ## Choose a return value in case of warning
         return("Warning")
     },
-    finally={
+    finally = {
         ## To execute regardless of success or failure
     })
-    
+
     return(out)
-    
+
 }

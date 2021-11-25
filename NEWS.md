@@ -1,3 +1,14 @@
+# cthist 0.1.1
+
+* Renamed function `clinicaltrials_gov_version_dates` to
+  `clinicaltrials_gov_dates` for brevity
+* Renamed function `clinicaltrials_gov_version_data` to
+  `clinicaltrials_gov_version` for brevity
+* Renamed function `drks_de_version_dates` to
+  `drks_de_dates` for brevity
+* Renamed function `drks_de_version_data` to
+  `drks_de_version` for brevity
+
 # cthist 0.1.0
 
 * Added a `NEWS.md` file to track changes to the package.

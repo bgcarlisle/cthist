@@ -15,9 +15,9 @@
 #' @importFrom magrittr %>%
 #'
 #' @examples
-#' versions <- clinicaltrials_gov_version_dates("NCT00942747")
-#' 
-clinicaltrials_gov_version_dates <- function (nctid) {
+#' versions <- clinicaltrials_gov_dates("NCT00942747")
+#'
+clinicaltrials_gov_dates <- function(nctid) {
     out <- tryCatch({
 
         url <- paste0(
@@ -30,29 +30,29 @@ clinicaltrials_gov_version_dates <- function (nctid) {
         index %>%
             rvest::html_nodes("fieldset.releases table a") %>%
             rvest::html_text() %>%
-            as.Date(format="%B %d, %Y") %>%
+            as.Date(format = "%B %d, %Y") %>%
             format("%Y-%m-%d") %>%
             return()
 
     },
-    error=function(cond) {
+    error = function(cond) {
         message(paste("Error downloading NCT ID:", nctid))
         message("Here's the original error message:")
         message(paste(cond, "\n"))
         ## Choose a return value in case of error
-        return ("Error")
+        return("Error")
     },
-    warning=function(cond) {
+    warning = function(cond) {
         message(paste("NCT ID caused a warning:", nctid))
         message("Here's the original warning message:")
         message(paste(cond, "\n"))
         ## Choose a return value in case of warning
         return("Warning")
     },
-    finally={
+    finally = {
         ## To execute regardless of success or failure
     })
-    
+
     return(out)
-    
+
 }

@@ -19,17 +19,17 @@
 #' @importFrom rlang .data
 #'
 #' @examples
-#' 
+#'
 #' filename <- tempfile()
-#' drks_de_download (c("DRKS00005219", "DRKS00003170"), filename)
-#' 
-drks_de_download <- function (drksids, output_filename) {
+#' drks_de_download(c("DRKS00005219", "DRKS00003170"), filename)
+#'
+drks_de_download <- function(drksids, output_filename) {
 
     output_cols <- "ciiccDDiccccccccc"
 
     if (!file.exists(output_filename)) {
 
-        tibble::tribble (
+        tibble::tribble(
                     ~drksid,
                     ~version_number,
                     ~total_versions,
@@ -48,17 +48,21 @@ drks_de_download <- function (drksids, output_filename) {
                     ~secondary_outcomes,
                     ~contacts
                 ) %>%
-        readr::write_csv(file=output_filename, append=TRUE, col_names=TRUE)
-        
+            readr::write_csv(
+                       file = output_filename,
+                       append = TRUE,
+                       col_names = TRUE
+                   )
+
     } else {
 
         ## Find errors from previous attempts, if any
 
         check <- readr::read_csv(
                             output_filename,
-                            col_types=output_cols
+                            col_types = output_cols
                         )
-        
+
         error_trns <- check %>%
             dplyr::filter(
                        as.character(.data$version_date) == "Error" |
@@ -76,7 +80,7 @@ drks_de_download <- function (drksids, output_filename) {
             dplyr::rename(dl_versions = .data$n)
 
         check <- check %>%
-            dplyr::left_join(dl_counts, by="drksid")
+            dplyr::left_join(dl_counts, by = "drksid")
 
         check %>%
             dplyr::filter(!remove) %>% ## Remove errors
@@ -86,37 +90,37 @@ drks_de_download <- function (drksids, output_filename) {
                    ) %>% ## Remove incomplete dl's
             dplyr::mutate(dl_versions = NULL) %>%
             readr::write_csv(output_filename) ## Write to disc
-        
+
     }
 
     ## Remove duplicate TRN's from input
     drksids <- drksids %>%
         unique()
 
-    input <- tibble::as_tibble_col(drksids, column_name="drksid")
+    input <- tibble::as_tibble_col(drksids, column_name = "drksid")
 
     input$notdone <- ! input$drksid %in% readr::read_csv(
-                          output_filename, col_types=output_cols
+                          output_filename, col_types = output_cols
                        )$drksid
 
-    while (sum (input$notdone) > 0) {
+    while (sum(input$notdone) > 0) {
 
         to_dl <- input %>%
             dplyr::filter(.data$notdone)
 
         drksid <- to_dl$drksid[1]
 
-        versions <- drks_de_version_dates(drksid)
+        versions <- drks_de_dates(drksid)
 
         versionno <- 1
         for (version in versions) {
 
             if (versionno == length(versions)) {
-                versiondata <- drks_de_version_data (drksid, 0)
+                versiondata <- drks_de_version(drksid, 0)
             } else {
-                versiondata <- drks_de_version_data (drksid, versionno)
+                versiondata <- drks_de_version(drksid, versionno)
             }
-        
+
             rstatus <- versiondata[1]
             startdate <- versiondata[2]
             closingdate <- versiondata[3]
@@ -165,9 +169,9 @@ drks_de_download <- function (drksids, output_filename) {
                        exclusion_criteria,
                        primaryoutcomes,
                        secondaryoutcomes,
-                       contacts   
+                       contacts
                    ) %>%
-                readr::write_csv(file=output_filename, append=TRUE)
+                readr::write_csv(file = output_filename, append = TRUE)
 
             if (length(versions) > 10) {
                 message(paste0(
@@ -193,7 +197,7 @@ drks_de_download <- function (drksids, output_filename) {
             dplyr::filter(! .data$notdone) %>%
             nrow()
 
-        progress <- format(100 * numer / denom, digits=2)
+        progress <- format(100 * numer / denom, digits = 2)
 
         message(
             paste0(
@@ -207,15 +211,15 @@ drks_de_download <- function (drksids, output_filename) {
                 "%)"
             )
         )
-        
+
     }
 
     ## Check for errors and incompletely downloaded sets of versions
     check <- readr::read_csv(
         output_filename,
-        col_types=output_cols
+        col_types = output_cols
     )
-    
+
     error_trns <- check %>%
         dplyr::filter(
                    as.character(.data$version_date) == "Error" |
@@ -224,16 +228,16 @@ drks_de_download <- function (drksids, output_filename) {
         dplyr::group_by(drksid) %>%
         dplyr::slice_head() %>%
         dplyr::select(drksid)
-    
+
     errors_n <- nrow(error_trns)
     no_errors <- errors_n == 0
-    
+
     dl_counts <- check %>%
         dplyr::count(drksid) %>%
         dplyr::rename(dl_versions = .data$n)
 
     check <- check %>%
-        dplyr::left_join(dl_counts, by="drksid")
+        dplyr::left_join(dl_counts, by = "drksid")
 
     incomplete_dl_n <- sum(check$total_versions != check$dl_versions)
     all_dl_complete <- incomplete_dl_n == 0
@@ -268,5 +272,5 @@ drks_de_download <- function (drksids, output_filename) {
             return(FALSE)
         }
     }
-    
+
 }

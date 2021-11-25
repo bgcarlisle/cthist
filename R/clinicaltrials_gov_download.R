@@ -22,10 +22,10 @@
 #' @examples
 #'
 #' filename <- tempfile()
-#' clinicaltrials_gov_download (c("NCT00942747",
+#' clinicaltrials_gov_download(c("NCT00942747",
 #'     "NCT03281616"), filename)
 #'
-clinicaltrials_gov_download <- function (nctids, output_filename) {
+clinicaltrials_gov_download <- function(nctids, output_filename) {
 
     output_cols <- "ciiccDDciccccccccc"
 
@@ -52,10 +52,13 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
             ~contacts,
             ~sponsor_collaborators
         ) %>%
-            readr::write_csv(file=output_filename, append=TRUE, col_names=TRUE)
+            readr::write_csv(
+                       file = output_filename,
+                       append = TRUE,
+                       col_names = TRUE
+                   )
 
     } else {
-        
         ## Find errors from previous attempts, if any (Need to specify
         ## column types because if you have a big CSV, read_csv() will
         ## only read the first few rows before assuming it knows how
@@ -63,10 +66,10 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
         ## "Error" value if the script screws up, this will cause
         ## problems)
         check <- readr::read_csv(
-            output_filename,
-            col_types=output_cols
-        )
-        
+                            output_filename,
+                            col_types = output_cols
+                        )
+
         error_ncts <- check %>%
             dplyr::filter(
                        as.character(.data$version_date) == "Error" |
@@ -84,43 +87,42 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
             dplyr::rename(dl_versions = .data$n)
 
         check <- check %>%
-            dplyr::left_join(dl_counts, by="nctid")
+            dplyr::left_join(dl_counts, by = "nctid")
 
         check %>%
             dplyr::filter(!remove) %>% ## Remove errors
             dplyr::mutate(remove = NULL) %>%
-            dplyr::filter( ## Remove incomplete dl's
+            dplyr::filter(## Remove incomplete dl's
                        .data$total_versions == .data$dl_versions
                    ) %>%
             dplyr::mutate(dl_versions = NULL) %>%
             readr::write_csv(output_filename) ## Write to disc
-        
     }
-    
+
     ## Remove duplicate NCT's
     nctids <- nctids %>%
         unique()
 
-    input <- tibble::as_tibble_col(nctids, column_name="nctid")
+    input <- tibble::as_tibble_col(nctids, column_name = "nctid")
 
     input$notdone <- ! input$nctid %in% readr::read_csv(
-                           output_filename, col_types=output_cols
+                           output_filename, col_types = output_cols
                         )$nctid
 
-    while (sum (input$notdone) > 0) {
+    while (sum(input$notdone) > 0) {
 
         to_dl <- input %>%
             dplyr::filter(.data$notdone)
 
         nctid <- to_dl$nctid[1]
 
-        versions <- clinicaltrials_gov_version_dates (nctid)
+        versions <- clinicaltrials_gov_dates(nctid)
 
         versionno <- 1
         for (version in versions) {
 
-            versiondata <- clinicaltrials_gov_version_data (nctid, versionno)
-            
+            versiondata <- clinicaltrials_gov_version(nctid, versionno)
+
             enrol <- versiondata[2]
             enrolno <- enrol %>%
                 stringr::str_extract("^[0-9]+")
@@ -167,9 +169,9 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
                 versiondata[13], ## contacts_data
                 versiondata[14] ## sponsor_data
             ) %>%
-                readr::write_csv(file=output_filename, append=TRUE)
+                readr::write_csv(file = output_filename, append = TRUE)
 
-            
+
             if (length(versions) > 10) {
                 message(
                     paste0(
@@ -177,13 +179,13 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
                     )
                 )
             }
-        
+
             versionno <- versionno + 1
 
         }
 
         input$notdone[input$nctid == nctid] <- FALSE
-        
+
         denom <- input$nctid %>%
             unique() %>%
             length()
@@ -192,7 +194,7 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
             dplyr::filter(! .data$notdone) %>%
             nrow()
 
-        progress <- format(100 * numer / denom, digits=2)
+        progress <- format(100 * numer / denom, digits = 2)
 
         message(
             paste0(
@@ -206,15 +208,15 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
                 "%)"
             )
         )
-        
+
     }
 
     ## Check for errors and incompletely downloaded sets of versions
     check <- readr::read_csv(
         output_filename,
-        col_types=output_cols
+        col_types = output_cols
     )
-    
+
     error_ncts <- check %>%
         dplyr::filter(
                    as.character(.data$version_date) == "Error"
@@ -223,21 +225,21 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
         dplyr::group_by(nctid) %>%
         dplyr::slice_head() %>%
         dplyr::select(nctid)
-    
+
     errors_n <- nrow(error_ncts)
     no_errors <- errors_n == 0
-    
+
     dl_counts <- check %>%
         dplyr::count(nctid) %>%
         dplyr::rename(dl_versions = .data$n)
 
     check <- check %>%
-        dplyr::left_join(dl_counts, by="nctid")
+        dplyr::left_join(dl_counts, by = "nctid")
 
     incomplete_dl_n <- sum(check$total_versions != check$dl_versions)
     all_dl_complete <- incomplete_dl_n == 0
 
-    
+
     if (no_errors & all_dl_complete) {
         return(TRUE)
     } else {
@@ -268,5 +270,5 @@ clinicaltrials_gov_download <- function (nctids, output_filename) {
             return(FALSE)
         }
     }
-    
+
 }

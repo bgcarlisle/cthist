@@ -11,15 +11,15 @@
 #'     minimum age, maximum age, sex, gender-based, accepts healthy
 #'     volunteers, inclusion/exclusion criteria, outcome measures,
 #'     contacts and sponsors
-#' 
+#'
 #' @export
 #'
 #' @importFrom magrittr %>%
 #'
 #' @examples
-#' version <- drks_de_version_data ("DRKS00005219", 1)
-#' 
-drks_de_version_data <- function (drksid, versionno) {
+#' version <- drks_de_version("DRKS00005219", 1)
+#'
+drks_de_version <- function(drksid, versionno) {
 
     ## The DRKS site appears to internally assign version
     ## numbers that are integer multiples of 2, starting
@@ -33,44 +33,44 @@ drks_de_version_data <- function (drksid, versionno) {
 
     out <- tryCatch({
 
-        if ( versionno != 0 ) {
-            
+        if (versionno != 0) {
+
             version_query <- list(
-                TRIAL_ID=drksid,
-                version1=paste0(
+                TRIAL_ID = drksid,
+                version1 = paste0(
                     drksid,
                     "_",
                     versionno,
                     "_en.html"
                 ),
-                version2=paste0(
+                version2 = paste0(
                     drksid,
                     "_",
                     versionno,
                     "_en.html"
                 )
             )
-            
+
         } else {
-            
+
             version_query <- list(
-                TRIAL_ID=drksid,
-                version1=paste0(
+                TRIAL_ID = drksid,
+                version1 = paste0(
                     drksid,
                     "_en.html"
                 ),
-                version2=paste0(
+                version2 = paste0(
                     drksid,
                     "_en.html"
                 )
             )
-            
+
         }
 
         res <- httr::POST(
             "https://drks.de/drks_web/compareTrialVersions.do",
-            body=version_query,
-            encode="form"
+            body = version_query,
+            encode = "form"
 
         )
 
@@ -109,7 +109,7 @@ drks_de_version_data <- function (drksid, versionno) {
             rvest::html_nodes("li.schedule") %>%
             rvest::html_text() %>%
             stringr::str_extract("[0-9]{4}/[0-9]{2}/[0-9]{2}") %>%
-            as.Date(format="%Y/%m/%d") %>%
+            as.Date(format = "%Y/%m/%d") %>%
             format("%Y-%m-%d")
 
         ## Read the closing date
@@ -119,7 +119,7 @@ drks_de_version_data <- function (drksid, versionno) {
             rvest::html_nodes("li.deadline") %>%
             rvest::html_text() %>%
             stringr::str_extract("[0-9]{4}/[0-9]{2}/[0-9]{2}") %>%
-            as.Date(format="%Y/%m/%d") %>%
+            as.Date(format = "%Y/%m/%d") %>%
             format("%Y-%m-%d")
 
         ## Read the outcome measures
@@ -142,29 +142,29 @@ drks_de_version_data <- function (drksid, versionno) {
         min_age <- version %>%
             rvest::html_node(".minAge") %>%
             rvest::html_text2() %>%
-            gsub(pattern="Minimum Age:", replacement="", .data) %>%
+            gsub(pattern = "Minimum Age:", replacement = "", .data) %>%
             trimws()
 
         max_age <- NA
         max_age <- version %>%
             rvest::html_node(".maxAge") %>%
             rvest::html_text2() %>%
-            gsub(pattern="Maximum Age:", replacement="", .data) %>%
+            gsub(pattern = "Maximum Age:", replacement = "", .data) %>%
             trimws()
 
         gender <- NA
         gender <- version %>%
             rvest::html_node(".gender") %>%
             rvest::html_text2() %>%
-            gsub(pattern="Gender:", replacement="", .data) %>%
+            gsub(pattern = "Gender:", replacement = "", .data) %>%
             trimws()
-        
+
         inclusion_criteria <- NA
         inclusion_criteria <- version %>%
             rvest::html_nodes(".inclusionAdd") %>%
             rvest::html_text2() %>%
             jsonlite::toJSON()
-        
+
         exclusion_criteria <- NA
         exclusion_criteria <- version %>%
             rvest::html_nodes(".exclusion") %>%
@@ -182,7 +182,7 @@ drks_de_version_data <- function (drksid, versionno) {
 
             label <- NA
             label <- address %>%
-                rvest::html_nodes(xpath="label") %>%
+                rvest::html_nodes(xpath = "label") %>%
                 rvest::html_text2()
 
             affiliation <- NA
@@ -194,55 +194,55 @@ drks_de_version_data <- function (drksid, versionno) {
             address_name <- address %>%
                 rvest::html_nodes("li.address-name") %>%
                 rvest::html_text2() %>%
-                paste(collapse=" ") %>%
+                paste(collapse = " ") %>%
                 trimws()
 
             telephone <- NA
             telephone <- address %>%
                 rvest::html_nodes(
-                           xpath=paste(
+                           xpath = paste(
                                selectr::css_to_xpath(".address-telephone"),
                                "/node()[not(self::label)]"
                            )
                 ) %>%
                 rvest::html_text2() %>%
-                paste(collapse=" ") %>%
+                paste(collapse = " ") %>%
                 trimws()
 
             fax <- NA
             fax <- address %>%
                 rvest::html_nodes(
-                           xpath=paste(
+                           xpath = paste(
                                selectr::css_to_xpath(".address-fax"),
                                "/node()[not(self::label)]"
                            )
                 ) %>%
                 rvest::html_text2() %>%
-                paste(collapse=" ") %>%
+                paste(collapse = " ") %>%
                 trimws()
 
             email <- NA
             email <- address %>%
                 rvest::html_nodes(
-                           xpath=paste(
+                           xpath = paste(
                                selectr::css_to_xpath(".address-email"),
                                "/node()[not(self::label)]"
                            )
                 ) %>%
                 rvest::html_text2() %>%
-                paste(collapse=" ") %>%
+                paste(collapse = " ") %>%
                 trimws()
 
             url <- NA
             url <- address %>%
                 rvest::html_nodes(
-                           xpath=paste(
+                           xpath = paste(
                                selectr::css_to_xpath(".address-url"),
                                "/node()[not(self::label)]"
                            )
                        ) %>%
                 rvest::html_text2() %>%
-                paste(collapse=" ") %>%
+                paste(collapse = " ") %>%
                 trimws()
 
             contacts <- contacts %>%
@@ -262,15 +262,15 @@ drks_de_version_data <- function (drksid, versionno) {
                                        fax,
                                        email,
                                        url
-                                       
+
                                    )
                        )
-            
+
         }
-        
+
         contacts <- contacts %>%
             jsonlite::toJSON()
-        
+
         ## Now, put all these data points together
 
         data <- c(
@@ -289,10 +289,10 @@ drks_de_version_data <- function (drksid, versionno) {
             contacts
         )
 
-        return (data)
-        
+        return(data)
+
     },
-    error=function(cond) {
+    error = function(cond) {
         message(paste(
             "Version caused an error:",
             drksid, "version", versionno
@@ -300,9 +300,9 @@ drks_de_version_data <- function (drksid, versionno) {
         message("Here's the original error message:")
         message(paste(cond, "\n"))
         ## Choose a return value in case of error
-        return ("Error")
+        return("Error")
     },
-    warning=function(cond) {
+    warning = function(cond) {
         message(paste(
             "Version caused a warning:",
             drksid, "version", versionno
@@ -312,7 +312,7 @@ drks_de_version_data <- function (drksid, versionno) {
         ## Choose a return value in case of warning
         return("Warning")
     },
-    finally={
+    finally = {
         ## To execute regardless of success or failure
     })
 
