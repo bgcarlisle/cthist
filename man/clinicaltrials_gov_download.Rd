@@ -28,8 +28,10 @@ ClinicalTrials.gov
 }
 \examples{
 
+\dontrun{
 filename <- tempfile()
 clinicaltrials_gov_download(c("NCT00942747",
     "NCT03281616"), filename)
+}
 
 }

@@ -21,10 +21,12 @@
 #'
 #' @examples
 #'
+#' \dontrun{
 #' filename <- tempfile()
 #' clinicaltrials_gov_download(c("NCT00942747",
 #'     "NCT03281616"), filename)
-#'
+#' }
+#' 
 clinicaltrials_gov_download <- function(nctids, output_filename) {
 
     output_cols <- "ciiccDDciccccccccc"

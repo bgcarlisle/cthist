@@ -26,7 +26,9 @@ Mass-download registry entry historical versions from DRKS.de
 }
 \examples{
 
+\dontrun{
 filename <- tempfile()
 drks_de_download(c("DRKS00005219", "DRKS00003170"), filename)
+}
 
 }
