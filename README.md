@@ -5,7 +5,15 @@ clinical trial registry entry data.
 
 ## How to install
 
-To install through `git`, you will need to install `devtools` first:
+To install the stable version of `cthist` through CRAN:
+
+```{r}
+install.packages("cthist")
+library(cthist)
+```
+
+If you want the most recent development version of `cthist`, you will
+need to install `devtools` first, and then install via `git`:
 
 ```{r}
 install.packages("devtools")
