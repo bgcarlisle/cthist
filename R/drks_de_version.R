@@ -140,21 +140,21 @@ drks_de_version <- function(drksid, versionno) {
 
         min_age <- NA
         min_age <- version %>%
-            rvest::html_node(".minAge") %>%
+            rvest::html_node("li.minAge") %>%
             rvest::html_text2() %>%
             gsub(pattern = "Minimum Age:", replacement = "", .data) %>%
             trimws()
 
         max_age <- NA
         max_age <- version %>%
-            rvest::html_node(".maxAge") %>%
+            rvest::html_node("li.maxAge") %>%
             rvest::html_text2() %>%
             gsub(pattern = "Maximum Age:", replacement = "", .data) %>%
             trimws()
 
         gender <- NA
         gender <- version %>%
-            rvest::html_node(".gender") %>%
+            rvest::html_node("li.gender") %>%
             rvest::html_text2() %>%
             gsub(pattern = "Gender:", replacement = "", .data) %>%
             trimws()
