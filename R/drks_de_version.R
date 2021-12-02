@@ -172,7 +172,7 @@ drks_de_version <- function(drksid, versionno) {
             jsonlite::toJSON()
 
         contacts <- tibble::tribble(
-            ~label, ~affiliation, ~street, ~telephone, ~fax, ~email, ~url
+            ~label, ~affiliation, ~telephone, ~fax, ~email, ~url
         )
 
         addresses <- version %>%
