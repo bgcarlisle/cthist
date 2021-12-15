@@ -17,7 +17,10 @@
 #' @importFrom magrittr %>%
 #'
 #' @examples
+#'
+#' \dontrun{
 #' version <- drks_de_version("DRKS00005219", 1)
+#' }
 #'
 drks_de_version <- function(drksid, versionno) {
 

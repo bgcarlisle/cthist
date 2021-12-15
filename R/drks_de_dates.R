@@ -14,7 +14,10 @@
 #' @importFrom magrittr %>%
 #'
 #' @examples
+#'
+#' \dontrun{
 #' versions <- drks_de_dates("DRKS00005219")
+#' }
 #'
 drks_de_dates <- function(drksid) {
 
@@ -38,7 +41,7 @@ drks_de_dates <- function(drksid) {
 
     },
     error = function(cond) {
-        message(paste("DRKS ID does not seem to exist:", drksid))
+        message(paste("Error downloading DRKS ID:", drksid))
         message("Here's the original error message:")
         message(paste(cond, "\n"))
         ## Choose a return value in case of error

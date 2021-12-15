@@ -15,7 +15,10 @@
 #' @importFrom magrittr %>%
 #'
 #' @examples
+#'
+#' \dontrun{
 #' versions <- clinicaltrials_gov_dates("NCT00942747")
+#' }
 #'
 clinicaltrials_gov_dates <- function(nctid) {
     out <- tryCatch({
