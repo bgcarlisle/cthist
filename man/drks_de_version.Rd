@@ -24,6 +24,9 @@ contacts and sponsors
 Download a registry entry version from DRKS.de
 }
 \examples{
+
+\dontrun{
 version <- drks_de_version("DRKS00005219", 1)
+}
 
 }

@@ -25,6 +25,9 @@ contacts and sponsors
 Download a registry entry version from ClinicalTrials.gov
 }
 \examples{
+
+\dontrun{
 version <- clinicaltrials_gov_version("NCT00942747", 1)
+}
 
 }

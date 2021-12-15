@@ -23,6 +23,9 @@ Download a vector of dates on which a ClinicalTrials.gov registry
 entry was updated
 }
 \examples{
+
+\dontrun{
 versions <- clinicaltrials_gov_dates("NCT00942747")
+}
 
 }
