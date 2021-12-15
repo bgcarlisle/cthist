@@ -1,3 +1,8 @@
+# cthist 0.1.2
+
+* Updated DRKS error message to be more informative on failure
+* Updated unit tests to expect graceful error on failure
+
 # cthist 0.1.1
 
 * Renamed function `clinicaltrials_gov_version_dates` to
