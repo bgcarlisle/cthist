@@ -1,3 +1,8 @@
+# cthist 0.1.3
+
+* Fix DRKS bug where multiple contact affiliation nodes caused
+  download to produce an error
+
 # cthist 0.1.2
 
 * Updated DRKS error message to be more informative on failure

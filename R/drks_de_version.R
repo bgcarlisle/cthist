@@ -191,7 +191,9 @@ drks_de_version <- function(drksid, versionno) {
             affiliation <- NA
             affiliation <- address %>%
                 rvest::html_nodes("li.address-affiliation") %>%
-                rvest::html_text2()
+                rvest::html_text2() %>%
+                paste(collapse = " ") %>%
+                trimws()
 
             address_name <- NA
             address_name <- address %>%
