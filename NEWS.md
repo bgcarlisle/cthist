@@ -1,3 +1,8 @@
+# cthist 0.1.4
+
+* Fix DRKS bug where post-completion records sometimes contain more
+  than one `li.deadline` node, causing formatting errors
+
 # cthist 0.1.3
 
 * Fix DRKS bug where multiple contact affiliation nodes caused
