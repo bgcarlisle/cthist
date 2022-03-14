@@ -121,6 +121,7 @@ drks_de_version <- function(drksid, versionno) {
         closingdate <- version %>%
             rvest::html_nodes("li.deadline") %>%
             rvest::html_text() %>%
+            paste(collapse="\n") %>%
             stringr::str_extract("[0-9]{4}/[0-9]{2}/[0-9]{2}") %>%
             as.Date(format = "%Y/%m/%d") %>%
             format("%Y-%m-%d")
