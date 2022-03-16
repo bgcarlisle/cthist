@@ -36,7 +36,6 @@ drks_de_dates <- function(drksid) {
             rvest::html_text() %>%
             as.Date(format = "%m-%d-%Y") %>%
             sort() %>%
-            format("%Y-%m-%d") %>%
             return()
 
     },

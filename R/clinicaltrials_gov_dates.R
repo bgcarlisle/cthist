@@ -34,7 +34,6 @@ clinicaltrials_gov_dates <- function(nctid) {
             rvest::html_nodes("fieldset.releases table a") %>%
             rvest::html_text() %>%
             as.Date(format = "%B %d, %Y") %>%
-            format("%Y-%m-%d") %>%
             return()
 
     },
