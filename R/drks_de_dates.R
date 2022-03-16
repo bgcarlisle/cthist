@@ -5,9 +5,9 @@
 #'     e.g. "DRKS00005219". (A capitalized "DRKS" followed by eight
 #'     numerals with no spaces or hyphens.)
 #'
-#' @return A vector of ISO-8601 formatted dates corresponding to the
-#'     dates on which there were clinical trial history version
-#'     updates.
+#' @return A character vector of ISO-8601 formatted dates
+#'     corresponding to the dates on which there were clinical trial
+#'     history version updates.
 #'
 #' @export
 #'
@@ -36,6 +36,7 @@ drks_de_dates <- function(drksid) {
             rvest::html_text() %>%
             as.Date(format = "%m-%d-%Y") %>%
             sort() %>%
+            format("%Y-%m-%d") %>%
             return()
 
     },

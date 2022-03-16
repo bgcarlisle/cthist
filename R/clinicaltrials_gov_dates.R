@@ -6,9 +6,9 @@
 #'     capitalized "NCT" followed by eight numerals with no spaces or
 #'     hyphens.)
 #'
-#' @return A vector of ISO-8601 formatted dates corresponding to the
-#'     dates on which there were clinical trial history version
-#'     updates.
+#' @return A character vector of ISO-8601 formatted dates
+#'     corresponding to the dates on which there were clinical trial
+#'     history version updates.
 #'
 #' @export
 #'
@@ -34,6 +34,7 @@ clinicaltrials_gov_dates <- function(nctid) {
             rvest::html_nodes("fieldset.releases table a") %>%
             rvest::html_text() %>%
             as.Date(format = "%B %d, %Y") %>%
+            format("%Y-%m-%d") %>%
             return()
 
     },
