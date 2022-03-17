@@ -71,7 +71,9 @@ drks_de_version <- function(drksid, versionno) {
 
         }
 
-        session <- polite::bow("https://drks.de/drks_web/compareTrialVersions.do")
+        session <- polite::bow(
+                    "https://drks.de/drks_web/compareTrialVersions.do"
+                           )
 
         version <- polite::scrape(session, query=version_query)
 
