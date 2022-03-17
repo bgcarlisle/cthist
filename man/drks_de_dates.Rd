@@ -13,9 +13,9 @@ e.g. "DRKS00005219". (A capitalized "DRKS" followed by eight
 numerals with no spaces or hyphens.)}
 }
 \value{
-A vector of ISO-8601 formatted dates corresponding to the
-dates on which there were clinical trial history version
-updates.
+A character vector of ISO-8601 formatted dates
+corresponding to the dates on which there were clinical trial
+history version updates.
 }
 \description{
 Download a vector of dates on which a drks.de registry entry was
