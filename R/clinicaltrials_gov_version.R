@@ -35,9 +35,7 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
             versionno
         )
 
-        session <- polite::bow(url)
-
-        version <- polite::scrape(session)
+        version <- polite_read_html(url)
 
         ## Read the overall status
 
