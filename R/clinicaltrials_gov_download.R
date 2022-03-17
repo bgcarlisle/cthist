@@ -184,13 +184,16 @@ clinicaltrials_gov_download <- function(nctids, output_filename) {
                 versiondata[13], ## contacts_data
                 versiondata[14] ## sponsor_data
             ) %>%
-                readr::write_csv(file = output_filename, append = TRUE)
+                readr::write_csv(
+                           file = output_filename, append = TRUE
+                       )
 
 
             if (length(versions) > 2) {
                 message(
                     paste0(
-                        nctid, " - ", versionno, " of ", length(versions)
+                        nctid, " - ", versionno, " of ",
+                        length(versions)
                     )
                 )
             }

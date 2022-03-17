@@ -67,8 +67,8 @@ drks_de_download <- function(drksids, output_filename) {
 
         error_trns <- check %>%
             dplyr::filter(
-                       as.character(.data$version_date) == "Error" |
-                       as.character(.data$recruitment_status) == "Error"
+                     as.character(.data$version_date) == "Error" |
+                     as.character(.data$recruitment_status) == "Error"
                    ) %>%
             dplyr::group_by(drksid) %>%
             dplyr::slice_head() %>%
@@ -184,7 +184,9 @@ drks_de_download <- function(drksids, output_filename) {
                        secondaryoutcomes,
                        contacts
                    ) %>%
-                readr::write_csv(file = output_filename, append = TRUE)
+                readr::write_csv(
+                           file = output_filename, append = TRUE
+                       )
 
             if (length(versions) > 2) {
                 message(paste0(
