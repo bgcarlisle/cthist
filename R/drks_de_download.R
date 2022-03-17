@@ -122,7 +122,11 @@ drks_de_download <- function(drksids, output_filename) {
             versiondata <- NA
             version_retry <- 1
 
-            while (length(versiondata) == 1 & version_retry < 10) {
+            while (
+                (is.na(versiondata[1]) |
+                versiondata[1] == "Error") &
+                version_retry < 10
+            ) {
 
                 if (versionno == length(versions)) {
                     versiondata <- drks_de_version(drksid, 0)

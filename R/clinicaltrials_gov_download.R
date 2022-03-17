@@ -128,7 +128,11 @@ clinicaltrials_gov_download <- function(nctids, output_filename) {
             versiondata <- NA
             version_retry <- 1
 
-            while (length(versiondata) == 1 & version_retry < 10) {
+            while (
+                (is.na(versiondata[1]) |
+                versiondata[1] == "Error") &
+                version_retry < 10
+            ) {
 
                 versiondata <- clinicaltrials_gov_version(
                     nctid, versionno
