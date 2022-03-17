@@ -123,7 +123,20 @@ clinicaltrials_gov_download <- function(nctids, output_filename) {
         versionno <- 1
         for (version in versions) {
 
-            versiondata <- clinicaltrials_gov_version(nctid, versionno)
+            ## Repeat attempts to download a version up to 10 times in
+            ## case of error
+            versiondata <- NA
+            version_retry <- 1
+
+            while (length(versiondata) == 1 & version_retry < 10) {
+
+                versiondata <- clinicaltrials_gov_version(
+                    nctid, versionno
+                )
+                
+                version_retry <- version_retry + 1
+                
+            }
 
             enrol <- versiondata[2]
             enrolno <- enrol %>%
@@ -174,7 +187,7 @@ clinicaltrials_gov_download <- function(nctids, output_filename) {
                 readr::write_csv(file = output_filename, append = TRUE)
 
 
-            if (length(versions) > 10) {
+            if (length(versions) > 2) {
                 message(
                     paste0(
                         nctid, " - ", versionno, " of ", length(versions)

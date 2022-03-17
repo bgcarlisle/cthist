@@ -117,10 +117,21 @@ drks_de_download <- function(drksids, output_filename) {
         versionno <- 1
         for (version in versions) {
 
-            if (versionno == length(versions)) {
-                versiondata <- drks_de_version(drksid, 0)
-            } else {
-                versiondata <- drks_de_version(drksid, versionno)
+            ## Repeat attempts to download a version up to 10 times in
+            ## case of error
+            versiondata <- NA
+            version_retry <- 1
+
+            while (length(versiondata) == 1 & version_retry < 10) {
+
+                if (versionno == length(versions)) {
+                    versiondata <- drks_de_version(drksid, 0)
+                } else {
+                    versiondata <- drks_de_version(drksid, versionno)
+                }
+
+                version_retry <- version_retry + 1
+                
             }
 
             rstatus <- versiondata[1]
@@ -175,7 +186,7 @@ drks_de_download <- function(drksids, output_filename) {
                    ) %>%
                 readr::write_csv(file = output_filename, append = TRUE)
 
-            if (length(versions) > 10) {
+            if (length(versions) > 2) {
                 message(paste0(
                     drksid,
                     " - ",
