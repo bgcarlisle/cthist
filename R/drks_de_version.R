@@ -4,7 +4,8 @@
 #'     e.g. "DRKS00005219". (A capitalized "DRKS" followed by eight
 #'     numerals with no spaces or hyphens.)
 #'
-#' @param versionno An integer version number, e.g. 1
+#' @param versionno An integer version number, where 1 is the earliest
+#'     version of the trial in question, e.g. 3
 #'
 #' @return A list containing the overall status, enrolment, start
 #'     date, primary completion date, primary completion date type,
