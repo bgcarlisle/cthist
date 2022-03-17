@@ -120,13 +120,17 @@ drks_de_download <- function(drksids, output_filename) {
             ## Repeat attempts to download a version up to 10 times in
             ## case of error
             versiondata <- NA
-            version_retry <- 1
+            version_retry <- 0
 
             while (
                 (is.na(versiondata[1]) |
                 versiondata[1] == "Error") &
                 version_retry < 10
             ) {
+
+                if (version_retry > 0) {
+                    message("Trying again ...")
+                }
 
                 if (versionno == length(versions)) {
                     versiondata <- drks_de_version(drksid, 0)
@@ -136,6 +140,10 @@ drks_de_download <- function(drksids, output_filename) {
 
                 version_retry <- version_retry + 1
                 
+            }
+
+            if (version_retry > 1) {
+                message("Recovered from error successfully")
             }
 
             rstatus <- versiondata[1]

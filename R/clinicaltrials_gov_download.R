@@ -126,7 +126,7 @@ clinicaltrials_gov_download <- function(nctids, output_filename) {
             ## Repeat attempts to download a version up to 10 times in
             ## case of error
             versiondata <- NA
-            version_retry <- 1
+            version_retry <- 0
 
             while (
                 (is.na(versiondata[1]) |
@@ -134,12 +134,20 @@ clinicaltrials_gov_download <- function(nctids, output_filename) {
                 version_retry < 10
             ) {
 
+                if (version_retry > 0) {
+                    message("Trying again ...")
+                }
+
                 versiondata <- clinicaltrials_gov_version(
                     nctid, versionno
                 )
                 
                 version_retry <- version_retry + 1
                 
+            }
+
+            if (version_retry > 1) {
+                message("Recovered from error successfully")
             }
 
             enrol <- versiondata[2]
