@@ -32,12 +32,22 @@ clinicaltrials_gov_dates <- function(nctid) {
 
         index <- polite::scrape(session)
 
-        index %>%
+        ## Back up locale info
+        lct <- Sys.getlocale("LC_TIME")
+        ## Set locale so that months are parsed correctly on
+        ## non-English computers
+        Sys.setlocale("LC_TIME", "en_US.UTF-8")
+        
+        dates <- index %>%
             rvest::html_nodes("fieldset.releases table a") %>%
             rvest::html_text() %>%
             as.Date(format = "%B %d, %Y") %>%
-            format("%Y-%m-%d") %>%
-            return()
+            format("%Y-%m-%d")
+
+        ## Restore original locale info
+        Sys.setlocale("LC_TIME", lct)
+        
+        return(dates)
 
     },
     error = function(cond) {
