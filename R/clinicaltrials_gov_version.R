@@ -37,6 +37,12 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
 
         version <- polite_read_html(url)
 
+        ## Back up locale info
+        lct <- Sys.getlocale("LC_TIME")
+        ## Set locale so that months are parsed correctly on
+        ## non-English computers
+        Sys.setlocale("LC_TIME", "en_US.UTF-8")
+
         ## Read the overall status
 
         ostatus_rows <- version %>%
@@ -474,6 +480,9 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
             contacts_data,
             sponsor_data
         )
+
+        ## Restore original locale info
+        Sys.setlocale("LC_TIME", lct)
 
         return(data)
 

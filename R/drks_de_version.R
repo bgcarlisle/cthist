@@ -77,7 +77,11 @@ drks_de_version <- function(drksid, versionno) {
 
         version <- polite::scrape(session, query=version_query)
 
-        closeAllConnections()
+        ## Back up locale info
+        lct <- Sys.getlocale("LC_TIME")
+        ## Set locale so that months are parsed correctly on
+        ## non-English computers
+        Sys.setlocale("LC_TIME", "en_US.UTF-8")
 
         ## Read the recruitment status
 
@@ -292,6 +296,9 @@ drks_de_version <- function(drksid, versionno) {
             secondaryoutcomes,
             contacts
         )
+
+        ## Restore original locale info
+        Sys.setlocale("LC_TIME", lct)
 
         return(data)
 
