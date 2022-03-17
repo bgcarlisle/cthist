@@ -29,7 +29,9 @@ drks_de_dates <- function(drksid) {
             drksid
         )
 
-        index <- rvest::read_html(url)
+        session <- polite::bow(url)
+
+        index <- polite::scrape(session)
 
         index %>%
             rvest::html_nodes("tr:not(.bgHighlight) > td:nth-child(1)") %>%

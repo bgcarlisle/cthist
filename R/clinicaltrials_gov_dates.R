@@ -28,7 +28,9 @@ clinicaltrials_gov_dates <- function(nctid) {
             nctid
         )
 
-        index <- rvest::read_html(url)
+        session <- polite::bow(url)
+
+        index <- polite::scrape(session)
 
         index %>%
             rvest::html_nodes("fieldset.releases table a") %>%

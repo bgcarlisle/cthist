@@ -35,7 +35,9 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
             versionno
         )
 
-        version <- rvest::read_html(url)
+        session <- polite::bow(url)
+
+        version <- polite::scrape(session)
 
         ## Read the overall status
 

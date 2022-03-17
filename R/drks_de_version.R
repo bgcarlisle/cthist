@@ -71,14 +71,9 @@ drks_de_version <- function(drksid, versionno) {
 
         }
 
-        res <- httr::POST(
-            "https://drks.de/drks_web/compareTrialVersions.do",
-            body = version_query,
-            encode = "form"
+        session <- polite::bow("https://drks.de/drks_web/compareTrialVersions.do")
 
-        )
-
-        version <- rvest::read_html(res)
+        version <- polite::scrape(session, query=version_query)
 
         closeAllConnections()
 
