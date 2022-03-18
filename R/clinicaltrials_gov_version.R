@@ -28,6 +28,21 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
 
     out <- tryCatch({
 
+        ## Check that TRN is well-formed
+        if (! grepl("^NCT\\d{8}$", nctid)) {
+            stop(paste0("'", nctid, "' is not a well-formed TRN"))
+        }
+
+        ## Check that version number is numeric
+        if (! is.numeric(versionno)) {
+            stop(paste0("'", versionno, "' is not a number"))
+        }
+
+        ## Check that version number is a whole number
+        if (versionno %% 1 != 0) {
+            stop(paste0("'", versionno, "' is not a whole number"))
+        }
+        
         url <- paste0(
             "https://clinicaltrials.gov/ct2/history/",
             nctid,

@@ -29,6 +29,11 @@
 #' 
 clinicaltrials_gov_download <- function(nctids, output_filename) {
 
+    ## Check that all TRNs are well-formed
+    if (sum(grepl("^NCT\\d{8}$", nctids)) != length(nctids)) {
+        stop("Input contains TRNs that are not well-formed")
+    }
+
     output_cols <- "ciiDcDcDcciccccccccc"
 
     if (!file.exists(output_filename)) {
