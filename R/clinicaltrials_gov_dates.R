@@ -23,6 +23,11 @@
 clinicaltrials_gov_dates <- function(nctid) {
     out <- tryCatch({
 
+        ## Check that TRN is well-formed
+        if (! grepl("^NCT\\d{8}$", nctid)) {
+            stop(paste0("'", nctid, "' is not a well-formed TRN"))
+        }
+
         url <- paste0(
             "https://clinicaltrials.gov/ct2/history/",
             nctid

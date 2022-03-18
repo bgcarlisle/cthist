@@ -27,6 +27,11 @@
 #' 
 drks_de_download <- function(drksids, output_filename) {
 
+    ## Check that all TRNs are well-formed
+    if (sum(grepl("^DRKS\\d{8}$", drksids)) != length(drksids)) {
+        stop("Input contains TRNs that are not well-formed")
+    }
+
     output_cols <- "ciiDcDDiccccccccc"
 
     if (!file.exists(output_filename)) {

@@ -23,6 +23,11 @@ drks_de_dates <- function(drksid) {
 
     out <- tryCatch({
 
+        ## Check that TRN is well-formed
+        if (! grepl("^DRKS\\d{8}$", drksid)) {
+            stop(paste0("'", drksid, "' is not a well-formed TRN"))
+        }
+
         url <- paste0(
             "https://drks.de/drks_web/navigate.do?",
             "navigationId=trial.history&TRIAL_ID=",

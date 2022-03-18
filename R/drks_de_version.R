@@ -37,6 +37,21 @@ drks_de_version <- function(drksid, versionno) {
 
     out <- tryCatch({
 
+        ## Check that TRN is well-formed
+        if (! grepl("^DRKS\\d{8}$", drksid)) {
+            stop(paste0("'", drksid, "' is not a well-formed TRN"))
+        }
+
+        ## Check that version number is numeric
+        if (! is.numeric(versionno)) {
+            stop(paste0("'", versionno, "' is not a number"))
+        }
+
+        ## Check that version number is a whole number
+        if (versionno %% 1 != 0) {
+            stop(paste0("'", versionno, "' is not a whole number"))
+        }
+
         if (versionno != 0) {
 
             version_query <- list(
