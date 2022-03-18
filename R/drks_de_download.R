@@ -5,13 +5,20 @@
 #'
 #' @param output_filename A character string for a filename into which
 #'     the dataframe will be written as a CSV,
-#'     e.g. "historical_versions.csv".
+#'     e.g. "historical_versions.csv". If no output filename is
+#'     provided, the data frame of downloaded historical versions will
+#'     be returned by the function as a data frame.
 #'
-#' @return On successful completion, returns TRUE, otherwise returns
-#'     FALSE. If the function is called again with the same DRKS
-#'     numbers and output filename, it will check the output file for
-#'     errors in the download, remove them and try to download the
-#'     historical versions again.
+#' @return If an output filename is specified, on successful
+#'     completion, this function returns TRUE and otherwise returns
+#'     FALSE. If an output filename is not specified, on successful
+#'     completion, this function returns a data frame containing the
+#'     historical versions of the clinical trial that have been
+#'     retrieved, and in case of error returns FALSE. After
+#'     unsuccessful completion, if the function is called again with
+#'     the same NCT numbers and output filename, it will check the
+#'     output file for errors in the download, remove them and try to
+#'     download the historical versions again.
 #'
 #' @export
 #'
@@ -25,7 +32,16 @@
 #' drks_de_download(c("DRKS00005219", "DRKS00003170"), filename)
 #' }
 #' 
-drks_de_download <- function(drksids, output_filename) {
+drks_de_download <- function(drksids, output_filename=NA) {
+
+    ## If output_filename is not specified, write to tempfile() and
+    ## return this invisibly rather than TRUE
+    if (is.na (output_filename)) {
+        output_filename <- tempfile()
+        return_dataframe <- TRUE
+    } else {
+        return_dataframe <- FALSE
+    }
 
     ## Check that all TRNs are well-formed
     if (sum(grepl("^DRKS\\d{8}$", drksids)) != length(drksids)) {
@@ -275,7 +291,14 @@ drks_de_download <- function(drksids, output_filename) {
     all_dl_complete <- incomplete_dl_n == 0
 
     if (no_errors & all_dl_complete) {
-        return(TRUE)
+
+        if (return_dataframe) {
+            readr::read_csv(output_filename) %>%
+                return()
+        } else {
+            return(TRUE)
+        }
+        
     } else {
         if (errors_n > 0) {
             message(
