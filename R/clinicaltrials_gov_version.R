@@ -5,8 +5,10 @@
 #'     capitalized "NCT" followed by eight numerals with no spaces or
 #'     hyphens.)
 #'
-#' @param versionno An integer version number, where 1 is the earliest
-#'     version of the trial in question, e.g. 3
+#' @param versionno An integer version number, e.g. 3, where 1 is the
+#'     earliest version of the trial in question, 2 is the next most
+#'     recent, etc. If no version number is specified, the first
+#'     version will be downloaded.
 #'
 #' @return A list containing the overall status, enrolment, start
 #'     date, primary completion date, primary completion date type,
@@ -24,7 +26,7 @@
 #' version <- clinicaltrials_gov_version("NCT00942747", 1)
 #' }
 #'
-clinicaltrials_gov_version <- function(nctid, versionno) {
+clinicaltrials_gov_version <- function(nctid, versionno=1) {
 
     out <- tryCatch({
 

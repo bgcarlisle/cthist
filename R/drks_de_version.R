@@ -4,8 +4,11 @@
 #'     e.g. "DRKS00005219". (A capitalized "DRKS" followed by eight
 #'     numerals with no spaces or hyphens.)
 #'
-#' @param versionno An integer version number, where 1 is the earliest
-#'     version of the trial in question, e.g. 3
+#' @param versionno An integer version number, e.g. 3, where 1 is the
+#'     earliest version of the trial in question, 2, is the next most
+#'     recent, etc. If 0 is supplied, the most recent version will be
+#'     returned. If no version number is specified, the first version
+#'     will be downloaded.
 #'
 #' @return A list containing the overall status, enrolment, start
 #'     date, primary completion date, primary completion date type,
@@ -23,7 +26,7 @@
 #' version <- drks_de_version("DRKS00005219", 1)
 #' }
 #'
-drks_de_version <- function(drksid, versionno) {
+drks_de_version <- function(drksid, versionno=1) {
 
     ## The DRKS site appears to internally assign version
     ## numbers that are integer multiples of 2, starting
