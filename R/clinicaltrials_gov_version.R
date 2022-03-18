@@ -97,6 +97,7 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
             trimws()
 
         startdate_raw <- NA
+        startdate_precision <- NA
 
         for (startdate_row in startdate_rows) {
             startdate_row <- startdate_row %>%
@@ -124,8 +125,10 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
 
         if (! is.na(startdate_full)) {
             startdate <- startdate_full
+            startdate_precision <- "date"
         } else {
             startdate <- startdate_month
+            startdate_precision <- "month"
         }
 
         ## Read the primary completion date
@@ -138,6 +141,7 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
             trimws()
 
         pcdate_raw <- NA
+        pcdate_precision <- NA
 
         for (pcdate_row in pcdate_rows) {
             pcdate_row <- pcdate_row %>%
@@ -169,8 +173,10 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
 
         if (! is.na(pcdate_full)) {
             pcdate <- pcdate_full
+            pcdate_precision <- "date"
         } else {
             pcdate <- pcdate_month
+            pcdate_precision <- "month"
         }
 
         pcdatetype <- pcdate_raw %>%
@@ -468,7 +474,9 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
             ostatus,
             enrol,
             startdate,
+            startdate_precision,
             pcdate,
+            pcdate_precision,
             pcdatetype,
             min_age,
             max_age,

@@ -27,28 +27,28 @@
 #' 
 drks_de_download <- function(drksids, output_filename) {
 
-    output_cols <- "ciiccDDiccccccccc"
+    output_cols <- "ciiDcDDiccccccccc"
 
     if (!file.exists(output_filename)) {
 
-        tibble::tribble(
-                    ~drksid,
-                    ~version_number,
-                    ~total_versions,
-                    ~version_date,
-                    ~recruitment_status,
-                    ~start_date,
-                    ~closing_date,
-                    ~enrolment,
-                    ~enrolment_type,
-                    ~min_age,
-                    ~max_age,
-                    ~gender,
-                    ~inclusion_criteria,
-                    ~exclusion_criteria,
-                    ~primary_outcomes,
-                    ~secondary_outcomes,
-                    ~contacts
+        tibble::tibble(
+                    drksid = character(),
+                    version_number = numeric(),
+                    total_versions = numeric(),
+                    version_date = date(),
+                    recruitment_status = character(),
+                    start_date = date(),
+                    closing_date = date(),
+                    enrolment = numeric(),
+                    enrolment_type = character(),
+                    min_age = character(),
+                    max_age = character(),
+                    gender = character(),
+                    inclusion_criteria = character(),
+                    exclusion_criteria = character(),
+                    primary_outcomes = character(),
+                    secondary_outcomes = character(),
+                    contacts = character()
                 ) %>%
             readr::write_csv(
                        file = output_filename,

@@ -29,30 +29,32 @@
 #' 
 clinicaltrials_gov_download <- function(nctids, output_filename) {
 
-    output_cols <- "ciiccDDciccccccccc"
+    output_cols <- "ciiDcDcDcciccccccccc"
 
     if (!file.exists(output_filename)) {
 
-        tibble::tribble(
-            ~nctid,
-            ~version_number,
-            ~total_versions,
-            ~version_date,
-            ~overall_status,
-            ~study_start_date,
-            ~primary_completion_date,
-            ~primary_completion_date_type,
-            ~enrolment,
-            ~enrolment_type,
-            ~min_age,
-            ~max_age,
-            ~sex,
-            ~gender_based,
-            ~accepts_healthy_volunteers,
-            ~criteria,
-            ~outcome_measures,
-            ~contacts,
-            ~sponsor_collaborators
+        tibble::tibble(
+            nctid = character(),
+            version_number = numeric(),
+            total_versions = numeric(),
+            version_date = date(),
+            overall_status = character(),
+            study_start_date = date(),
+            study_start_date_precision = character(),
+            primary_completion_date = date(),
+            primary_completion_date_precision = character(),
+            primary_completion_date_type = character(),
+            enrolment = numeric(),
+            enrolment_type = character(),
+            min_age = character(),
+            max_age = character(),
+            sex = character(),
+            gender_based = character(),
+            accepts_healthy_volunteers = character(),
+            criteria = character(),
+            outcome_measures = character(),
+            contacts = character(),
+            sponsor_collaborators = character()
         ) %>%
             readr::write_csv(
                        file = output_filename,
@@ -163,8 +165,10 @@ clinicaltrials_gov_download <- function(nctids, output_filename) {
                 ~version_date,
                 ~overall_status,
                 ~study_start_date,
+                ~study_start_date_precision,
                 ~primary_completion_date,
                 ~primary_completion_date_type,
+                ~primary_completion_date_precision,
                 ~enrolment,
                 ~enrolment_type,
                 ~min_age,
@@ -182,19 +186,21 @@ clinicaltrials_gov_download <- function(nctids, output_filename) {
                 version,
                 versiondata[1], ## overall_status
                 versiondata[3], ## startdate
-                versiondata[4], ## pcdate
-                versiondata[5], ## pcdatetype
+                versiondata[4], ## startdate_precision
+                versiondata[5], ## pcdate
+                versiondata[6], ## pcdate_precision
+                versiondata[7], ## pcdatetype
                 enrolno,
                 enroltype,
-                versiondata[6], ## min_age
-                versiondata[7], ## max_age
-                versiondata[8], ## sex
-                versiondata[9], ## gender_based
-                versiondata[10], ## accepts_healthy_volunteers
-                versiondata[11], ## criteria
-                versiondata[12], ## om_data
-                versiondata[13], ## contacts_data
-                versiondata[14] ## sponsor_data
+                versiondata[8], ## min_age
+                versiondata[9], ## max_age
+                versiondata[10], ## sex
+                versiondata[11], ## gender_based
+                versiondata[12], ## accepts_healthy_volunteers
+                versiondata[13], ## criteria
+                versiondata[14], ## om_data
+                versiondata[15], ## contacts_data
+                versiondata[16] ## sponsor_data
             ) %>%
                 readr::write_csv(
                            file = output_filename, append = TRUE
