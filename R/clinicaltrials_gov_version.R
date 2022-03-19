@@ -142,7 +142,7 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
 
         if (! is.na(startdate_full)) {
             startdate <- startdate_full
-            startdate_precision <- "date"
+            startdate_precision <- "day"
         } else {
             startdate <- startdate_month
             startdate_precision <- "month"
@@ -190,7 +190,7 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
 
         if (! is.na(pcdate_full)) {
             pcdate <- pcdate_full
-            pcdate_precision <- "date"
+            pcdate_precision <- "day"
         } else {
             pcdate <- pcdate_month
             pcdate_precision <- "month"
