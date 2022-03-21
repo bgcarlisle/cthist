@@ -4,15 +4,18 @@
 \alias{drks_de_version}
 \title{Download a registry entry version from DRKS.de}
 \usage{
-drks_de_version(drksid, versionno)
+drks_de_version(drksid, versionno = 1)
 }
 \arguments{
 \item{drksid}{A character string including a well-formed DRKS id,
 e.g. "DRKS00005219". (A capitalized "DRKS" followed by eight
 numerals with no spaces or hyphens.)}
 
-\item{versionno}{An integer version number, where 1 is the earliest
-version of the trial in question, e.g. 3}
+\item{versionno}{An integer version number, e.g. 3, where 1 is the
+earliest version of the trial in question, 2, is the next most
+recent, etc. If 0 is supplied, the most recent version will be
+returned. If no version number is specified, the first version
+will be downloaded.}
 }
 \value{
 A list containing the overall status, enrolment, start

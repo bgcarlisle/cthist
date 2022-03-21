@@ -5,22 +5,29 @@
 \title{Mass-download registry entry historical versions from
 ClinicalTrials.gov}
 \usage{
-clinicaltrials_gov_download(nctids, output_filename)
+clinicaltrials_gov_download(nctids, output_filename = NA)
 }
 \arguments{
 \item{nctids}{A list of well-formed NCT numbers,
 e.g. c("NCT00942747", "NCT03281616").}
 
 \item{output_filename}{A character string for a filename into which
-the dataframe will be written as a CSV,
-e.g. "historical_versions.csv".}
+the data frame will be written as a CSV,
+e.g. "historical_versions.csv". If no output filename is
+provided, the data frame of downloaded historical versions will
+be returned by the function as a data frame.}
 }
 \value{
-On successful completion, returns TRUE, otherwise returns
-FALSE. If the function is called again with the same NCT
-numbers and output filename, it will check the output file for
-errors in the download, remove them and try to download the
-historical versions again.
+If an output filename is specified, on successful
+completion, this function returns TRUE and otherwise returns
+FALSE. If an output filename is not specified, on successful
+completion, this function returns a data frame containing the
+historical versions of the clinical trial that have been
+retrieved, and in case of error returns FALSE. After
+unsuccessful completion, if the function is called again with
+the same NCT numbers and output filename, it will check the
+output file for errors in the download, remove them and try to
+download the historical versions again.
 }
 \description{
 Mass-download registry entry historical versions from
