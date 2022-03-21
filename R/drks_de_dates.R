@@ -54,6 +54,11 @@ drks_de_dates <- function(drksid) {
         ## Restore original locale info
         Sys.setlocale("LC_TIME", lct)
 
+        ## Check for NA values in dates
+        if (sum(is.na(dates)) > 0) {
+            warning("NA values returned for dates")
+        }
+        
         return(dates)
 
     },

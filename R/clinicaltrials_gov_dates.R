@@ -51,6 +51,11 @@ clinicaltrials_gov_dates <- function(nctid) {
 
         ## Restore original locale info
         Sys.setlocale("LC_TIME", lct)
+
+        ## Check for NA values in dates
+        if (sum(is.na(dates)) > 0) {
+            warning("NA values returned for dates")
+        }
         
         return(dates)
 
