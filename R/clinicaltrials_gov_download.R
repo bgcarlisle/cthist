@@ -16,10 +16,13 @@
 #'     completion, this function returns a data frame containing the
 #'     historical versions of the clinical trial that have been
 #'     retrieved, and in case of error returns FALSE. After
-#'     unsuccessful completion, if the function is called again with
-#'     the same NCT numbers and output filename, it will check the
-#'     output file for errors in the download, remove them and try to
-#'     download the historical versions again.
+#'     unsuccessful completion with an output filename specified, if
+#'     the function is called again with the same NCT numbers and
+#'     output filename, the function will check the output file for
+#'     errors or incompletely downloaded registry entries, remove them
+#'     and try to download the historical versions that are still
+#'     needed, while preserving the ones that have already been
+#'     downloaded correctly.
 #'
 #' @export
 #'
