@@ -11,10 +11,11 @@
 #'     version will be downloaded.
 #'
 #' @return A list containing the overall status, enrolment, start
-#'     date, primary completion date, primary completion date type,
-#'     minimum age, maximum age, sex, gender-based, accepts healthy
-#'     volunteers, inclusion/exclusion criteria, outcome measures,
-#'     contacts and sponsors
+#'     date, start date precision (month or day) primary completion
+#'     date, primary completion date precision (month or day), primary
+#'     completion date type, minimum age, maximum age, sex,
+#'     gender-based, accepts healthy volunteers, inclusion/exclusion
+#'     criteria, outcome measures, contacts and sponsors
 #'
 #' @export
 #'
