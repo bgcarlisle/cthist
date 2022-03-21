@@ -5,14 +5,21 @@
 #'     e.g. c("NCT00942747", "NCT03281616").
 #'
 #' @param output_filename A character string for a filename into which
-#'     the dataframe will be written as a CSV,
-#'     e.g. "historical_versions.csv".
+#'     the data frame will be written as a CSV,
+#'     e.g. "historical_versions.csv". If no output filename is
+#'     provided, the data frame of downloaded historical versions will
+#'     be returned by the function as a data frame.
 #'
-#' @return On successful completion, returns TRUE, otherwise returns
-#'     FALSE. If the function is called again with the same NCT
-#'     numbers and output filename, it will check the output file for
-#'     errors in the download, remove them and try to download the
-#'     historical versions again.
+#' @return If an output filename is specified, on successful
+#'     completion, this function returns TRUE and otherwise returns
+#'     FALSE. If an output filename is not specified, on successful
+#'     completion, this function returns a data frame containing the
+#'     historical versions of the clinical trial that have been
+#'     retrieved, and in case of error returns FALSE. After
+#'     unsuccessful completion, if the function is called again with
+#'     the same NCT numbers and output filename, it will check the
+#'     output file for errors in the download, remove them and try to
+#'     download the historical versions again.
 #'
 #' @export
 #'
@@ -27,32 +34,48 @@
 #'     "NCT03281616"), filename)
 #' }
 #' 
-clinicaltrials_gov_download <- function(nctids, output_filename) {
+clinicaltrials_gov_download <- function(nctids, output_filename=NA) {
 
-    output_cols <- "ciiccDDciccccccccc"
+    ## If output_filename is not specified, write to tempfile() and
+    ## return this invisibly rather than TRUE
+    if (is.na (output_filename)) {
+        output_filename <- tempfile()
+        return_dataframe <- TRUE
+    } else {
+        return_dataframe <- FALSE
+    }
+
+    ## Check that all TRNs are well-formed
+    if (sum(grepl("^NCT\\d{8}$", nctids)) != length(nctids)) {
+        stop("Input contains TRNs that are not well-formed")
+    }
+
+    output_cols <- "ciiDcDcDcciccccccccc"
 
     if (!file.exists(output_filename)) {
 
-        tibble::tribble(
-            ~nctid,
-            ~version_number,
-            ~total_versions,
-            ~version_date,
-            ~overall_status,
-            ~study_start_date,
-            ~primary_completion_date,
-            ~primary_completion_date_type,
-            ~enrolment,
-            ~enrolment_type,
-            ~min_age,
-            ~max_age,
-            ~sex,
-            ~gender_based,
-            ~accepts_healthy_volunteers,
-            ~criteria,
-            ~outcome_measures,
-            ~contacts,
-            ~sponsor_collaborators
+        tibble::tibble(
+            nctid = character(),
+            version_number = numeric(),
+            total_versions = numeric(),
+            version_date = date(),
+            overall_status = character(),
+            study_start_date = date(),
+            study_start_date_precision = character(),
+            primary_completion_date = date(),
+            primary_completion_date_precision = character(),
+            primary_completion_date_type = character(),
+            enrolment = numeric(),
+            enrolment_type = character(),
+            min_age = character(),
+            max_age = character(),
+            sex = character(),
+            gender_based = character(),
+            accepts_healthy_volunteers = character(),
+            criteria = character(),
+            outcome_measures = character(),
+            contacts = character(),
+            sponsor_collaborators = character()
         ) %>%
             readr::write_csv(
                        file = output_filename,
@@ -123,9 +146,34 @@ clinicaltrials_gov_download <- function(nctids, output_filename) {
         versionno <- 1
         for (version in versions) {
 
-            versiondata <- clinicaltrials_gov_version(nctid, versionno)
+            ## Repeat attempts to download a version up to 10 times in
+            ## case of error
+            versiondata <- NA
+            version_retry <- 0
 
-            enrol <- versiondata[2]
+            while (
+                (is.na(versiondata[1]) |
+                versiondata[1] == "Error") &
+                version_retry < 10
+            ) {
+
+                if (version_retry > 0) {
+                    message("Trying again ...")
+                }
+
+                versiondata <- clinicaltrials_gov_version(
+                    nctid, versionno
+                )
+                
+                version_retry <- version_retry + 1
+                
+            }
+
+            if (version_retry > 1) {
+                message("Recovered from error successfully")
+            }
+
+            enrol <- versiondata$enrol
             enrolno <- enrol %>%
                 stringr::str_extract("^[0-9]+")
             enroltype <- enrol %>%
@@ -138,8 +186,10 @@ clinicaltrials_gov_download <- function(nctids, output_filename) {
                 ~version_date,
                 ~overall_status,
                 ~study_start_date,
+                ~study_start_date_precision,
                 ~primary_completion_date,
                 ~primary_completion_date_type,
+                ~primary_completion_date_precision,
                 ~enrolment,
                 ~enrolment_type,
                 ~min_age,
@@ -155,29 +205,34 @@ clinicaltrials_gov_download <- function(nctids, output_filename) {
                 versionno,
                 length(versions),
                 version,
-                versiondata[1], ## overall_status
-                versiondata[3], ## startdate
-                versiondata[4], ## pcdate
-                versiondata[5], ## pcdatetype
+                versiondata$ostatus,
+                versiondata$startdate,
+                versiondata$startdate_precision,
+                versiondata$pcdate,
+                versiondata$pcdate_precision,
+                versiondata$pcdatetype,
                 enrolno,
                 enroltype,
-                versiondata[6], ## min_age
-                versiondata[7], ## max_age
-                versiondata[8], ## sex
-                versiondata[9], ## gender_based
-                versiondata[10], ## accepts_healthy_volunteers
-                versiondata[11], ## criteria
-                versiondata[12], ## om_data
-                versiondata[13], ## contacts_data
-                versiondata[14] ## sponsor_data
+                versiondata$min_age,
+                versiondata$max_age,
+                versiondata$sex,
+                versiondata$gender_based,
+                versiondata$accepts_health_volunteers,
+                versiondata$criteria,
+                versiondata$om_data,
+                versiondata$contacts_data,
+                versiondata$sponsor_data
             ) %>%
-                readr::write_csv(file = output_filename, append = TRUE)
+                readr::write_csv(
+                           file = output_filename, append = TRUE
+                       )
 
 
-            if (length(versions) > 10) {
+            if (length(versions) > 2) {
                 message(
                     paste0(
-                        nctid, " - ", versionno, " of ", length(versions)
+                        nctid, " - ", versionno, " of ",
+                        length(versions)
                     )
                 )
             }
@@ -243,7 +298,14 @@ clinicaltrials_gov_download <- function(nctids, output_filename) {
 
 
     if (no_errors & all_dl_complete) {
-        return(TRUE)
+
+        if (return_dataframe) {
+            readr::read_csv(output_filename) %>%
+                return()
+        } else {
+            return(TRUE)
+        }
+        
     } else {
         if (errors_n > 0) {
             message(

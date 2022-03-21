@@ -4,7 +4,11 @@
 #'     e.g. "DRKS00005219". (A capitalized "DRKS" followed by eight
 #'     numerals with no spaces or hyphens.)
 #'
-#' @param versionno An integer version number, e.g. 1
+#' @param versionno An integer version number, e.g. 3, where 1 is the
+#'     earliest version of the trial in question, 2, is the next most
+#'     recent, etc. If 0 is supplied, the most recent version will be
+#'     returned. If no version number is specified, the first version
+#'     will be downloaded.
 #'
 #' @return A list containing the overall status, enrolment, start
 #'     date, primary completion date, primary completion date type,
@@ -22,7 +26,7 @@
 #' version <- drks_de_version("DRKS00005219", 1)
 #' }
 #'
-drks_de_version <- function(drksid, versionno) {
+drks_de_version <- function(drksid, versionno=1) {
 
     ## The DRKS site appears to internally assign version
     ## numbers that are integer multiples of 2, starting
@@ -35,6 +39,21 @@ drks_de_version <- function(drksid, versionno) {
     versionno <- versionno * 2
 
     out <- tryCatch({
+
+        ## Check that TRN is well-formed
+        if (! grepl("^DRKS\\d{8}$", drksid)) {
+            stop(paste0("'", drksid, "' is not a well-formed TRN"))
+        }
+
+        ## Check that version number is numeric
+        if (! is.numeric(versionno)) {
+            stop(paste0("'", versionno, "' is not a number"))
+        }
+
+        ## Check that version number is a whole number
+        if (versionno %% 1 != 0) {
+            stop(paste0("'", versionno, "' is not a whole number"))
+        }
 
         if (versionno != 0) {
 
@@ -70,16 +89,17 @@ drks_de_version <- function(drksid, versionno) {
 
         }
 
-        res <- httr::POST(
-            "https://drks.de/drks_web/compareTrialVersions.do",
-            body = version_query,
-            encode = "form"
+        session <- polite::bow(
+                    "https://drks.de/drks_web/compareTrialVersions.do"
+                           )
 
-        )
+        version <- polite::scrape(session, query=version_query)
 
-        version <- rvest::read_html(res)
-
-        closeAllConnections()
+        ## Back up locale info
+        lct <- Sys.getlocale("LC_TIME")
+        ## Set locale so that months are parsed correctly on
+        ## non-English computers
+        Sys.setlocale("LC_TIME", "en_US.UTF-8")
 
         ## Read the recruitment status
 
@@ -279,21 +299,24 @@ drks_de_version <- function(drksid, versionno) {
 
         ## Now, put all these data points together
 
-        data <- c(
-            rstatus,
-            startdate,
-            closingdate,
-            enrolno,
-            enroltype,
-            min_age,
-            max_age,
-            gender,
-            inclusion_criteria,
-            exclusion_criteria,
-            primaryoutcomes,
-            secondaryoutcomes,
-            contacts
+        data <- list(
+            rstatus = rstatus,
+            startdate = startdate,
+            closingdate = closingdate,
+            enrolno = enrolno,
+            enroltype = enroltype,
+            min_age = min_age,
+            max_age = max_age,
+            gender = gender,
+            inclusion_criteria = inclusion_criteria,
+            exclusion_criteria = exclusion_criteria,
+            primaryoutcomes = primaryoutcomes,
+            secondaryoutcomes = secondaryoutcomes,
+            contacts = contacts
         )
+
+        ## Restore original locale info
+        Sys.setlocale("LC_TIME", lct)
 
         return(data)
 

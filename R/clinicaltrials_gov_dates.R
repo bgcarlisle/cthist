@@ -6,9 +6,9 @@
 #'     capitalized "NCT" followed by eight numerals with no spaces or
 #'     hyphens.)
 #'
-#' @return A vector of ISO-8601 formatted dates corresponding to the
-#'     dates on which there were clinical trial history version
-#'     updates.
+#' @return A character vector of ISO-8601 formatted dates
+#'     corresponding to the dates on which there were clinical trial
+#'     history version updates.
 #'
 #' @export
 #'
@@ -23,19 +23,41 @@
 clinicaltrials_gov_dates <- function(nctid) {
     out <- tryCatch({
 
+        ## Check that TRN is well-formed
+        if (! grepl("^NCT\\d{8}$", nctid)) {
+            stop(paste0("'", nctid, "' is not a well-formed TRN"))
+        }
+
         url <- paste0(
             "https://clinicaltrials.gov/ct2/history/",
             nctid
         )
 
-        index <- rvest::read_html(url)
+        session <- polite::bow(url)
 
-        index %>%
+        index <- polite::scrape(session)
+
+        ## Back up locale info
+        lct <- Sys.getlocale("LC_TIME")
+        ## Set locale so that months are parsed correctly on
+        ## non-English computers
+        Sys.setlocale("LC_TIME", "en_US.UTF-8")
+        
+        dates <- index %>%
             rvest::html_nodes("fieldset.releases table a") %>%
             rvest::html_text() %>%
             as.Date(format = "%B %d, %Y") %>%
-            format("%Y-%m-%d") %>%
-            return()
+            format("%Y-%m-%d")
+
+        ## Restore original locale info
+        Sys.setlocale("LC_TIME", lct)
+
+        ## Check for NA values in dates
+        if (sum(is.na(dates)) > 0) {
+            warning("NA values returned for dates")
+        }
+        
+        return(dates)
 
     },
     error = function(cond) {

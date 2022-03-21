@@ -11,7 +11,8 @@ drks_de_version(drksid, versionno)
 e.g. "DRKS00005219". (A capitalized "DRKS" followed by eight
 numerals with no spaces or hyphens.)}
 
-\item{versionno}{An integer version number, e.g. 1}
+\item{versionno}{An integer version number, where 1 is the earliest
+version of the trial in question, e.g. 3}
 }
 \value{
 A list containing the overall status, enrolment, start

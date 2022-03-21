@@ -5,13 +5,17 @@
 #'     capitalized "NCT" followed by eight numerals with no spaces or
 #'     hyphens.)
 #'
-#' @param versionno An integer version number, e.g. 1
+#' @param versionno An integer version number, e.g. 3, where 1 is the
+#'     earliest version of the trial in question, 2 is the next most
+#'     recent, etc. If no version number is specified, the first
+#'     version will be downloaded.
 #'
 #' @return A list containing the overall status, enrolment, start
-#'     date, primary completion date, primary completion date type,
-#'     minimum age, maximum age, sex, gender-based, accepts healthy
-#'     volunteers, inclusion/exclusion criteria, outcome measures,
-#'     contacts and sponsors
+#'     date, start date precision (month or day) primary completion
+#'     date, primary completion date precision (month or day), primary
+#'     completion date type, minimum age, maximum age, sex,
+#'     gender-based, accepts healthy volunteers, inclusion/exclusion
+#'     criteria, outcome measures, contacts and sponsors
 #'
 #' @export
 #'
@@ -23,10 +27,25 @@
 #' version <- clinicaltrials_gov_version("NCT00942747", 1)
 #' }
 #'
-clinicaltrials_gov_version <- function(nctid, versionno) {
+clinicaltrials_gov_version <- function(nctid, versionno=1) {
 
     out <- tryCatch({
 
+        ## Check that TRN is well-formed
+        if (! grepl("^NCT\\d{8}$", nctid)) {
+            stop(paste0("'", nctid, "' is not a well-formed TRN"))
+        }
+
+        ## Check that version number is numeric
+        if (! is.numeric(versionno)) {
+            stop(paste0("'", versionno, "' is not a number"))
+        }
+
+        ## Check that version number is a whole number
+        if (versionno %% 1 != 0) {
+            stop(paste0("'", versionno, "' is not a whole number"))
+        }
+        
         url <- paste0(
             "https://clinicaltrials.gov/ct2/history/",
             nctid,
@@ -34,7 +53,13 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
             versionno
         )
 
-        version <- rvest::read_html(url)
+        version <- polite_read_html(url)
+
+        ## Back up locale info
+        lct <- Sys.getlocale("LC_TIME")
+        ## Set locale so that months are parsed correctly on
+        ## non-English computers
+        Sys.setlocale("LC_TIME", "en_US.UTF-8")
 
         ## Read the overall status
 
@@ -90,6 +115,7 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
             trimws()
 
         startdate_raw <- NA
+        startdate_precision <- NA
 
         for (startdate_row in startdate_rows) {
             startdate_row <- startdate_row %>%
@@ -117,8 +143,10 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
 
         if (! is.na(startdate_full)) {
             startdate <- startdate_full
+            startdate_precision <- "day"
         } else {
             startdate <- startdate_month
+            startdate_precision <- "month"
         }
 
         ## Read the primary completion date
@@ -131,6 +159,7 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
             trimws()
 
         pcdate_raw <- NA
+        pcdate_precision <- NA
 
         for (pcdate_row in pcdate_rows) {
             pcdate_row <- pcdate_row %>%
@@ -162,8 +191,10 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
 
         if (! is.na(pcdate_full)) {
             pcdate <- pcdate_full
+            pcdate_precision <- "day"
         } else {
             pcdate <- pcdate_month
+            pcdate_precision <- "month"
         }
 
         pcdatetype <- pcdate_raw %>%
@@ -457,22 +488,27 @@ clinicaltrials_gov_version <- function(nctid, versionno) {
 
         ## Now, put all these data points together
 
-        data <- c(
-            ostatus,
-            enrol,
-            startdate,
-            pcdate,
-            pcdatetype,
-            min_age,
-            max_age,
-            sex,
-            gender_based,
-            accepts_healthy_volunteers,
-            criteria,
-            om_data,
-            contacts_data,
-            sponsor_data
+        data <- list(
+            ostatus = ostatus,
+            enrol = enrol,
+            startdate = startdate,
+            startdate_precision = startdate_precision,
+            pcdate = pcdate,
+            pcdate_precision = pcdate_precision,
+            pcdatetype = pcdatetype,
+            min_age = min_age,
+            max_age = max_age,
+            sex = sex,
+            gender_based = gender_based,
+            accepts_healthy_volunteers = accepts_healthy_volunteers,
+            criteria = criteria,
+            om_data = om_data,
+            contacts_data = contacts_data,
+            sponsor_data = sponsor_data
         )
+
+        ## Restore original locale info
+        Sys.setlocale("LC_TIME", lct)
 
         return(data)
 

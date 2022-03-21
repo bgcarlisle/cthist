@@ -12,7 +12,8 @@ ClinicalTrials.gov NCT Number, e.g. "NCT00942747". (A
 capitalized "NCT" followed by eight numerals with no spaces or
 hyphens.)}
 
-\item{versionno}{An integer version number, e.g. 1}
+\item{versionno}{An integer version number, where 1 is the earliest
+version of the trial in question, e.g. 3}
 }
 \value{
 A list containing the overall status, enrolment, start
