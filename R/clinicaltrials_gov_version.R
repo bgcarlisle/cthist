@@ -487,23 +487,23 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
 
         ## Now, put all these data points together
 
-        data <- c(
-            ostatus,
-            enrol,
-            startdate,
-            startdate_precision,
-            pcdate,
-            pcdate_precision,
-            pcdatetype,
-            min_age,
-            max_age,
-            sex,
-            gender_based,
-            accepts_healthy_volunteers,
-            criteria,
-            om_data,
-            contacts_data,
-            sponsor_data
+        data <- list(
+            ostatus = ostatus,
+            enrol = enrol,
+            startdate = startdate,
+            startdate_precision = startdate_precision,
+            pcdate = pcdate,
+            pcdate_precision = pcdate_precision,
+            pcdatetype = pcdatetype,
+            min_age = min_age,
+            max_age = max_age,
+            sex = sex,
+            gender_based = gender_based,
+            accepts_healthy_volunteers = accepts_healthy_volunteers,
+            criteria = criteria,
+            om_data = om_data,
+            contacts_data = contacts_data,
+            sponsor_data = sponsor_data
         )
 
         ## Restore original locale info

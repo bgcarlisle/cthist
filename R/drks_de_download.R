@@ -167,20 +167,6 @@ drks_de_download <- function(drksids, output_filename=NA) {
                 message("Recovered from error successfully")
             }
 
-            rstatus <- versiondata[1]
-            startdate <- versiondata[2]
-            closingdate <- versiondata[3]
-            enrolno <- versiondata[4]
-            enroltype <- versiondata[5]
-            min_age <- versiondata[6]
-            max_age <- versiondata[7]
-            gender <- versiondata[8]
-            inclusion_criteria <- versiondata[9]
-            exclusion_criteria <- versiondata[10]
-            primaryoutcomes <- versiondata[11]
-            secondaryoutcomes <- versiondata[12]
-            contacts <- versiondata[13]
-
             tibble::tribble(
                        ~drksid,
                        ~version_number,
@@ -203,19 +189,19 @@ drks_de_download <- function(drksids, output_filename=NA) {
                        versionno,
                        length(versions),
                        version,
-                       rstatus,
-                       startdate,
-                       closingdate,
-                       enrolno,
-                       enroltype,
-                       min_age,
-                       max_age,
-                       gender,
-                       inclusion_criteria,
-                       exclusion_criteria,
-                       primaryoutcomes,
-                       secondaryoutcomes,
-                       contacts
+                       versiondata$rstatus,
+                       versiondata$startdate,
+                       versiondata$closingdate,
+                       versiondata$enrolno,
+                       versiondata$enroltype,
+                       versiondata$min_age,
+                       versiondata$max_age,
+                       versiondata$gender,
+                       versiondata$inclusion_criteria,
+                       versiondata$exclusion_criteria,
+                       versiondata$primaryoutcomes,
+                       versiondata$secondaryoutcomes,
+                       versiondata$contacts
                    ) %>%
                 readr::write_csv(
                            file = output_filename, append = TRUE

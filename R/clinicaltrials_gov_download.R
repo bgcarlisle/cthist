@@ -173,7 +173,7 @@ clinicaltrials_gov_download <- function(nctids, output_filename=NA) {
                 message("Recovered from error successfully")
             }
 
-            enrol <- versiondata[2]
+            enrol <- versiondata$enrol
             enrolno <- enrol %>%
                 stringr::str_extract("^[0-9]+")
             enroltype <- enrol %>%
@@ -205,23 +205,23 @@ clinicaltrials_gov_download <- function(nctids, output_filename=NA) {
                 versionno,
                 length(versions),
                 version,
-                versiondata[1], ## overall_status
-                versiondata[3], ## startdate
-                versiondata[4], ## startdate_precision
-                versiondata[5], ## pcdate
-                versiondata[6], ## pcdate_precision
-                versiondata[7], ## pcdatetype
+                versiondata$ostatus,
+                versiondata$startdate,
+                versiondata$startdate_precision,
+                versiondata$pcdate,
+                versiondata$pcdate_precision,
+                versiondata$pcdatetype,
                 enrolno,
                 enroltype,
-                versiondata[8], ## min_age
-                versiondata[9], ## max_age
-                versiondata[10], ## sex
-                versiondata[11], ## gender_based
-                versiondata[12], ## accepts_healthy_volunteers
-                versiondata[13], ## criteria
-                versiondata[14], ## om_data
-                versiondata[15], ## contacts_data
-                versiondata[16] ## sponsor_data
+                versiondata$min_age,
+                versiondata$max_age,
+                versiondata$sex,
+                versiondata$gender_based,
+                versiondata$accepts_health_volunteers,
+                versiondata$criteria,
+                versiondata$om_data,
+                versiondata$contacts_data,
+                versiondata$sponsor_data
             ) %>%
                 readr::write_csv(
                            file = output_filename, append = TRUE

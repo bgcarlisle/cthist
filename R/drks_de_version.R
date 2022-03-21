@@ -299,20 +299,20 @@ drks_de_version <- function(drksid, versionno=1) {
 
         ## Now, put all these data points together
 
-        data <- c(
-            rstatus,
-            startdate,
-            closingdate,
-            enrolno,
-            enroltype,
-            min_age,
-            max_age,
-            gender,
-            inclusion_criteria,
-            exclusion_criteria,
-            primaryoutcomes,
-            secondaryoutcomes,
-            contacts
+        data <- list(
+            rstatus = rstatus,
+            startdate = startdate,
+            closingdate = closingdate,
+            enrolno = enrolno,
+            enroltype = enroltype,
+            min_age = min_age,
+            max_age = max_age,
+            gender = gender,
+            inclusion_criteria = inclusion_criteria,
+            exclusion_criteria = exclusion_criteria,
+            primaryoutcomes = primaryoutcomes,
+            secondaryoutcomes = secondaryoutcomes,
+            contacts = contacts
         )
 
         ## Restore original locale info
