@@ -146,7 +146,9 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
             startdate_precision <- "day"
         } else {
             startdate <- startdate_month
-            startdate_precision <- "month"
+            if (! is.na(startdate)) {
+                startdate_precision <- "month"
+            }
         }
 
         ## Read the primary completion date
@@ -194,7 +196,9 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
             pcdate_precision <- "day"
         } else {
             pcdate <- pcdate_month
-            pcdate_precision <- "month"
+            if (! is.na(pcdate)) {
+                pcdate_precision <- "month"
+            }
         }
 
         pcdatetype <- pcdate_raw %>%
