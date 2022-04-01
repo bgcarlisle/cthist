@@ -1,0 +1,7 @@
+test_that("ClinicalTrials.gov contacts downloads correctly", {
+    version <- clinicaltrials_gov_version("NCT02110043", 1)
+    expect_equal(
+        jsonlite::fromJSON(version$contacts_data)$label[1],
+        "Central Contact Person:"
+    )
+})
