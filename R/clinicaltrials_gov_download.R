@@ -36,7 +36,10 @@
 #' clinicaltrials_gov_download(c("NCT00942747",
 #'     "NCT03281616"), filename)
 #' }
-#' 
+#'
+#' \dontrun{
+#' hv <- clinicaltrials_gov_download("NCT00942747")
+#' }
 clinicaltrials_gov_download <- function(nctids, output_filename=NA) {
 
     ## If output_filename is not specified, write to tempfile() and

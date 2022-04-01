@@ -31,7 +31,10 @@
 #' filename <- tempfile()
 #' drks_de_download(c("DRKS00005219", "DRKS00003170"), filename)
 #' }
-#' 
+#'
+#' \dontrun{
+#' hv <- drks_de_download("DRKS00005219")
+#' }
 drks_de_download <- function(drksids, output_filename=NA) {
 
     ## If output_filename is not specified, write to tempfile() and
