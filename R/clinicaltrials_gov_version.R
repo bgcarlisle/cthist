@@ -255,11 +255,11 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
         gender_based <- NA
         for (elig_row in eligibility_rows) {
             elig_row <- elig_row %>%
-                stringr::str_extract("Gender based: [A-Za-z]+")
+                stringr::str_extract("Gender Based: [A-Za-z]+")
 
             if (! is.na(elig_row))  {
                 gender_based <- sub(
-                    "Gender based: ([A-Za-z]+)",
+                    "Gender Based: ([A-Za-z]+)",
                     "\\1",
                     elig_row
                 )
