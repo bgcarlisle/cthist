@@ -42,7 +42,7 @@ drks_de_dates <- function(drksid) {
         lct <- Sys.getlocale("LC_TIME")
         ## Set locale so that months are parsed correctly on
         ## non-English computers
-        Sys.setlocale("LC_TIME", "en_US.UTF-8")
+        Sys.setlocale("LC_TIME", "C")
 
         dates <- index %>%
             rvest::html_nodes("tr:not(.bgHighlight) > td:nth-child(1)") %>%
