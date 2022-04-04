@@ -56,7 +56,7 @@ clinicaltrials_gov_download <- function(nctids, output_filename=NA) {
         stop("Input contains TRNs that are not well-formed")
     }
 
-    output_cols <- "ciiDcDcDcciccccccccc"
+    output_cols <- "ciiDcDcDccicccccccccc"
 
     if (!file.exists(output_filename)) {
 
