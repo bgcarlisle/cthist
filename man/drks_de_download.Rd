@@ -4,7 +4,7 @@
 \alias{drks_de_download}
 \title{Mass-download registry entry historical versions from DRKS.de}
 \usage{
-drks_de_download(drksids, output_filename = NA)
+drks_de_download(drksids, output_filename = NA, quiet = FALSE)
 }
 \arguments{
 \item{drksids}{A list of well-formed DRKS numbers,
@@ -15,6 +15,10 @@ the dataframe will be written as a CSV,
 e.g. "historical_versions.csv". If no output filename is
 provided, the data frame of downloaded historical versions will
 be returned by the function as a data frame.}
+
+\item{quiet}{A boolean TRUE or FALSE. If TRUE, no messages will be
+printed during download. FALSE by default, messages printed for
+every version downloaded showing progress.}
 }
 \value{
 If an output filename is specified, on successful
