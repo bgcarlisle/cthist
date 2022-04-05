@@ -10,6 +10,10 @@
 #'     provided, the data frame of downloaded historical versions will
 #'     be returned by the function as a data frame.
 #'
+#' @param quiet A boolean TRUE or FALSE. If TRUE, no messages will be
+#'     printed during download. FALSE by default, messages printed for
+#'     every version downloaded showing progress.
+#'
 #' @return If an output filename is specified, on successful
 #'     completion, this function returns TRUE and otherwise returns
 #'     FALSE. If an output filename is not specified, on successful
@@ -40,7 +44,7 @@
 #' \dontrun{
 #' hv <- clinicaltrials_gov_download("NCT00942747")
 #' }
-clinicaltrials_gov_download <- function(nctids, output_filename=NA) {
+clinicaltrials_gov_download <- function(nctids, output_filename=NA, quiet=FALSE) {
 
     ## If output_filename is not specified, write to tempfile() and
     ## return this invisibly rather than TRUE
@@ -163,7 +167,7 @@ clinicaltrials_gov_download <- function(nctids, output_filename=NA) {
                 version_retry < 10
             ) {
 
-                if (version_retry > 0) {
+                if (version_retry > 0 & ! quiet) {
                     message("Trying again ...")
                 }
 
@@ -175,7 +179,7 @@ clinicaltrials_gov_download <- function(nctids, output_filename=NA) {
                 
             }
 
-            if (version_retry > 1) {
+            if (version_retry > 1 & ! quiet) {
                 message("Recovered from error successfully")
             }
 
@@ -234,7 +238,7 @@ clinicaltrials_gov_download <- function(nctids, output_filename=NA) {
                        )
 
 
-            if (length(versions) > 2) {
+            if (length(versions) > 2 & ! quiet) {
                 message(
                     paste0(
                         nctid, " - ", versionno, " of ",
@@ -259,18 +263,22 @@ clinicaltrials_gov_download <- function(nctids, output_filename=NA) {
 
         progress <- format(100 * numer / denom, digits = 2)
 
-        message(
-            paste0(
-                Sys.time(),
-                " ",
-                nctid,
-                " processed (",
-                length(versions),
-                " versions, ",
-                progress,
-                "%)"
+        if (! quiet) {
+            
+            message(
+                paste0(
+                    Sys.time(),
+                    " ",
+                    nctid,
+                    " processed (",
+                    length(versions),
+                    " versions, ",
+                    progress,
+                    "%)"
+                )
             )
-        )
+            
+        }
 
     }
 
