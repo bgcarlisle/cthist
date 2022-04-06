@@ -106,10 +106,11 @@ drks_de_version <- function(drksid, versionno=1) {
         rstatus <- NA
         rstatus <- version %>%
             rvest::html_nodes("li.state") %>%
-            rvest::html_text()
-
-        rstatus <- substr(rstatus, 23, nchar(rstatus))
-
+            rvest::html_text2() %>%
+            trimws() %>%
+            stringr::str_extract("Recruitment Status: ([A-Za-z, -]+)") %>%
+            sub("Recruitment Status: ([A-Za-z, -]+)", "\\1", .)
+        
         ## Read the enrolment
 
         enrolno <- NA
@@ -121,9 +122,10 @@ drks_de_version <- function(drksid, versionno=1) {
         enroltype <- NA
         enroltype <- version %>%
             rvest::html_nodes("li.running") %>%
-            rvest::html_text()
-
-        enroltype <- substr(enroltype, 19, nchar(enroltype))
+            rvest::html_text2() %>%
+            trimws() %>%
+            stringr::str_extract("Planned/Actual: ([A-Za-z]+)") %>%
+            sub("Planned/Actual: ([A-Za-z]+)", "\\1", .)
 
         ## Read the start date
 
@@ -166,23 +168,26 @@ drks_de_version <- function(drksid, versionno=1) {
         min_age <- version %>%
             rvest::html_node("li.minAge") %>%
             rvest::html_text2() %>%
-            gsub(pattern = "Minimum Age:", replacement = "", .data) %>%
-            trimws()
+            trimws() %>%
+            stringr::str_extract("Minimum Age: ([A-Za-z0-9 ]+)") %>%
+            sub("Minimum Age: ([A-Za-z0-9 ]+)", "\\1", .)
 
         max_age <- NA
         max_age <- version %>%
             rvest::html_node("li.maxAge") %>%
             rvest::html_text2() %>%
-            gsub(pattern = "Maximum Age:", replacement = "", .data) %>%
-            trimws()
-
+            trimws() %>%
+            stringr::str_extract("Maximum Age: ([A-Za-z0-9 ]+)") %>%
+            sub("Maximum Age: ([A-Za-z0-9 ]+)", "\\1", .)
+        
         gender <- NA
         gender <- version %>%
             rvest::html_node("li.gender") %>%
             rvest::html_text2() %>%
-            gsub(pattern = "Gender:", replacement = "", .data) %>%
-            trimws()
-
+            trimws() %>%
+            stringr::str_extract("Gender: ([A-Za-z, ]+)") %>%
+            sub("Gender: ([A-Za-z, ]+)", "\\1", .)
+        
         inclusion_criteria <- NA
         inclusion_criteria <- version %>%
             rvest::html_nodes(".inclusionAdd") %>%
