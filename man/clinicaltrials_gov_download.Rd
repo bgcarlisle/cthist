@@ -37,8 +37,13 @@ needed, while preserving the ones that have already been
 downloaded correctly.
 }
 \description{
-Mass-download registry entry historical versions from
-ClinicalTrials.gov
+This function will download all ClinicalTrials.gov registry records
+for the NCT numbers specified. Rather than transcribing NCT numbers
+by hand, it is recommended that you conduct a search for trials of
+interest using the ClinicalTrials.gov web front-end and download
+the result as a comma-separated value (CSV) file. The CSV can be
+read in to memory as a data frame and the \verb{NCT Number} column can
+be passed directly to the function as the \code{nctids} argument.
 }
 \examples{
 

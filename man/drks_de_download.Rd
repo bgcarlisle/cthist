@@ -33,7 +33,15 @@ output file for errors in the download, remove them and try to
 download the historical versions again.
 }
 \description{
-Mass-download registry entry historical versions from DRKS.de
+This function will download all DRKS.de registry records for the
+TRNs specified. Rather than transcribing TRNs by hand, it is
+recommended that you conduct a search for trials of interest using
+the DRKS.de web front-end and download the result as a
+comma-separated value (CSV) file. Thedownload option labeled "CSV"
+on DRKS.de currently produces a zipped semicolon-delimited file,
+which must be unzipped before reading. The file can be read in to
+memory as a data frame and the \code{drksId} column can be passed
+directly to the function as the \code{drksids} argument.
 }
 \examples{
 

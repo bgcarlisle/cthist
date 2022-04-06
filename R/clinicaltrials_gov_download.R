@@ -1,6 +1,14 @@
 #' Mass-download registry entry historical versions from
 #' ClinicalTrials.gov
 #'
+#' This function will download all ClinicalTrials.gov registry records
+#' for the NCT numbers specified. Rather than transcribing NCT numbers
+#' by hand, it is recommended that you conduct a search for trials of
+#' interest using the ClinicalTrials.gov web front-end and download
+#' the result as a comma-separated value (CSV) file. The CSV can be
+#' read in to memory as a data frame and the `NCT Number` column can
+#' be passed directly to the function as the `nctids` argument.
+#'
 #' @param nctids A list of well-formed NCT numbers,
 #'     e.g. c("NCT00942747", "NCT03281616").
 #'
