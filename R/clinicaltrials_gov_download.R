@@ -301,6 +301,7 @@ clinicaltrials_gov_download <- function(nctids, output_filename=NA, quiet=FALSE)
         dplyr::filter(
                    as.character(.data$version_date) == "Error"
                    | as.character(.data$overall_status) == "Error"
+                   | is.na(.data$overall_status)
                ) %>%
         dplyr::group_by(nctid) %>%
         dplyr::slice_head() %>%
