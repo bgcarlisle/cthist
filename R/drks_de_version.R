@@ -108,8 +108,9 @@ drks_de_version <- function(drksid, versionno=1) {
             rvest::html_nodes("li.state") %>%
             rvest::html_text2() %>%
             trimws() %>%
-            stringr::str_extract("Recruitment Status: ([A-Za-z, -]+)") %>%
-            sub("Recruitment Status: ([A-Za-z, -]+)", "\\1", .)
+            stringr::str_extract("Recruitment Status: ([A-Za-z, -]+)")
+
+        rstatus <- sub("Recruitment Status: ([A-Za-z, -]+)", "\\1", rstatus)
         
         ## Read the enrolment
 
@@ -124,8 +125,9 @@ drks_de_version <- function(drksid, versionno=1) {
             rvest::html_nodes("li.running") %>%
             rvest::html_text2() %>%
             trimws() %>%
-            stringr::str_extract("Planned/Actual: ([A-Za-z]+)") %>%
-            sub("Planned/Actual: ([A-Za-z]+)", "\\1", .)
+            stringr::str_extract("Planned/Actual: ([A-Za-z]+)")
+
+        enroltype <- sub("Planned/Actual: ([A-Za-z]+)", "\\1", enroltype)
 
         ## Read the start date
 
@@ -169,24 +171,27 @@ drks_de_version <- function(drksid, versionno=1) {
             rvest::html_node("li.minAge") %>%
             rvest::html_text2() %>%
             trimws() %>%
-            stringr::str_extract("Minimum Age: ([A-Za-z0-9 ]+)") %>%
-            sub("Minimum Age: ([A-Za-z0-9 ]+)", "\\1", .)
+            stringr::str_extract("Minimum Age: ([A-Za-z0-9 ]+)")
+
+        min_age <- sub("Minimum Age: ([A-Za-z0-9 ]+)", "\\1", min_age)
 
         max_age <- NA
         max_age <- version %>%
             rvest::html_node("li.maxAge") %>%
             rvest::html_text2() %>%
             trimws() %>%
-            stringr::str_extract("Maximum Age: ([A-Za-z0-9 ]+)") %>%
-            sub("Maximum Age: ([A-Za-z0-9 ]+)", "\\1", .)
+            stringr::str_extract("Maximum Age: ([A-Za-z0-9 ]+)")
+
+        max_age <- sub("Maximum Age: ([A-Za-z0-9 ]+)", "\\1", max_age)
         
         gender <- NA
         gender <- version %>%
             rvest::html_node("li.gender") %>%
             rvest::html_text2() %>%
             trimws() %>%
-            stringr::str_extract("Gender: ([A-Za-z, ]+)") %>%
-            sub("Gender: ([A-Za-z, ]+)", "\\1", .)
+            stringr::str_extract("Gender: ([A-Za-z, ]+)")
+
+        gender <- sub("Gender: ([A-Za-z, ]+)", "\\1", gender)
         
         inclusion_criteria <- NA
         inclusion_criteria <- version %>%
