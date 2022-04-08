@@ -44,7 +44,7 @@ Download clinical trial registry entry version data:
 version_data <- clinicaltrials_gov_version("NCT02110043", 4)
 
 ## Get the 2nd item (enrolment) for that version
-version_data[2]
+version_data$enrol
 ## [1] "22 [Anticipated]"
 ```
 
@@ -86,7 +86,7 @@ Download clinical trial registry entry version data:
 version_data <- drks_de_version("DRKS00003170", 4)
 
 ## Get the 4th item (enrolment) for that version
-version_data[4]
+version_data$enrolno
 ## [1] "60"
 ```
 
