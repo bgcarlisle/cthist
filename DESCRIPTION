@@ -14,13 +14,13 @@ Imports:
     httr,
     jsonlite,
     magrittr,
+    polite,
     readr,
     rlang,
     rvest,
     selectr,
     stringr,
-    tibble,
-    polite
+    tibble
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
