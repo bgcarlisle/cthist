@@ -52,7 +52,8 @@
 #' \dontrun{
 #' hv <- clinicaltrials_gov_download("NCT00942747")
 #' }
-clinicaltrials_gov_download <- function(nctids, output_filename=NA, quiet=FALSE) {
+clinicaltrials_gov_download <-
+    function(nctids, output_filename=NA, quiet=FALSE) {
 
     ## If output_filename is not specified, write to tempfile() and
     ## return this invisibly rather than TRUE

@@ -27,7 +27,9 @@
 #'     trial registry entry versions for one or many trials on
 #'     DRKS.de
 #'
-#' @references Carlisle, BG. Analysis of clinical trial registry entry histories using the novel R package cthist. medRxiv, 2022. doi: 10.1101/2022.01.20.22269538
+#' @references Carlisle, BG. Analysis of clinical trial registry entry
+#'     histories using the novel R package cthist. medRxiv, 2022. doi:
+#'     10.1101/2022.01.20.22269538
 #' 
 #' @keywords internal
 "_PACKAGE"
