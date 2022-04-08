@@ -20,9 +20,7 @@ Imports:
     selectr,
     stringr,
     tibble,
-    polite,
-    memoise,
-    robotstxt
+    polite
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
