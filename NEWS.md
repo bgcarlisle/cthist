@@ -1,3 +1,8 @@
+# cthist 1.0.1
+
+* Fix bug where `cthist` does not capture outcome measures in versions
+  posted after results are posted.
+
 # cthist 1.0.0
 
 * Re-implemented functions that access ClinicalTrials.gov or DRKS.de
