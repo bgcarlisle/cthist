@@ -69,7 +69,7 @@ clinicaltrials_gov_download <-
         stop("Input contains TRNs that are not well-formed")
     }
 
-    output_cols <- "ciiDcDcDccicccccccccc"
+    output_cols <- "ciiDcDcDcciccccccccccc"
 
     if (!file.exists(output_filename)) {
 
@@ -94,7 +94,8 @@ clinicaltrials_gov_download <-
             criteria = character(),
             outcome_measures = character(),
             contacts = character(),
-            sponsor_collaborators = character()
+            sponsor_collaborators = character(),
+            whystopped = character()
         ) %>%
             readr::write_csv(
                        file = output_filename,
@@ -221,6 +222,7 @@ clinicaltrials_gov_download <-
                 ~outcome_measures,
                 ~contacts,
                 ~sponsor_collaborators,
+                ~whystopped,
                 nctid,
                 versionno,
                 length(versions),
@@ -241,7 +243,8 @@ clinicaltrials_gov_download <-
                 versiondata$criteria,
                 versiondata$om_data,
                 versiondata$contacts_data,
-                versiondata$sponsor_data
+                versiondata$sponsor_data,
+                versiondata$whystopped
             ) %>%
                 readr::write_csv(
                            file = output_filename, append = TRUE
