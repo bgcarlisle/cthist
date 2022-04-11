@@ -310,81 +310,93 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
 
         ## Read the outcome measures
 
+        om_rows <- version %>%
+            rvest::html_nodes("#OutcomeMeasuresBody tr")
+
+        if (length(om_rows) == 0) {
+            om_rows <- version %>%
+                rvest::html_nodes("#ProtocolOutcomeMeasuresBody tr")
+        }
+
+        om_data <- tibble::tribble(
+                               ~section, ~label, ~content
+                           )
+
         outcomes_link <- NA
         outcomes_link <-  version %>%
             rvest::html_node("#ProtocolOutcomeMeasuresBody a") %>%
             rvest::html_text()
 
-        if (is.na(outcomes_link)) {
+        if (! is.na(outcomes_link)) {
+            new_om_data <- tibble::tribble(
+                                       ~section, ~label, ~content,
+                                       outcomes_link, NA, NA
+                                   )
+            
+            om_data <- dplyr::bind_rows(om_data, new_om_data)
+        }
+        
+        omsection <- NA
+        omlabel <- NA
+        omcontent <- NA
+        for (om_row in om_rows) {
 
-            om_rows <- version %>%
-                rvest::html_nodes("#OutcomeMeasuresBody tr")
+            om_row_cells <- om_row %>% rvest::html_nodes("td")
 
-            om_data <- tibble::tribble(
-                ~section, ~label, ~content
-            )
-            omsection <- NA
-            omlabel <- NA
-            omcontent <- NA
-            for (om_row in om_rows) {
+            if (length(om_row_cells) > 0) {
 
-                om_row_cells <- om_row %>% rvest::html_nodes("td")
+                if (length(om_row_cells) == 2) {
 
-                if (length(om_row_cells) > 0) {
-
-                    if (length(om_row_cells) == 2) {
-
-                        if (om_row_cells[2] %>% rvest::html_text() == "") {
-                            omsection <- om_row_cells[1] %>%
-                                rvest::html_text() %>%
-                                trimws()
-
-                        } else {
-                            omlabel <- om_row_cells[1] %>%
-                                rvest::html_text() %>%
-                                trimws()
-
-                            omcontent <- om_row_cells[2] %>%
-                                rvest::html_text2() %>%
-                                trimws()
-
-                            new_om_data <- tibble::tribble(
-                                ~section, ~label, ~content,
-                                omsection, omlabel, omcontent
-                            )
-
-                            om_data <- dplyr::bind_rows(om_data, new_om_data)
-                        }
+                    if (om_row_cells[2] %>% rvest::html_text() == ""){
+                        omsection <- om_row_cells[1] %>%
+                            rvest::html_text() %>%
+                            trimws()
 
                     } else {
-
                         omlabel <- om_row_cells[1] %>%
-                            rvest::html_node("p.mcp-comment-title") %>%
-                            rvest::html_text()
+                            rvest::html_text() %>%
+                            trimws()
 
-                        omcontent <- om_row_cells[1] %>%
-                            rvest::html_nodes("li") %>%
+                        omcontent <- om_row_cells[2] %>%
                             rvest::html_text2() %>%
-                            paste(collapse = " ")
+                            trimws()
 
                         new_om_data <- tibble::tribble(
-                            ~section, ~label, ~content,
-                            omsection, omlabel, omcontent
-                        )
+                                         ~section, ~label, ~content,
+                                         omsection, omlabel, omcontent
+                                       )
 
-                        om_data <- dplyr::bind_rows(om_data, new_om_data)
+                        om_data <- dplyr::bind_rows(
+                                              om_data,
+                                              new_om_data
+                                          )
                     }
 
+                } else {
+
+                    omlabel <- om_row_cells[1] %>%
+                        rvest::html_node("p.mcp-comment-title") %>%
+                        rvest::html_text()
+
+                    omcontent <- om_row_cells[1] %>%
+                        rvest::html_nodes("li") %>%
+                        rvest::html_text2() %>%
+                        paste(collapse = " ")
+
+                    new_om_data <- tibble::tribble(
+                                     ~section, ~label, ~content,
+                                     omsection, omlabel, omcontent
+                                   )
+
+                    om_data <- dplyr::bind_rows(om_data, new_om_data)
                 }
 
             }
 
-            om_data <- om_data %>%
-                jsonlite::toJSON()
-
-        } else {
-            om_data <- outcomes_link
         }
+
+        om_data <- om_data %>%
+            jsonlite::toJSON()
 
         ## Read the Contacts
 
