@@ -85,6 +85,31 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
             }
         }
 
+        ## Read the "why stopped"
+
+        ostatus_rows <- version %>%
+            rvest::html_nodes("#StudyStatusBody tr") %>%
+            rvest::html_text2() %>%
+            trimws()
+
+        whystopped <- NA
+        for (ostatus_row in ostatus_rows) {
+            
+            ostatus_row <- ostatus_row %>%
+                stringr::str_extract("Overall Status:\t([A-Za-z, ]+) \\[(.*)+\\]")
+
+            if (! is.na(ostatus_row)) {
+                whystopped <- sub(
+                    "Overall Status:\t([A-Za-z, ]+) \\[(.*)+\\]",
+                    "\\2",
+                    ostatus_row
+                ) %>%
+                    trimws()
+                
+            }
+            
+        }
+
         ## Read the enrolment and type
 
         enrol_rows <- version %>%
@@ -501,7 +526,7 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
 
         sponsor_data <- sponsor_data %>%
             jsonlite::toJSON()
-
+        
         ## Now, put all these data points together
 
         data <- list(
@@ -520,7 +545,8 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
             criteria = criteria,
             om_data = om_data,
             contacts_data = contacts_data,
-            sponsor_data = sponsor_data
+            sponsor_data = sponsor_data,
+            whystopped = whystopped
         )
 
         ## Restore original locale info
