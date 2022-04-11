@@ -1,3 +1,7 @@
+# cthist 1.1.0
+
+* Added "why stopped" field
+
 # cthist 1.0.1
 
 * Fix bug where `cthist` does not capture outcome measures in versions
