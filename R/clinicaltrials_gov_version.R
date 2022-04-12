@@ -74,7 +74,8 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
         for (ostatus_row in ostatus_rows) {
 
             ostatus_row <- ostatus_row %>%
-                stringr::str_extract("Overall Status: ([A-Za-z, ]+)")
+                stringr::str_extract("Overall Status: ([A-Za-z, ]+)") %>%
+                trimws()
 
             if (! is.na(ostatus_row)) {
                 ostatus <- sub(
