@@ -1,6 +1,7 @@
 # cthist 1.1.0
 
 * Added "why stopped" field
+* Remove superfluous white space from overall status field
 
 # cthist 1.0.1
 
