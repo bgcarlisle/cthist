@@ -124,6 +124,7 @@ drks_de_download(c("DRKS00005219", "DRKS00003170"), "versions.csv")
 | Inclusion and exclusion criteria |                  ✓ |       ✓ |
 | Contacts                         |                  ✓ |       ✓ |
 | Sponsors                         |                  ✓ |       - |
+| "Why stopped?"                   |                  ✓ |       - |
 
 ## Note on use
 
