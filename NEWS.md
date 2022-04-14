@@ -2,6 +2,7 @@
 
 * Added "why stopped" field
 * Remove superfluous white space from overall status field
+* Fixed bug that occurs in rare cases (version has no overall status)
 
 # cthist 1.0.1
 
