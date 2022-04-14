@@ -118,8 +118,7 @@ clinicaltrials_gov_download <-
         error_ncts <- check %>%
             dplyr::filter(
                        as.character(.data$version_date) == "Error" |
-                       as.character(.data$overall_status) == "Error" |
-                       is.na(.data$overall_status)
+                       as.character(.data$overall_status) == "Error"
                    ) %>%
             dplyr::group_by(nctid) %>%
             dplyr::slice_head() %>%
@@ -305,7 +304,6 @@ clinicaltrials_gov_download <-
         dplyr::filter(
                    as.character(.data$version_date) == "Error"
                    | as.character(.data$overall_status) == "Error"
-                   | is.na(.data$overall_status)
                ) %>%
         dplyr::group_by(nctid) %>%
         dplyr::slice_head() %>%

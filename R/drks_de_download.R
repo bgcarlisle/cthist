@@ -106,8 +106,7 @@ drks_de_download <- function(drksids, output_filename=NA, quiet=FALSE) {
         error_trns <- check %>%
             dplyr::filter(
                      as.character(.data$version_date) == "Error" |
-                   as.character(.data$recruitment_status) == "Error" |
-                     is.na(.data$recruitment_status)
+                   as.character(.data$recruitment_status) == "Error"
                    ) %>%
             dplyr::group_by(drksid) %>%
             dplyr::slice_head() %>%
@@ -279,8 +278,7 @@ drks_de_download <- function(drksids, output_filename=NA, quiet=FALSE) {
     error_trns <- check %>%
         dplyr::filter(
                    as.character(.data$version_date) == "Error" |
-                   as.character(.data$recruitment_status) == "Error" |
-                   is.na(.data$recruitment_status)
+                   as.character(.data$recruitment_status) == "Error"
                ) %>%
         dplyr::group_by(drksid) %>%
         dplyr::slice_head() %>%
