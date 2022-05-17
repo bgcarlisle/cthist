@@ -5,13 +5,16 @@
 \title{Download a vector of dates on which a ClinicalTrials.gov registry
 entry was updated}
 \usage{
-clinicaltrials_gov_dates(nctid)
+clinicaltrials_gov_dates(nctid, status_change_only = FALSE)
 }
 \arguments{
 \item{nctid}{A character string including a well-formed
 ClinicalTrials.gov NCT Number, e.g. "NCT00942747". (A
 capitalized "NCT" followed by eight numerals with no spaces or
 hyphens.)}
+
+\item{status_change_only}{If TRUE, returns only the dates marked
+with a Recruitment Status change, default FALSE.}
 }
 \value{
 A character vector of ISO-8601 formatted dates

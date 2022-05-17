@@ -6,6 +6,9 @@
 #'     capitalized "NCT" followed by eight numerals with no spaces or
 #'     hyphens.)
 #'
+#' @param status_change_only If TRUE, returns only the dates marked
+#'     with a Recruitment Status change, default FALSE.
+#'
 #' @return A character vector of ISO-8601 formatted dates
 #'     corresponding to the dates on which there were clinical trial
 #'     history version updates.
@@ -20,7 +23,7 @@
 #' versions <- clinicaltrials_gov_dates("NCT00942747")
 #' }
 #'
-clinicaltrials_gov_dates <- function(nctid) {
+clinicaltrials_gov_dates <- function(nctid, status_change_only=FALSE) {
     out <- tryCatch({
 
         ## Check that TRN is well-formed
@@ -42,12 +45,25 @@ clinicaltrials_gov_dates <- function(nctid) {
         ## Set locale so that months are parsed correctly on
         ## non-English computers
         Sys.setlocale("LC_TIME", "C")
-        
-        dates <- index %>%
-            rvest::html_nodes("fieldset.releases table a") %>%
-            rvest::html_text() %>%
-            as.Date(format = "%B %d, %Y") %>%
-            format("%Y-%m-%d")
+
+        if (! status_change_only) {
+            ## Default setting: Download all version change dates
+            dates <- index %>%
+                rvest::html_nodes("fieldset.releases table a") %>%
+                rvest::html_text() %>%
+                as.Date(format = "%B %d, %Y") %>%
+                format("%Y-%m-%d")
+        } else {
+            ## Download only the dates that are marked with a
+            ## Recruitment Status change
+            dates <- index %>%
+                rvest::html_nodes("fieldset.releases table span.recruitmentStatus") %>%
+                rvest::html_nodes(xpath="../..") %>%
+                rvest::html_nodes("a") %>%
+                rvest::html_text() %>%
+                as.Date(format = "%B %d, %Y") %>%
+                format("%Y-%m-%d")
+        }
 
         ## Restore original locale info
         Sys.setlocale("LC_TIME", lct)

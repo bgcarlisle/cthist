@@ -1,3 +1,9 @@
+# cthist 1.2.0
+
+* Added `status_change_only` option to `clinicaltrials_gov_dates()`
+  function to allow for downloading only the dates on which a trial's
+  Recruitment Status changed
+
 # cthist 1.1.0
 
 * Added "why stopped" field
