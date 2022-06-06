@@ -27,9 +27,16 @@ clinicaltrials_gov_dates <- function(nctid, status_change_only=FALSE) {
     out <- tryCatch({
 
         ## Check that TRN is well-formed
-        if (! grepl("^NCT\\d{8}$", nctid)) {
-            stop(paste0("'", nctid, "' is not a well-formed TRN"))
-        }
+        assertthat::assert_that(
+                        is.character(nctid),
+                        grepl(
+                            "^NCT\\d{8}$",
+                            nctid
+                        )
+                    )
+
+        ## Check that `status_change_only` is logical
+        assertthat::assert_that(is.logical(status_change_only))
 
         url <- paste0(
             "https://clinicaltrials.gov/ct2/history/",
