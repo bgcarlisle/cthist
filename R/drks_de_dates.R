@@ -27,6 +27,12 @@ drks_de_dates <- function(drksid) {
         if (! grepl("^DRKS\\d{8}$", drksid)) {
             stop(paste0("'", drksid, "' is not a well-formed TRN"))
         }
+   
+        ## Check that the site is reachable
+        if (! RCurl::url.exists("https://clinicaltrials.gov")) {
+            message("Unable to connect to clinicaltrials.gov")
+            return ("Error")
+        }
 
         url <- paste0(
             "https://drks.de/drks_web/navigate.do?",

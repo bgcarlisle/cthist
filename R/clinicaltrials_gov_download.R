@@ -73,12 +73,11 @@ clinicaltrials_gov_download <- function(
     }
         
     ## Check that the site is reachable
-    assertthat::assert_that(
-                    RCurl::url.exists(
-                               "https://clinicaltrials.gov"
-                           )
-                )
-
+    if (! RCurl::url.exists("https://clinicaltrials.gov")) {
+        message("Unable to connect to clinicaltrials.gov")
+        return (FALSE)
+    }
+    
     output_cols <- "ciiDcDcDcciccccccccccc"
 
     if (!file.exists(output_filename)) {

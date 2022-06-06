@@ -1,3 +1,9 @@
+# cthist 1.2.1
+
+* Implemented checks in `clinicaltrials_gov_download()` and
+  `drks_de_download()` that the Internet resources are available and
+  fails gracefully in the case that they're not
+
 # cthist 1.2.0
 
 * Added `status_change_only` option to `clinicaltrials_gov_dates()`

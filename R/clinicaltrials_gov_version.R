@@ -45,6 +45,12 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
         if (versionno %% 1 != 0) {
             stop(paste0("'", versionno, "' is not a whole number"))
         }
+   
+        ## Check that the site is reachable
+        if (! RCurl::url.exists("https://clinicaltrials.gov")) {
+            message("Unable to connect to clinicaltrials.gov")
+            return ("Error")
+        }
         
         url <- paste0(
             "https://clinicaltrials.gov/ct2/history/",

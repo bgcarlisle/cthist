@@ -66,11 +66,10 @@ drks_de_download <- function(drksids, output_filename=NA, quiet=FALSE) {
     }
    
     ## Check that the site is reachable
-    assertthat::assert_that(
-                    RCurl::url.exists(
-                               "https://drks.de"
-                           )
-                )
+    if (! RCurl::url.exists("https://drks.de")) {
+        message("Unable to connect to drks.de")
+        return (FALSE)
+    }
     
     output_cols <- "ciiDcDDiccccccccc"
 

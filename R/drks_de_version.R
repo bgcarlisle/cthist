@@ -54,6 +54,12 @@ drks_de_version <- function(drksid, versionno=1) {
         if (versionno %% 1 != 0) {
             stop(paste0("'", versionno, "' is not a whole number"))
         }
+   
+        ## Check that the site is reachable
+        if (! RCurl::url.exists("https://clinicaltrials.gov")) {
+            message("Unable to connect to clinicaltrials.gov")
+            return ("Error")
+        }
 
         if (versionno != 0) {
 
