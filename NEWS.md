@@ -4,11 +4,17 @@
   `drks_de_download()` that the Internet resources are available and
   fails gracefully in the case that they're not
 
+---
+
 # cthist 1.2.0
+
+---
 
 * Added `status_change_only` option to `clinicaltrials_gov_dates()`
   function to allow for downloading only the dates on which a trial's
   Recruitment Status changed
+
+---
 
 # cthist 1.1.0
 
@@ -16,10 +22,16 @@
 * Remove superfluous white space from overall status field
 * Fixed bug that occurs in rare cases (version has no overall status)
 
+---
+
 # cthist 1.0.1
+
+---
 
 * Fix bug where `cthist` does not capture outcome measures in versions
   posted after results are posted.
+
+---
 
 # cthist 1.0.0
 
@@ -44,20 +56,30 @@
 * Add "quiet" downloading option
 * Improved documentation
 
+---
+
 # cthist 0.1.4
 
 * Fix DRKS bug where post-completion records sometimes contain more
   than one `li.deadline` node, causing formatting errors
 
+---
+
 # cthist 0.1.3
+
+---
 
 * Fix DRKS bug where multiple contact affiliation nodes caused
   download to produce an error
+
+---
 
 # cthist 0.1.2
 
 * Updated DRKS error message to be more informative on failure
 * Updated unit tests to expect graceful error on failure
+
+---
 
 # cthist 0.1.1
 
@@ -69,6 +91,8 @@
   `drks_de_dates` for brevity
 * Renamed function `drks_de_version_data` to
   `drks_de_version` for brevity
+
+---
 
 # cthist 0.1.0
 

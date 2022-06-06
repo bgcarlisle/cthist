@@ -16,6 +16,7 @@ Imports:
     jsonlite,
     magrittr,
     polite,
+    RCurl,
     readr,
     rlang,
     rvest,
