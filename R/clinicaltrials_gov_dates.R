@@ -23,7 +23,10 @@
 #' versions <- clinicaltrials_gov_dates("NCT00942747")
 #' }
 #'
-clinicaltrials_gov_dates <- function(nctid, status_change_only=FALSE) {
+clinicaltrials_gov_dates <- function(
+                                     nctid,
+                                     status_change_only=FALSE
+                                     ) {
     out <- tryCatch({
 
         ## Check that TRN is well-formed
