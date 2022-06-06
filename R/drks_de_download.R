@@ -64,7 +64,14 @@ drks_de_download <- function(drksids, output_filename=NA, quiet=FALSE) {
     if (sum(grepl("^DRKS\\d{8}$", drksids)) != length(drksids)) {
         stop("Input contains TRNs that are not well-formed")
     }
-
+   
+    ## Check that the site is reachable
+    assertthat::assert_that(
+                    RCurl::url.exists(
+                               "https://drks.de"
+                           )
+                )
+    
     output_cols <- "ciiDcDDiccccccccc"
 
     if (!file.exists(output_filename)) {

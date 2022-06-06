@@ -68,6 +68,13 @@ clinicaltrials_gov_download <-
     if (sum(grepl("^NCT\\d{8}$", nctids)) != length(nctids)) {
         stop("Input contains TRNs that are not well-formed")
     }
+        
+    ## Check that the site is reachable
+    assertthat::assert_that(
+                    RCurl::url.exists(
+                               "https://clinicaltrials.gov"
+                           )
+                )
 
     output_cols <- "ciiDcDcDcciccccccccccc"
 
