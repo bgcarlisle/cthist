@@ -537,7 +537,9 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
         ## Check for the presence of study results
 
         study_results_section_heading <- version %>%
-            rvest::html_nodes(xpath='//*[@id="Results"]/../div[@class="sectionDivider"]')
+            rvest::html_nodes(
+            xpath='//*[@id="Results"]/../div[@class="sectionDivider"]'
+            )
 
         results_posted <- FALSE
         
