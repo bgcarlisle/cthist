@@ -533,6 +533,22 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
 
         sponsor_data <- sponsor_data %>%
             jsonlite::toJSON()
+
+        ## Check for the presence of study results
+
+        study_results_section_heading <- version %>%
+            rvest::html_nodes(xpath='//*[@id="Results"]/../div[@class="sectionDivider"]')
+
+        results_posted <- FALSE
+        
+        if (length(study_results_section_heading) > 0) {
+            if (rvest::html_text2(study_results_section_heading) ==
+                "Study Results"
+                ) {
+                results_posted <- TRUE
+            }
+            
+        }
         
         ## Now, put all these data points together
 
@@ -553,7 +569,8 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
             om_data = om_data,
             contacts_data = contacts_data,
             sponsor_data = sponsor_data,
-            whystopped = whystopped
+            whystopped = whystopped,
+            results_posted = results_posted
         )
 
         ## Restore original locale info
