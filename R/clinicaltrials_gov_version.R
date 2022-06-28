@@ -15,7 +15,9 @@
 #'     date, primary completion date precision (month or day), primary
 #'     completion date type, minimum age, maximum age, sex,
 #'     gender-based, accepts healthy volunteers, inclusion/exclusion
-#'     criteria, outcome measures, contacts and sponsors
+#'     criteria, outcome measures, contacts, sponsors, reason why the
+#'     trial stopped (if provided), whether results are posted, and
+#'     references data
 #'
 #' @export
 #'
@@ -551,6 +553,80 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
             }
             
         }
+
+        ## Read References
+
+        ref_rows <- version %>%
+            rvest::html_nodes("#ReferencesBody tr")
+
+        references_data <- tibble::tribble(
+                                       ~label,
+                                       ~content,
+                                       ~doi,
+                                       ~pmid
+                                   )
+
+        ref_label <- NA
+        ref_content <- NA
+        ref_doi <- NA
+        ref_pmid <- NA
+
+        for (ref_row in ref_rows) {
+            
+            ref_row_cells <- ref_row %>%
+                rvest::html_nodes("td")
+
+            if (length(ref_row_cells) > 0) {
+
+                if (rvest::html_text(ref_row_cells[1]) != "") {
+                    ## First cell isn't empty
+
+                    ref_label <- ref_row_cells[1] %>%
+                        rvest::html_text2() %>%
+                        trimws()
+                    
+                }
+
+                ref_content <- ref_row_cells[2] %>%
+                    rvest::html_text2() %>%
+                    trimws()
+
+                if (ref_label == "Citations:" & ref_content != "") {
+                    ## If we're looking at citations
+                    ref_doi <- stringr::str_match(
+                        ref_content,
+                        "doi: ([^\\s]+)\\. "
+                    )[2]
+
+                    ref_pmid <- stringr::str_match(
+                        ref_content,
+                        "PubMed ([0-9]+)$"
+                    )[2]
+                } else {
+                    ref_doi <- NA
+                    ref_pmid <- NA
+                }
+
+                references_data <- references_data %>%
+                    dplyr::bind_rows(
+                               tibble::tribble(
+                                           ~label,
+                                           ~content,
+                                           ~doi,
+                                           ~pmid,
+                                           ref_label,
+                                           ref_content,
+                                           ref_doi,
+                                           ref_pmid
+                                       )
+                           )
+                
+            }
+            
+        }
+
+        references_data <- references_data %>%
+            jsonlite::toJSON()
         
         ## Now, put all these data points together
 
@@ -572,7 +648,8 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
             contacts_data = contacts_data,
             sponsor_data = sponsor_data,
             whystopped = whystopped,
-            results_posted = results_posted
+            results_posted = results_posted,
+            references = references_data
         )
 
         ## Restore original locale info

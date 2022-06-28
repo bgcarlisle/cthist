@@ -78,7 +78,7 @@ clinicaltrials_gov_download <- function(
         return (FALSE)
     }
     
-    output_cols <- "ciiDcDcDccicccccccccccc"
+    output_cols <- "ciiDcDcDcciccccccccccccc"
 
     if (!file.exists(output_filename)) {
 
@@ -105,7 +105,8 @@ clinicaltrials_gov_download <- function(
             contacts = character(),
             sponsor_collaborators = character(),
             whystopped = character(),
-            results_posted = character()
+            results_posted = character(),
+            references = character()
         ) %>%
             readr::write_csv(
                        file = output_filename,
@@ -233,6 +234,7 @@ clinicaltrials_gov_download <- function(
                 ~sponsor_collaborators,
                 ~whystopped,
                 ~results_posted,
+                ~references,
                 nctid,
                 versionno,
                 length(versions),
@@ -255,7 +257,8 @@ clinicaltrials_gov_download <- function(
                 versiondata$contacts_data,
                 versiondata$sponsor_data,
                 versiondata$whystopped,
-                versiondata$results_posted
+                versiondata$results_posted,
+                versiondata$references
             ) %>%
                 readr::write_csv(
                            file = output_filename, append = TRUE

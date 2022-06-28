@@ -1,3 +1,9 @@
+# cthist 1.3.0
+
+* Added "results posted" (indicates whether study results have been
+  posted)
+* Added "references" (citations, links and available IPD/Information)
+
 # cthist 1.2.1
 
 * Implemented checks in `clinicaltrials_gov_download()` and
