@@ -125,6 +125,7 @@ drks_de_download(c("DRKS00005219", "DRKS00003170"), "versions.csv")
 | Contacts                         |                  ✓ |       ✓ |
 | Sponsors                         |                  ✓ |       - |
 | "Why stopped?"                   |                  ✓ |       - |
+| Results reported                 |                  ✓ |       - |
 
 ## Note on use
 
