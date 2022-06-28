@@ -2,7 +2,9 @@
 
 * Added "results posted" (indicates whether study results have been
   posted)
-* Added "references" (citations, links and available IPD/Information)
+* Added "references" to `clinicaltrials_gov_version()` (citations,
+  links and available IPD/Information) and `drks_de_version()` (Trial
+  Publications, Results and other Documents)
 
 # cthist 1.2.1
 

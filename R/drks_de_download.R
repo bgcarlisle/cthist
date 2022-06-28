@@ -71,7 +71,7 @@ drks_de_download <- function(drksids, output_filename=NA, quiet=FALSE) {
         return (FALSE)
     }
     
-    output_cols <- "ciiDcDDiccccccccc"
+    output_cols <- "ciiDcDDicccccccccc"
 
     if (!file.exists(output_filename)) {
 
@@ -92,7 +92,8 @@ drks_de_download <- function(drksids, output_filename=NA, quiet=FALSE) {
                     exclusion_criteria = character(),
                     primary_outcomes = character(),
                     secondary_outcomes = character(),
-                    contacts = character()
+                    contacts = character(),
+                    references = character()
                 ) %>%
             readr::write_csv(
                        file = output_filename,
@@ -208,6 +209,7 @@ drks_de_download <- function(drksids, output_filename=NA, quiet=FALSE) {
                        ~primary_outcomes,
                        ~secondary_outcomes,
                        ~contacts,
+                       ~references,
                        drksid,
                        versionno,
                        length(versions),
@@ -224,7 +226,8 @@ drks_de_download <- function(drksids, output_filename=NA, quiet=FALSE) {
                        versiondata$exclusion_criteria,
                        versiondata$primaryoutcomes,
                        versiondata$secondaryoutcomes,
-                       versiondata$contacts
+                       versiondata$contacts,
+                       versiondata$references
                    ) %>%
                 readr::write_csv(
                            file = output_filename, append = TRUE

@@ -123,10 +123,10 @@ drks_de_download(c("DRKS00005219", "DRKS00003170"), "versions.csv")
 | Outcome measures                 |                  ✓ |       ✓ |
 | Inclusion and exclusion criteria |                  ✓ |       ✓ |
 | Contacts                         |                  ✓ |       ✓ |
-| Sponsors                         |                  ✓ |       - |
+| Sponsors                         |                  ✓ |       ✓ |
 | "Why stopped?"                   |                  ✓ |       - |
 | Results reported                 |                  ✓ |       - |
-| References                       |                  ✓ |       - |
+| References                       |                  ✓ |       ✓ |
 
 ## Note on use
 
