@@ -139,11 +139,16 @@ of the license.
 @Manual{bgcarlisle-cthist,
   title          = {Analysis of Clinical Trial Registry Entry Histories Using the Novel {{R}} Package cthist},
   author         = {Carlisle, Benjamin Gregory},
-  date           = {2022-01-21},
-  publisher      = {{medRxiv}},
-  doi            = {10.1101/2022.01.20.22269538},
-  url            = {https://www.medrxiv.org/content/10.1101/2022.01.20.22269538v1},
-  year           = 2022
+  date           = {2022-07-01},
+  journaltitle   = {PLOS ONE},
+  shortjournal   = {PLOS ONE},
+  volume         = {17},
+  number         = {7},
+  pages          = {e0270909},
+  publisher      = {{Public Library of Science}},
+  issn           = {1932-6203},
+  doi            = {10.1371/journal.pone.0270909},
+  url            = {https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0270909}
 }
 ```
 
