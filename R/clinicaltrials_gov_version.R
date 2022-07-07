@@ -563,13 +563,15 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
                                        ~label,
                                        ~content,
                                        ~doi,
-                                       ~pmid
+                                       ~pmid,
+                                       ~type
                                    )
 
         ref_label <- NA
         ref_content <- NA
         ref_doi <- NA
         ref_pmid <- NA
+        ref_type <- NA
 
         for (ref_row in ref_rows) {
             
@@ -602,9 +604,16 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
                         ref_content,
                         "PubMed ([0-9]+)$"
                     )[2]
+
+                    ref_type <- stringr::str_match(
+                        ref_content,
+                        "^\\[([A-Za-z ]+)\\] "
+                    )[2]
+                    
                 } else {
                     ref_doi <- NA
                     ref_pmid <- NA
+                    ref_type <- NA
                 }
 
                 if (ref_content != "") {
@@ -615,10 +624,12 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
                                                ~content,
                                                ~doi,
                                                ~pmid,
+                                               ~type,
                                                ref_label,
                                                ref_content,
                                                ref_doi,
-                                               ref_pmid
+                                               ref_pmid,
+                                               ref_type
                                            )
                                )
                 }
