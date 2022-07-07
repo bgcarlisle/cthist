@@ -359,8 +359,13 @@ drks_de_version <- function(drksid, versionno=1) {
             }
         }
 
-        references_data <- references_data %>%
-            jsonlite::toJSON()
+        if (nrow(references_data) > 0) {
+            references_data <- references_data %>%
+                jsonlite::toJSON()
+        } else {
+            reference_data <- NA
+        }
+        
 
         ## Now, put all these data points together
 
