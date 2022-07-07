@@ -607,26 +607,33 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
                     ref_pmid <- NA
                 }
 
-                references_data <- references_data %>%
-                    dplyr::bind_rows(
-                               tibble::tribble(
-                                           ~label,
-                                           ~content,
-                                           ~doi,
-                                           ~pmid,
-                                           ref_label,
-                                           ref_content,
-                                           ref_doi,
-                                           ref_pmid
-                                       )
-                           )
+                if (ref_content != "") {
+                    references_data <- references_data %>%
+                        dplyr::bind_rows(
+                                   tibble::tribble(
+                                               ~label,
+                                               ~content,
+                                               ~doi,
+                                               ~pmid,
+                                               ref_label,
+                                               ref_content,
+                                               ref_doi,
+                                               ref_pmid
+                                           )
+                               )
+                }
+
                 
             }
             
         }
 
-        references_data <- references_data %>%
-            jsonlite::toJSON()
+        if (nrow(references_data) > 0) {
+            references_data <- references_data %>%
+                jsonlite::toJSON()
+        } else {
+            references_data <- NA
+        }
         
         ## Now, put all these data points together
 
