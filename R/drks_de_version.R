@@ -339,6 +339,10 @@ drks_de_version <- function(drksid, versionno=1) {
             ref_link <- ref_item %>%
                 rvest::html_nodes("a") %>%
                 rvest::html_attr("href")
+            
+            if (length(ref_link) == 0) {
+                ref_link <- NA
+            }
 
             ref_text <- ref_item %>%
                 rvest::html_text2() %>%
