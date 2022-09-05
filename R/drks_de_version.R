@@ -14,7 +14,7 @@
 #'     date, primary completion date, primary completion date type,
 #'     minimum age, maximum age, sex, gender-based, accepts healthy
 #'     volunteers, inclusion/exclusion criteria, outcome measures,
-#'     contacts and sponsors
+#'     contacts, sponsors and references
 #'
 #' @export
 #'
@@ -56,8 +56,8 @@ drks_de_version <- function(drksid, versionno=1) {
         }
    
         ## Check that the site is reachable
-        if (! RCurl::url.exists("https://clinicaltrials.gov")) {
-            message("Unable to connect to clinicaltrials.gov")
+        if (! RCurl::url.exists("https://drks.de")) {
+            message("Unable to connect to drks.de")
             return ("Error")
         }
 
@@ -313,6 +313,64 @@ drks_de_version <- function(drksid, versionno=1) {
         contacts <- contacts %>%
             jsonlite::toJSON()
 
+        ## Read references ("Trial Publications, Results and other
+        ## Documents")
+
+        references_items <- version %>%
+            rvest::html_nodes("li.publication")
+
+        references_data <- tibble::tribble(
+                                       ~type,
+                                       ~link,
+                                       ~text
+                                   )
+
+        for (ref_item in references_items) {
+            
+            ref_type <- NA
+            ref_link <- NA
+            ref_text <- NA
+
+            ref_type <- ref_item %>%
+                rvest::html_nodes("label") %>%
+                rvest::html_text2() %>%
+                trimws()
+
+            ref_link <- ref_item %>%
+                rvest::html_nodes("a") %>%
+                rvest::html_attr("href")
+            
+            if (length(ref_link) == 0) {
+                ref_link <- NA
+            }
+
+            ref_text <- ref_item %>%
+                rvest::html_text2() %>%
+                trimws()
+
+            if (ref_text != "[---]*") {
+                references_data <- references_data %>%
+                    dplyr::bind_rows(
+                               tibble::tribble(
+                                           ~type,
+                                           ~link,
+                                           ~text,
+                                           ref_type,
+                                           ref_link,
+                                           ref_text
+                                       )
+                           )
+            }
+        }
+
+        if (nrow(references_data) > 0) {
+            references_data <- references_data %>%
+                jsonlite::toJSON()
+        } else {
+            reference_data <- NA
+        }
+        
+
         ## Now, put all these data points together
 
         data <- list(
@@ -328,7 +386,8 @@ drks_de_version <- function(drksid, versionno=1) {
             exclusion_criteria = exclusion_criteria,
             primaryoutcomes = primaryoutcomes,
             secondaryoutcomes = secondaryoutcomes,
-            contacts = contacts
+            contacts = contacts,
+            references = references_data
         )
 
         ## Restore original locale info

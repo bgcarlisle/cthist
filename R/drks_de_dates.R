@@ -29,8 +29,8 @@ drks_de_dates <- function(drksid) {
         }
    
         ## Check that the site is reachable
-        if (! RCurl::url.exists("https://clinicaltrials.gov")) {
-            message("Unable to connect to clinicaltrials.gov")
+        if (! RCurl::url.exists("https://drks.de")) {
+            message("Unable to connect to drks.de")
             return ("Error")
         }
 
