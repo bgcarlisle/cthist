@@ -140,7 +140,7 @@ clinicaltrials_gov_download <- function(
         ## Find incompletely downloaded NCT's
         dl_counts <- check %>%
             dplyr::count(nctid) %>%
-            dplyr::rename(dl_versions = .data$n)
+            dplyr::rename(dl_versions = "n")
 
         check <- check %>%
             dplyr::left_join(dl_counts, by = "nctid")
@@ -329,7 +329,7 @@ clinicaltrials_gov_download <- function(
 
     dl_counts <- check %>%
         dplyr::count(nctid) %>%
-        dplyr::rename(dl_versions = .data$n)
+        dplyr::rename(dl_versions = "n")
 
     check <- check %>%
         dplyr::left_join(dl_counts, by = "nctid")
