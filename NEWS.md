@@ -24,8 +24,6 @@
 
 # cthist 1.2.0
 
----
-
 * Added `status_change_only` option to `clinicaltrials_gov_dates()`
   function to allow for downloading only the dates on which a trial's
   Recruitment Status changed
@@ -41,8 +39,6 @@
 ---
 
 # cthist 1.0.1
-
----
 
 * Fix bug where `cthist` does not capture outcome measures in versions
   posted after results are posted.
@@ -82,8 +78,6 @@
 ---
 
 # cthist 0.1.3
-
----
 
 * Fix DRKS bug where multiple contact affiliation nodes caused
   download to produce an error
