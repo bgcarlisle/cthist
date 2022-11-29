@@ -1,3 +1,9 @@
+# cthist 1.3.1
+
+* Replace deprecated `.data$n` expressions
+
+---
+
 # cthist 1.3.0
 
 * Added "results posted" (indicates whether study results have been
@@ -5,6 +11,8 @@
 * Added "references" to `clinicaltrials_gov_version()` (citations,
   links and available IPD/Information) and `drks_de_version()` (Trial
   Publications, Results and other Documents)
+
+---
 
 # cthist 1.2.1
 
