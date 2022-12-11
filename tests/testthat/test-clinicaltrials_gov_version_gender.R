@@ -1,5 +1,5 @@
 test_that("ClinicalTrials.gov gender-based downloads correctly", {
-    version <- clinicaltrials_gov_version("NCT05306145", 1)
+    version <- clinicaltrials_gov_version("NCT05306145", 1, polite=FALSE)
     if (version[1] == "Error") {
         expect_equal(
             version[1],

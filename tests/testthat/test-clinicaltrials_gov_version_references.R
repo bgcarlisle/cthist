@@ -1,5 +1,5 @@
 test_that("ClinicalTrials.gov references downloads correctly", {
-    version <- clinicaltrials_gov_version("NCT04315480", 3)
+    version <- clinicaltrials_gov_version("NCT04315480", 3, polite=FALSE)
     if (version[1] == "Error") {
         expect_equal(
             version[1],

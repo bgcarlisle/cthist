@@ -22,8 +22,8 @@ install_github("bgcarlisle/cthist")
 library(cthist)
 ```
 
-This package provides 6 functions, 3 for ClinicalTrials.gov and 3 for
-DRKS.de.
+This package provides 3 for downloading historical clinical trial data
+from ClinicalTrials.gov
 
 ## ClinicalTrials.gov functions
 
@@ -67,66 +67,30 @@ and save to disk:
 clinicaltrials_gov_download(c("NCT02110043", "NCT03281616"), "versions.csv")
 ```
 
-## DRKS.de functions
-
-Download clinical trial version dates:
-
-```{r}
-## Get all the dates when the registry entry for DRKS00005219 changed
-
-drks_de_dates("DRKS00005219")
-## [1] "2014-02-17" "2014-04-17"
-```
-
-Download clinical trial registry entry version data:
-
-```{r}
-## Get the 4th version of DRKS00003170
-
-version_data <- drks_de_version("DRKS00003170", 4)
-
-## Get the 4th item (enrolment) for that version
-version_data$enrolno
-## [1] "60"
-```
-
-Mass-download clinical trial registry entry versions:
-
-```{r}
-## Download all data for all versions of DRKS00005219 and store in
-## variable `versions`
-
-versions <- drks_de_download("DRKS00005219")
-```
-
-Mass-download clinical trial registry entry versions for many trials
-and save to disk:
-
-```{r}
-## Download all data for all versions of DRKS00005219 and DRKS00003170
-## and save to versions.csv
-
-drks_de_download(c("DRKS00005219", "DRKS00003170"), "versions.csv")
-```
-
 ## What data is extracted?
 
-| Item                             | ClinicalTrials.gov | DRKS.de |
-|:---------------------------------|-------------------:|--------:|
-| Version number (1, 2, 3, etc.)   |                  ✓ |       ✓ |
-| Version date (ISO-8601)          |                  ✓ |       ✓ |
-| Overall status                   |                  ✓ |       ✓ |
-| Start date                       |                  ✓ |       ✓ |
-| Primary completion date          |                  ✓ |       ✓ |
-| Enrolment                        |                  ✓ |       ✓ |
-| Enrolment type                   |                  ✓ |       ✓ |
-| Outcome measures                 |                  ✓ |       ✓ |
-| Inclusion and exclusion criteria |                  ✓ |       ✓ |
-| Contacts                         |                  ✓ |       ✓ |
-| Sponsors                         |                  ✓ |       ✓ |
-| "Why stopped?"                   |                  ✓ |       - |
-| Results reported                 |                  ✓ |       - |
-| References                       |                  ✓ |       ✓ |
+* Version number (1, 2, 3, etc.)
+* Version date (ISO-8601)
+* Overall status
+* Start date
+* Primary completion date
+* Enrolment
+* Enrolment type
+* Outcome measures
+* Inclusion and exclusion criteria
+* Contacts
+* Sponsors
+* "Why stopped?"
+* Results reported
+* References
+
+## DRKS.de
+
+**Update as of 2022-12-11**
+
+DRKS.de has recently been updated in a manner that makes scraping data
+more difficult and so the functions related to DRKS.de have been
+deprecated, at least temporarily while I assess the changes.
 
 ## Note on use
 

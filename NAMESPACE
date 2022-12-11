@@ -3,8 +3,5 @@
 export(clinicaltrials_gov_dates)
 export(clinicaltrials_gov_download)
 export(clinicaltrials_gov_version)
-export(drks_de_dates)
-export(drks_de_download)
-export(drks_de_version)
 importFrom(magrittr,"%>%")
 importFrom(rlang,.data)

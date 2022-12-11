@@ -10,6 +10,10 @@
 #'     recent, etc. If no version number is specified, the first
 #'     version will be downloaded.
 #'
+#' @param polite If TRUE, this function uses the `polite` package to
+#'     download data, if FALSE, this function uses the `rvest`
+#'     package, default TRUE.
+#'
 #' @return A list containing the overall status, enrolment, start
 #'     date, start date precision (month or day) primary completion
 #'     date, primary completion date precision (month or day), primary
@@ -29,7 +33,11 @@
 #' version <- clinicaltrials_gov_version("NCT00942747", 1)
 #' }
 #'
-clinicaltrials_gov_version <- function(nctid, versionno=1) {
+clinicaltrials_gov_version <- function(
+                                       nctid,
+                                       versionno=1,
+                                       polite=TRUE
+                                       ) {
 
     out <- tryCatch({
 
@@ -61,7 +69,11 @@ clinicaltrials_gov_version <- function(nctid, versionno=1) {
             versionno
         )
 
-        version <- polite_read_html(url)
+        if (polite) {
+            version <- polite_read_html(url)
+        } else {
+            version <- rvest::read_html(url)
+        }
 
         ## Back up locale info
         lct <- Sys.getlocale("LC_TIME")

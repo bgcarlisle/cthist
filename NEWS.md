@@ -1,6 +1,9 @@
-# cthist 1.3.1
+# cthist 1.4.0
 
-* Replace deprecated `.data$n` expressions
+* Removed drks.de-related functions
+* Added `polite` variable to allow disabling of "polite" downloading
+  for debugging purposes
+* Removed deprecated `.data$n` syntax
 
 ---
 
@@ -11,6 +14,8 @@
 * Added "references" to `clinicaltrials_gov_version()` (citations,
   links and available IPD/Information) and `drks_de_version()` (Trial
   Publications, Results and other Documents)
+  
+---
 
 ---
 
