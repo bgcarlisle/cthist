@@ -9,10 +9,9 @@
 Retrieves historical versions of clinical trial registry entries.
 }
 \details{
-This package provides 6 functions for mass-downloading
-historical clinical trial registry entry data, 3 for
-ClinicalTrials.gov and 3 for
-DRKS.de.
+This package provides 3 functions for mass-downloading
+historical clinical trial registry entry data from
+ClinicalTrials.gov
 
 clinicaltrials_gov_dates() downloads the dates on which
 clinical trial registry entries were updated from
@@ -25,18 +24,6 @@ ClinicalTrials.gov
 clinicaltrials_gov_download() mass-downloads clinical
 trial registry entry versions for one or many trials on
 ClinicalTrials.gov
-
-drks_de_dates() downloads the dates on which
-clinical trial registry entries were updated from
-DRKS.de
-
-drks_de_version() downloads a specified
-historical version of a clinical trial registry entry from
-DRKS.de
-
-drks_de_download() mass-downloads clinical
-trial registry entry versions for one or many trials on
-DRKS.de
 }
 \references{
 Carlisle, BG. Analysis of clinical trial registry entry
