@@ -5,7 +5,9 @@ Authors@R:
     person("Benjamin Gregory", "Carlisle", , "murph@bgcarlisle.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8975-0649"))
 Description: Retrieves historical versions of clinical trial registry
-    entries.
+    entries from ClinicalTrials.gov. Package functionality and
+    implementation is documented in Carlisle (2022)
+    10.1371/journal.pone.0270909
 License: AGPL (>= 3)
 URL: https://github.com/bgcarlisle/cthist
 BugReports: https://github.com/bgcarlisle/cthist/issues
