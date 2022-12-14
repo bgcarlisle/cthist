@@ -6,7 +6,7 @@
 \alias{cthist-package}
 \title{cthist: Clinical Trial Registry History}
 \description{
-Retrieves historical versions of clinical trial registry entries.
+Retrieves historical versions of clinical trial registry entries from \url{https://ClinicalTrials.gov}. Package functionality and implementation is documented in Carlisle (2022) \doi{10.1371/journal.pone.0270909}.
 }
 \details{
 This package provides 3 functions for mass-downloading

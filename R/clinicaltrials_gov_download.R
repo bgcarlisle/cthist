@@ -47,13 +47,13 @@
 #'
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' filename <- tempfile()
 #' clinicaltrials_gov_download(c("NCT00942747",
 #'     "NCT03281616"), filename)
 #' }
 #'
-#' \dontrun{
+#' \donttest{
 #' hv <- clinicaltrials_gov_download("NCT00942747")
 #' }
 clinicaltrials_gov_download <- function(

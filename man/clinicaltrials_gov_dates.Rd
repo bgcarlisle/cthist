@@ -31,7 +31,7 @@ entry was updated
 }
 \examples{
 
-\dontrun{
+\donttest{
 versions <- clinicaltrials_gov_dates("NCT00942747")
 }
 
