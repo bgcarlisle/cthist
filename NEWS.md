@@ -17,8 +17,6 @@
   
 ---
 
----
-
 # cthist 1.2.1
 
 * Implemented checks in `clinicaltrials_gov_download()` and
