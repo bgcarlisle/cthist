@@ -78,7 +78,7 @@ clinicaltrials_gov_download <- function(
     }
         
     ## Check that the site is reachable
-    if (! RCurl::url.exists("https://clinicaltrials.gov")) {
+    if (httr::http_error("https://clinicaltrials.gov")) {
         message("Unable to connect to clinicaltrials.gov")
         return (FALSE)
     }

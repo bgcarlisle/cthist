@@ -1,3 +1,12 @@
+# cthist 1.4.1
+
+* Fixed bug where `cthist` sometimes can't connect to
+  ClinicalTrials.gov by replacing the statement that included
+  `RCurl::url.exists()` with one that uses `httr::http_error()`
+  instead
+
+---
+
 # cthist 1.4.0
 
 * Removed drks.de-related functions

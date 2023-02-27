@@ -1,6 +1,6 @@
 Package: cthist
 Title: Clinical Trial Registry History
-Version: 1.4.0
+Version: 1.4.1
 Authors@R: 
     person("Benjamin Gregory", "Carlisle", , "murph@bgcarlisle.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8975-0649"))
@@ -18,7 +18,6 @@ Imports:
     jsonlite,
     magrittr,
     polite,
-    RCurl,
     readr,
     rlang,
     rvest,

@@ -47,7 +47,7 @@ clinicaltrials_gov_dates <- function(
         assertthat::assert_that(is.logical(status_change_only))
    
         ## Check that the site is reachable
-        if (! RCurl::url.exists("https://clinicaltrials.gov")) {
+        if (httr::http_error("https://clinicaltrials.gov")) {
             message("Unable to connect to clinicaltrials.gov")
             return ("Error")
         }
