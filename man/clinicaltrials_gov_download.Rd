@@ -5,12 +5,7 @@
 \title{Mass-download registry entry historical versions from
 ClinicalTrials.gov}
 \usage{
-clinicaltrials_gov_download(
-  nctids,
-  output_filename = NA,
-  polite = TRUE,
-  quiet = FALSE
-)
+clinicaltrials_gov_download(nctids, output_filename = NA, quiet = FALSE)
 }
 \arguments{
 \item{nctids}{A list of well-formed NCT numbers,
@@ -21,10 +16,6 @@ the data frame will be written as a CSV,
 e.g. "historical_versions.csv". If no output filename is
 provided, the data frame of downloaded historical versions will
 be returned by the function as a data frame.}
-
-\item{polite}{If TRUE, this function uses the \code{polite} package to
-download data, if FALSE, this function uses the \code{rvest}
-package, default TRUE.}
 
 \item{quiet}{A boolean TRUE or FALSE. If TRUE, no messages will be
 printed during download. FALSE by default, messages printed for

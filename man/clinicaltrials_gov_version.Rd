@@ -4,7 +4,7 @@
 \alias{clinicaltrials_gov_version}
 \title{Download a registry entry version from ClinicalTrials.gov}
 \usage{
-clinicaltrials_gov_version(nctid, versionno = 1, polite = TRUE)
+clinicaltrials_gov_version(nctid, versionno = 1)
 }
 \arguments{
 \item{nctid}{A character string including a well-formed
@@ -16,10 +16,6 @@ hyphens.)}
 earliest version of the trial in question, 2 is the next most
 recent, etc. If no version number is specified, the first
 version will be downloaded.}
-
-\item{polite}{If TRUE, this function uses the \code{polite} package to
-download data, if FALSE, this function uses the \code{rvest}
-package, default TRUE.}
 }
 \value{
 A list containing the overall status, enrolment, start

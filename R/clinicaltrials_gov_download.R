@@ -18,10 +18,6 @@
 #'     provided, the data frame of downloaded historical versions will
 #'     be returned by the function as a data frame.
 #'
-#' @param polite If TRUE, this function uses the `polite` package to
-#'     download data, if FALSE, this function uses the `rvest`
-#'     package, default TRUE.
-#'
 #' @param quiet A boolean TRUE or FALSE. If TRUE, no messages will be
 #'     printed during download. FALSE by default, messages printed for
 #'     every version downloaded showing progress.
@@ -59,7 +55,6 @@
 clinicaltrials_gov_download <- function(
                                         nctids,
                                         output_filename=NA,
-                                        polite=TRUE,
                                         quiet=FALSE
                                         ) {
     
@@ -179,8 +174,7 @@ clinicaltrials_gov_download <- function(
 
         versions <- clinicaltrials_gov_dates(
             nctid,
-            FALSE,
-            polite
+            FALSE
         )
 
         versionno <- 1
@@ -202,7 +196,7 @@ clinicaltrials_gov_download <- function(
                 }
 
                 versiondata <- clinicaltrials_gov_version(
-                    nctid, versionno, polite
+                    nctid, versionno
                 )
                 
                 version_retry <- version_retry + 1

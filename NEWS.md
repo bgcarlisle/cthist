@@ -4,6 +4,7 @@
   ClinicalTrials.gov by replacing the statement that included
   `RCurl::url.exists()` with one that uses `httr::http_error()`
   instead
+* Removed `polite` dependency and functionality
 
 ---
 

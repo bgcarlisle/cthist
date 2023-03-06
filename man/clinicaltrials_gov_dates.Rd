@@ -5,7 +5,7 @@
 \title{Download a vector of dates on which a ClinicalTrials.gov registry
 entry was updated}
 \usage{
-clinicaltrials_gov_dates(nctid, status_change_only = FALSE, polite = TRUE)
+clinicaltrials_gov_dates(nctid, status_change_only = FALSE)
 }
 \arguments{
 \item{nctid}{A character string including a well-formed
@@ -15,10 +15,6 @@ hyphens.)}
 
 \item{status_change_only}{If TRUE, returns only the dates marked
 with a Recruitment Status change, default FALSE.}
-
-\item{polite}{If TRUE, this function uses the \code{polite} package to
-download data, if FALSE, this function uses the \code{rvest}
-package, default TRUE.}
 }
 \value{
 A character vector of ISO-8601 formatted dates
