@@ -1,3 +1,9 @@
+# cthist 1.4.2
+
+* Temporary fix of bugs introduced by ClinicalTrials.gov moving to
+  their new website design (changed URL links to
+  classic.clinicaltrials.gov)
+
 # cthist 1.4.1
 
 * Fixed bug where `cthist` sometimes can't connect to

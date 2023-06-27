@@ -42,13 +42,13 @@ clinicaltrials_gov_dates <- function(
         assertthat::assert_that(is.logical(status_change_only))
    
         ## Check that the site is reachable
-        if (httr::http_error("https://clinicaltrials.gov")) {
+        if (httr::http_error("https://classic.clinicaltrials.gov")) {
             message("Unable to connect to clinicaltrials.gov")
             return ("Error")
         }
 
         url <- paste0(
-            "https://clinicaltrials.gov/ct2/history/",
+            "https://classic.clinicaltrials.gov/ct2/history/",
             nctid
         )
 
