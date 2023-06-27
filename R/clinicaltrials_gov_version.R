@@ -52,13 +52,13 @@ clinicaltrials_gov_version <- function(
         }
    
         ## Check that the site is reachable
-        if (httr::http_error("https://clinicaltrials.gov")) {
+        if (httr::http_error("https://classic.clinicaltrials.gov")) {
             message("Unable to connect to clinicaltrials.gov")
             return ("Error")
         }
         
         url <- paste0(
-            "https://clinicaltrials.gov/ct2/history/",
+            "https://classic.clinicaltrials.gov/ct2/history/",
             nctid,
             "?V_",
             versionno
