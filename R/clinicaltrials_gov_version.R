@@ -135,27 +135,31 @@ clinicaltrials_gov_version <- function(
 
         primary_om <- version$study$protocolSection$outcomesModule$primaryOutcomes %>%
             tibble::tibble() %>%
-            mutate(ordinal = "Primary") %>%
-            mutate(
-                description = ifelse(
-                    "description" %in% colnames(.),
-                    description,
-                    NA
-                )
-            ) %>%
+            mutate(ordinal = "Primary")
+
+        cols <- c("measure", "timeFrame", "description")
+        add <- cols[! cols %in% names(primary_om)]
+
+        if (length(add) != 0) {
+            primary_om[add] <- NA
+        }
+        
+        primary_om <- primary_%>%
             select(ordinal, measure, timeFrame, description)
 
         if (! is.null(version$study$protocolSection$outcomesModule$secondaryOutcomes)) {
             secondary_om <- version$study$protocolSection$outcomesModule$secondaryOutcomes %>%
                 tibble::tibble() %>%
-                mutate(ordinal = "Secondary") %>%
-                mutate(
-                    description = ifelse(
-                        "description" %in% colnames(.),
-                        description,
-                        NA
-                    )
-                ) %>%
+                mutate(ordinal = "Secondary")
+
+            cols <- c("measure", "timeFrame", "description")
+            add <- cols[! cols %in% names(secondary_om)]
+
+            if (length(add) != 0) {
+                secondary_om[add] <- NA
+            }
+
+            secondary_om <- secondary_om %>%
                 select(ordinal, measure, timeFrame, description)
             
             outcomes <- primary_om %>%
