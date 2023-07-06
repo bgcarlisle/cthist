@@ -78,7 +78,7 @@ clinicaltrials_gov_download <- function(
         return (FALSE)
     }
     
-    output_cols <- "ciiDcDcDcciccccccccccccc"
+    output_cols <- "ciiDcDcDccicccccccccccccc"
 
     if (!file.exists(output_filename)) {
 
@@ -98,12 +98,13 @@ clinicaltrials_gov_download <- function(
             min_age = character(),
             max_age = character(),
             sex = character(),
-            gender_based = character(),
             accepts_healthy_volunteers = character(),
             criteria = character(),
             outcome_measures = character(),
-            contacts = character(),
-            sponsor_collaborators = character(),
+            overall_contacts = character(),
+            responsible_party = character(),
+            lead_sponsor = character(),
+            collaborators = character()
             whystopped = character(),
             results_posted = character(),
             references = character()
