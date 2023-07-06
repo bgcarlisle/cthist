@@ -90,7 +90,7 @@ clinicaltrials_gov_version <- function(
 
         startdate <- version$study$protocolSection$statusModule$startDateStruct$date
 
-        if (str_length(startdate) == 10) {
+        if (stringr::str_length(startdate) == 10) {
             startdate_precision <- "day"
         } else {
             startdate_precision <- "month"
@@ -105,7 +105,7 @@ clinicaltrials_gov_version <- function(
 
         pcdate <- version$study$protocolSection$statusModule$primaryCompletionDateStruct$date
 
-        if (str_length(pcdate) == 10) {
+        if (stringr::str_length(pcdate) == 10) {
             pcdate_precision <- "day"
         } else {
             pcdate_precision <- "month"
@@ -135,7 +135,7 @@ clinicaltrials_gov_version <- function(
 
         primary_om <- version$study$protocolSection$outcomesModule$primaryOutcomes %>%
             tibble::tibble() %>%
-            mutate(ordinal = "Primary")
+            dplyr::mutate(ordinal = "Primary")
 
         cols <- c("measure", "timeFrame", "description")
         add <- cols[! cols %in% names(primary_om)]
@@ -145,12 +145,12 @@ clinicaltrials_gov_version <- function(
         }
         
         primary_om <- primary_om %>%
-            select(ordinal, measure, timeFrame, description)
+            dplyr::select(ordinal, measure, timeFrame, description)
 
         if (! is.null(version$study$protocolSection$outcomesModule$secondaryOutcomes)) {
             secondary_om <- version$study$protocolSection$outcomesModule$secondaryOutcomes %>%
                 tibble::tibble() %>%
-                mutate(ordinal = "Secondary")
+                dplyr::mutate(ordinal = "Secondary")
 
             cols <- c("measure", "timeFrame", "description")
             add <- cols[! cols %in% names(secondary_om)]
@@ -160,10 +160,10 @@ clinicaltrials_gov_version <- function(
             }
 
             secondary_om <- secondary_om %>%
-                select(ordinal, measure, timeFrame, description)
+                dplyr::select(ordinal, measure, timeFrame, description)
             
             outcomes <- primary_om %>%
-                bind_rows(secondary_om)
+                dplyr::bind_rows(secondary_om)
         } else {
             outcomes <- primary_om
         }
