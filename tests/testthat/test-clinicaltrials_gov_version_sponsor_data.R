@@ -7,7 +7,7 @@ test_that("ClinicalTrials.gov contacts downloads correctly", {
         ) 
     } else {
         expect_equal(
-            jsonlite::fromJSON(version$sponsor_data)$content[1],
+            jsonlite::fromJSON(version$lead_sponsor)$name[1],
             "Charite University, Berlin, Germany"
         )
     }

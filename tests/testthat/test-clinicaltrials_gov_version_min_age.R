@@ -8,7 +8,7 @@ test_that("ClinicalTrials.gov minimum age downloads correctly", {
     } else {
         expect_equal(
             version$min_age,
-            "50"
+            "50 Years"
         )
     }
 })

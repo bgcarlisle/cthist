@@ -8,7 +8,7 @@ test_that("ClinicalTrials.gov enrolment downloads correctly", {
     } else {
         expect_equal(
             version$enrol,
-            "22 [Anticipated]"
+            22
         )
     }
 })

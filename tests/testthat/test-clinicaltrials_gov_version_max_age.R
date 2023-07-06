@@ -8,7 +8,7 @@ test_that("ClinicalTrials.gov maximum age downloads correctly", {
     } else {
         expect_equal(
             version$max_age,
-            "80"
+            "90 Years"
         )
     }
 })
