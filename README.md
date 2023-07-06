@@ -66,7 +66,11 @@ version_data <- clinicaltrials_gov_version("NCT02110043", 4)
 
 ## Get the 2nd item (enrolment) for that version
 version_data$enrol
-## [1] "22 [Anticipated]"
+## [1] 22
+
+## Get the 3rd item (enrolment type) for that version
+version_data$enroltype
+## [1] "ESTIMATED"
 ```
 
 Mass-download clinical trial registry entry versions:
