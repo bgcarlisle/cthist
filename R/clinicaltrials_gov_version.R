@@ -144,7 +144,7 @@ clinicaltrials_gov_version <- function(
             primary_om[add] <- NA
         }
         
-        primary_om <- primary_%>%
+        primary_om <- primary_om %>%
             select(ordinal, measure, timeFrame, description)
 
         if (! is.null(version$study$protocolSection$outcomesModule$secondaryOutcomes)) {
@@ -221,7 +221,7 @@ clinicaltrials_gov_version <- function(
             sex = sex,
             accepts_healthy_volunteers = accepts_healthy_volunteers,
             criteria = criteria,
-            om_data = om_data,
+            outcomes = om_data,
             overall_contacts = overall_contacts,
             central_contacts = central_contacts,
             responsible_party = responsible_party,
