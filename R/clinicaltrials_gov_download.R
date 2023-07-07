@@ -246,7 +246,7 @@ clinicaltrials_gov_download <- function(
                 versiondata$startdate_precision,
                 versiondata$pcdate,
                 versiondata$pcdate_precision,
-                versiondata$pcdatetype,
+                versiondata$pcdate_type,
                 versiondata$enrol,
                 versiondata$enroltype,
                 versiondata$min_age,
