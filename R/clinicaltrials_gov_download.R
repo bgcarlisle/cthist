@@ -272,7 +272,7 @@ clinicaltrials_gov_download <- function(
             if (length(versions) > 2 & ! quiet) {
                 message(
                     paste0(
-                        nctid, " - ", versionno, " of ",
+                        nctid, " - ", (versionno + 1), " of ",
                         length(versions)
                     )
                 )
