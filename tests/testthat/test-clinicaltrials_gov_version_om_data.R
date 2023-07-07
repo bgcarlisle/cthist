@@ -7,7 +7,7 @@ test_that("ClinicalTrials.gov outcome measures downloads correctly", {
         ) 
     } else {
         expect_equal(
-            jsonlite::fromJSON(version$om_data)$measure[1],
+            jsonlite::fromJSON(version$outcomes)$measure[1],
             "Performance in LOCATO task (Visual-spatial learning and memory) after a combination of intensive visual-spatial training and tDCS"
         )
     }
