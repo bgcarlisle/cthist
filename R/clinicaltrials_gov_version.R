@@ -7,8 +7,10 @@
 #'
 #' @param versionno An integer version number, e.g. 3, where 0 is the
 #'     earliest version of the trial in question, 1 is the next most
-#'     recent, etc. If no version number is specified, the first
-#'     version will be downloaded.
+#'     recent, etc. (Please note that this differs from the convention
+#'     used in cthist v. <= 1.4.2, in which 1 is the earliest version
+#'     of the trial in question.) If no version number is specified,
+#'     the first version will be downloaded.
 #'
 #' @return A list containing the overall status, enrolment, start
 #'     date, start date precision (month or day) primary completion
