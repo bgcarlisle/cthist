@@ -176,9 +176,10 @@ clinicaltrials_gov_download <- function(
         versions <- clinicaltrials_gov_dates(
             nctid,
             FALSE
-        )
+        ) %>%
+            pull(date)
 
-        versionno <- 1
+        versionno <- 0
         for (version in versions) {
 
             ## Repeat attempts to download a version up to 10 times in
