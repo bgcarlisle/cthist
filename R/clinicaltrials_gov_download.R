@@ -208,12 +208,6 @@ clinicaltrials_gov_download <- function(
                 message("Recovered from error successfully")
             }
 
-            enrol <- versiondata$enrol
-            enrolno <- enrol %>%
-                stringr::str_extract("^[0-9]+")
-            enroltype <- enrol %>%
-                stringr::str_extract("[A-Za-z]+")
-
             tibble::tribble(
                 ~nctid,
                 ~version_number,
@@ -249,8 +243,8 @@ clinicaltrials_gov_download <- function(
                 versiondata$pcdate,
                 versiondata$pcdate_precision,
                 versiondata$pcdatetype,
-                enrolno,
-                enroltype,
+                versiondata$enrol,
+                versiondata$enroltype,
                 versiondata$min_age,
                 versiondata$max_age,
                 versiondata$sex,
