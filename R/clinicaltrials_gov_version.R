@@ -79,7 +79,9 @@ clinicaltrials_gov_version <- function(
         ## Read the "why stopped"
 
         whystopped <- NA
-        whystopped <- prot$statusModule$whyStopped
+        if (! is.null(prot$statusModule$whyStopped)) {
+            whystopped <- prot$statusModule$whyStopped
+        }
         
         ## Read the enrolment and type
 
@@ -127,14 +129,20 @@ clinicaltrials_gov_version <- function(
         elig <- prot$eligibilityModule
 
         min_age <- NA
-        min_age <- elig$minimumAge
+        if (! is.null(elig$minimumAge)) {
+            min_age <- elig$minimumAge
+        }
         
         max_age <- NA
-        max_age <- elig$maximumAge
+        if (! is.null(elig$maximumAge)){
+            max_age <- elig$maximumAge
+        }
         
         sex <- NA
-        sex <- elig$sex
-                
+        if (! is.null(elig$sex)){
+            sex <- elig$sex
+        }
+        
         accepts_healthy_volunteers <- NA
         accepts_healthy_volunteers <- elig$healthyVolunteers
 
