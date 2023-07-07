@@ -63,32 +63,36 @@ clinicaltrials_gov_version <- function(
             versionno
         )
 
+        ## Read the study version in to memory from the server
         version <- jsonlite::read_json(url, simplifyVector=TRUE)
+        ## Make shorter variable names
+        prot <- version$study$protocolSection
+
         
         ## Read the overall status
 
         ostatus <- NA
-        ostatus <- version$study$protocolSection$statusModule$overallStatus
+        ostatus <- prot$statusModule$overallStatus
 
         ## Read the "why stopped"
 
         whystopped <- NA
-        whystopped <- version$study$protocolSection$statusModule$whyStopped
+        whystopped <- prot$statusModule$whyStopped
         
         ## Read the enrolment and type
 
         enrol <- NA
-        enrol <- version$study$protocolSection$designModule$enrollmentInfo$count
+        enrol <- prot$designModule$enrollmentInfo$count
 
         enroltype <- NA
-        enroltype <- version$study$protocolSection$designModule$enrollmentInfo$type
+        enroltype <- prot$designModule$enrollmentInfo$type
         
         ## Read the study start date
 
         startdate <- NA
         startdate_precision <- NA
 
-        startdate <- version$study$protocolSection$statusModule$startDateStruct$date
+        startdate <- prot$statusModule$startDateStruct$date
 
         if (stringr::str_length(startdate) == 10) {
             startdate_precision <- "day"
@@ -99,11 +103,13 @@ clinicaltrials_gov_version <- function(
 
         ## Read the primary completion date
 
+        pcdate_raw <- prot$statusModule$primaryCompletionDateStruct
+        
         pcdate <- NA
         pcdate_precision <- NA
         pcdate_type <- NA
 
-        pcdate <- version$study$protocolSection$statusModule$primaryCompletionDateStruct$date
+        pcdate <- pcdate_raw$date
 
         if (stringr::str_length(pcdate) == 10) {
             pcdate_precision <- "day"
@@ -112,28 +118,32 @@ clinicaltrials_gov_version <- function(
             pcdate <- paste0(pcdate, "-01")
         }
 
-        pcdate_type <- version$study$protocolSection$statusModule$primaryCompletionDateStruct$type
+        pcdate_type <- pcdate_raw$type
         
         ## Read the eligibility criteria
 
+        elig <- prot$eligibilityModule
+
         min_age <- NA
-        min_age <- version$study$protocolSection$eligibilityModule$minimumAge
+        min_age <- elig$minimumAge
         
         max_age <- NA
-        max_age <- version$study$protocolSection$eligibilityModule$maximumAge
+        max_age <- elig$maximumAge
         
         sex <- NA
-        sex <- version$study$protocolSection$eligibilityModule$sex
+        sex <- elig$sex
                 
         accepts_healthy_volunteers <- NA
-        accepts_healthy_volunteers <- version$study$protocolSection$eligibilityModule$healthyVolunteers
+        accepts_healthy_volunteers <- elig$healthyVolunteers
 
         criteria <- NA
-        criteria <- version$study$protocolSection$eligibilityModule$eligibilityCriteria
+        criteria <- elig$eligibilityCriteria
         
         ## Read the outcome measures
 
-        primary_om <- version$study$protocolSection$outcomesModule$primaryOutcomes %>%
+        om <- version$study$protocolSection$outcomesModule
+
+        primary_om <- om$primaryOutcomes %>%
             tibble::tibble() %>%
             dplyr::mutate(ordinal = "Primary")
 
@@ -147,8 +157,8 @@ clinicaltrials_gov_version <- function(
         primary_om <- primary_om %>%
             dplyr::select(ordinal, measure, timeFrame, description)
 
-        if (! is.null(version$study$protocolSection$outcomesModule$secondaryOutcomes)) {
-            secondary_om <- version$study$protocolSection$outcomesModule$secondaryOutcomes %>%
+        if (! is.null(om$secondaryOutcomes)) {
+            secondary_om <- om$secondaryOutcomes %>%
                 tibble::tibble() %>%
                 dplyr::mutate(ordinal = "Secondary")
 
@@ -160,7 +170,12 @@ clinicaltrials_gov_version <- function(
             }
 
             secondary_om <- secondary_om %>%
-                dplyr::select(ordinal, measure, timeFrame, description)
+                dplyr::select(
+                           ordinal,
+                           measure,
+                           timeFrame,
+                           description
+                       )
             
             outcomes <- primary_om %>%
                 dplyr::bind_rows(secondary_om)
@@ -174,23 +189,27 @@ clinicaltrials_gov_version <- function(
 
         ## Read the Contacts
 
-        overall_contacts <- version$study$protocolSection$contactsLocationsModule$overallOfficials %>%
+        conlm <- version$study$protocolSection$contactsLocationsModule
+        
+        overall_contacts <- conlm$overallOfficials %>%
             tibble::tibble() %>%
             jsonlite::toJSON()
 
-        central_contacts <- version$study$protocolSection$contactsLocationsModule$centralContacts %>%
+        central_contacts <- conlm$centralContacts %>%
             tibble::tibble() %>%
             jsonlite::toJSON()
 
         ## Read the sponsor/collaborators
 
-        responsible_party <- version$study$protocolSection$sponsorCollaboratorsModule$responsibleParty %>%
+        spocm <- prot$sponsorCollaboratorsModule
+
+        responsible_party <- spocm$responsibleParty %>%
             jsonlite::toJSON()
 
-        lead_sponsor <- version$study$protocolSection$sponsorCollaboratorsModule$leadSponsor %>%
+        lead_sponsor <- spocm$leadSponsor %>%
             jsonlite::toJSON()
         
-        collaborators <- version$study$protocolSection$sponsorCollaboratorsModule$collaborators %>%
+        collaborators <- spocm$collaborators %>%
             tibble::tibble() %>%
             jsonlite::toJSON()
 
@@ -201,7 +220,7 @@ clinicaltrials_gov_version <- function(
         
         ## Read References
 
-        references_data <- version$study$protocolSection$referencesModule$references %>%
+        references_data <- prot$referencesModule$references %>%
             tibble::tibble() %>%
             jsonlite::toJSON()
         
