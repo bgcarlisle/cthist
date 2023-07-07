@@ -104,7 +104,7 @@ clinicaltrials_gov_download <- function(
             overall_contacts = character(),
             responsible_party = character(),
             lead_sponsor = character(),
-            collaborators = character()
+            collaborators = character(),
             whystopped = character(),
             results_posted = character(),
             references = character()
