@@ -165,7 +165,12 @@ clinicaltrials_gov_version <- function(
         }
         
         primary_om <- primary_om %>%
-            dplyr::select(ordinal, measure, timeFrame, description)
+            dplyr::select(
+                       "ordinal",
+                       "measure",
+                       "timeFrame",
+                       "description"
+                   )
 
         if (! is.null(om$secondaryOutcomes)) {
             secondary_om <- om$secondaryOutcomes %>%
@@ -181,10 +186,10 @@ clinicaltrials_gov_version <- function(
 
             secondary_om <- secondary_om %>%
                 dplyr::select(
-                           ordinal,
-                           measure,
-                           timeFrame,
-                           description
+                           "ordinal",
+                           "measure",
+                           "timeFrame",
+                           "description"
                        )
             
             outcomes <- primary_om %>%

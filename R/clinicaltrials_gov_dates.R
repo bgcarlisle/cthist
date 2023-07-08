@@ -16,6 +16,7 @@
 #' @export
 #'
 #' @importFrom magrittr %>%
+#' @importFrom rlang .data
 #'
 #' @examples
 #'
@@ -56,8 +57,8 @@ clinicaltrials_gov_dates <- function(
         index <- jsonlite::read_json(url, simplifyVector=TRUE)
 
         dates <- index$history$changes %>%
-            tibble() %>%
-            select(! moduleLabels)
+            tibble::tibble() %>%
+            dplyr::select(! "moduleLabels")
 
         if (status_change_only) {
             ## Download only the dates that are marked with a
@@ -65,16 +66,16 @@ clinicaltrials_gov_dates <- function(
             status_runs <- rle(dates$status)
 
             dates <- dates %>%
-                mutate(
+                dplyr::mutate(
                     status_run = rep(
                         seq_along(status_runs$lengths),
                         status_runs$lengths
                     )
                 ) %>%
-                group_by(status_run) %>%
-                slice_head() %>%
-                ungroup() %>%
-                select(! status_run)
+                dplyr::group_by("status_run") %>%
+                dplyr::slice_head() %>%
+                dplyr::ungroup() %>%
+                dplyr::select(! "status_run")
         }
         
         return(dates)
