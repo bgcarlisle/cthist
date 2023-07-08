@@ -1,8 +1,17 @@
+# cthist 2.0.0
+
+* Upgrade to allow compatibility with 2023 ClinicalTrials.gov website
+  re-write
+
+---
+
 # cthist 1.4.2
 
 * Temporary fix of bugs introduced by ClinicalTrials.gov moving to
   their new website design (changed URL links to
   classic.clinicaltrials.gov)
+
+---
 
 # cthist 1.4.1
 
