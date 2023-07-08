@@ -78,7 +78,7 @@ clinicaltrials_gov_download <- function(
         return (FALSE)
     }
     
-    output_cols <- "ciiDcDcDcciccccccccccccc"
+    output_cols <- "ciiDcDcDccicccccccccccccc"
 
     if (!file.exists(output_filename)) {
 
@@ -98,12 +98,14 @@ clinicaltrials_gov_download <- function(
             min_age = character(),
             max_age = character(),
             sex = character(),
-            gender_based = character(),
             accepts_healthy_volunteers = character(),
             criteria = character(),
             outcome_measures = character(),
-            contacts = character(),
-            sponsor_collaborators = character(),
+            overall_contacts = character(),
+            central_contacts = character(),
+            responsible_party = character(),
+            lead_sponsor = character(),
+            collaborators = character(),
             whystopped = character(),
             results_posted = character(),
             references = character()
@@ -175,9 +177,10 @@ clinicaltrials_gov_download <- function(
         versions <- clinicaltrials_gov_dates(
             nctid,
             FALSE
-        )
+        ) %>%
+            dplyr::pull("date")
 
-        versionno <- 1
+        versionno <- 0
         for (version in versions) {
 
             ## Repeat attempts to download a version up to 10 times in
@@ -207,12 +210,6 @@ clinicaltrials_gov_download <- function(
                 message("Recovered from error successfully")
             }
 
-            enrol <- versiondata$enrol
-            enrolno <- enrol %>%
-                stringr::str_extract("^[0-9]+")
-            enroltype <- enrol %>%
-                stringr::str_extract("[A-Za-z]+")
-
             tibble::tribble(
                 ~nctid,
                 ~version_number,
@@ -222,19 +219,21 @@ clinicaltrials_gov_download <- function(
                 ~study_start_date,
                 ~study_start_date_precision,
                 ~primary_completion_date,
-                ~primary_completion_date_type,
                 ~primary_completion_date_precision,
+                ~primary_completion_date_type,
                 ~enrolment,
                 ~enrolment_type,
                 ~min_age,
                 ~max_age,
                 ~sex,
-                ~gender_based,
                 ~accepts_healthy_volunteers,
                 ~criteria,
                 ~outcome_measures,
-                ~contacts,
-                ~sponsor_collaborators,
+                ~overall_contacts,
+                ~central_contacts,
+                ~responsible_party,
+                ~lead_sponsor,
+                ~collaborator,
                 ~whystopped,
                 ~results_posted,
                 ~references,
@@ -247,18 +246,20 @@ clinicaltrials_gov_download <- function(
                 versiondata$startdate_precision,
                 versiondata$pcdate,
                 versiondata$pcdate_precision,
-                versiondata$pcdatetype,
-                enrolno,
-                enroltype,
+                versiondata$pcdate_type,
+                versiondata$enrol,
+                versiondata$enroltype,
                 versiondata$min_age,
                 versiondata$max_age,
                 versiondata$sex,
-                versiondata$gender_based,
-                versiondata$accepts_health_volunteers,
+                versiondata$accepts_healthy_volunteers,
                 versiondata$criteria,
-                versiondata$om_data,
-                versiondata$contacts_data,
-                versiondata$sponsor_data,
+                versiondata$outcomes,
+                versiondata$overall_contacts,
+                versiondata$central_contacts,
+                versiondata$responsible_party,
+                versiondata$lead_sponsor,
+                versiondata$collaborators,
                 versiondata$whystopped,
                 versiondata$results_posted,
                 versiondata$references
@@ -271,7 +272,7 @@ clinicaltrials_gov_download <- function(
             if (length(versions) > 2 & ! quiet) {
                 message(
                     paste0(
-                        nctid, " - ", versionno, " of ",
+                        nctid, " - ", (versionno + 1), " of ",
                         length(versions)
                     )
                 )

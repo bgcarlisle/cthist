@@ -16,6 +16,7 @@
 #' @export
 #'
 #' @importFrom magrittr %>%
+#' @importFrom rlang .data
 #'
 #' @examples
 #'
@@ -42,49 +43,39 @@ clinicaltrials_gov_dates <- function(
         assertthat::assert_that(is.logical(status_change_only))
    
         ## Check that the site is reachable
-        if (httr::http_error("https://classic.clinicaltrials.gov")) {
+        if (httr::http_error("https://clinicaltrials.gov/")) {
             message("Unable to connect to clinicaltrials.gov")
             return ("Error")
         }
 
         url <- paste0(
-            "https://classic.clinicaltrials.gov/ct2/history/",
-            nctid
+            "https://clinicaltrials.gov/api/int/studies/",
+            nctid,
+            "?history=true"
         )
 
-        index <- rvest::read_html(url)
+        index <- jsonlite::read_json(url, simplifyVector=TRUE)
 
-        ## Back up locale info
-        lct <- Sys.getlocale("LC_TIME")
-        ## Set locale so that months are parsed correctly on
-        ## non-English computers
-        Sys.setlocale("LC_TIME", "C")
+        dates <- index$history$changes %>%
+            tibble::tibble() %>%
+            dplyr::select(! "moduleLabels")
 
-        if (! status_change_only) {
-            ## Default setting: Download all version change dates
-            dates <- index %>%
-                rvest::html_nodes("fieldset.releases table a") %>%
-                rvest::html_text() %>%
-                as.Date(format = "%B %d, %Y") %>%
-                format("%Y-%m-%d")
-        } else {
+        if (status_change_only) {
             ## Download only the dates that are marked with a
             ## Recruitment Status change
-            dates <- index %>%
-                rvest::html_nodes("fieldset.releases table span.recruitmentStatus") %>%
-                rvest::html_nodes(xpath="../..") %>%
-                rvest::html_nodes("a") %>%
-                rvest::html_text() %>%
-                as.Date(format = "%B %d, %Y") %>%
-                format("%Y-%m-%d")
-        }
+            status_runs <- rle(dates$status)
 
-        ## Restore original locale info
-        Sys.setlocale("LC_TIME", lct)
-
-        ## Check for NA values in dates
-        if (sum(is.na(dates)) > 0) {
-            warning("NA values returned for dates")
+            dates <- dates %>%
+                dplyr::mutate(
+                    status_run = rep(
+                        seq_along(status_runs$lengths),
+                        status_runs$lengths
+                    )
+                ) %>%
+                dplyr::group_by("status_run") %>%
+                dplyr::slice_head() %>%
+                dplyr::ungroup() %>%
+                dplyr::select(! "status_run")
         }
         
         return(dates)

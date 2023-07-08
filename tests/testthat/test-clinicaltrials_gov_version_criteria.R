@@ -8,7 +8,7 @@ test_that("ClinicalTrials.gov criteria downloads correctly", {
     } else {
         expect_equal(
             version$criteria,
-            jsonlite::toJSON("Inclusion Criteria (MCI patients):\n\nright handedness\namnestic and amnestic plus MCI with:\nsubjective memory impairment;\nobjective memory difficulties, at least 1 SD below gender, age and education adjusted standard values;\nrelatively normal performance in other cognitive domains;\nno constraints in activities of daily livings\nage: 50-80 years\n\nExclusion Criteria:\n\nsevere internal or psychiatric disease\nepilepsy\nother severe neurological diseases, e.g. previous major stroke or brain tumor\nDMS-IV manifest dementia\ncontraindication for MRT (claustrophobia, metallic implants, tattoos)")
+            "<p>Inclusion Criteria (MCI patients):</p><ul><li>right handedness</li><li><p>amnestic and amnestic plus MCI with:</p><ol><li>subjective memory impairment;</li><li>objective memory difficulties, at least 1 SD below gender, age and education adjusted standard values;</li><li>relatively normal performance in other cognitive domains;</li><li>no constraints in activities of daily livings</li><li>age: 50-90 years</li></ol></li></ul><p>Exclusion Criteria:</p><ul><li>severe internal or psychiatric disease</li><li>epilepsy</li><li>other severe neurological diseases, e.g. previous major stroke or brain tumor</li><li>DMS-IV manifest dementia</li><li>contraindication for MRT (claustrophobia, metallic implants, tattoos)</li></ul>"
         )   
     }
 })

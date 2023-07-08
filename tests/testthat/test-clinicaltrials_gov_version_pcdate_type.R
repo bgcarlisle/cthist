@@ -7,8 +7,8 @@ test_that("ClinicalTrials.gov primary completion date type downloads correctly",
         ) 
     } else {
         expect_equal(
-            version$pcdatetype,
-            "Anticipated"
+            version$pcdate_type,
+            "ESTIMATED"
         )
     }
 })

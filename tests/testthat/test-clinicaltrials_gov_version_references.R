@@ -1,5 +1,5 @@
 test_that("ClinicalTrials.gov references downloads correctly", {
-    version <- clinicaltrials_gov_version("NCT04315480", 3)
+    version <- clinicaltrials_gov_version("NCT04315480", 2)
     if (version[1] == "Error") {
         expect_equal(
             version[1],
@@ -7,8 +7,8 @@ test_that("ClinicalTrials.gov references downloads correctly", {
         )
     } else {
         expect_equal(
-            jsonlite::fromJSON(version$references)$doi[1],
-            "10.1016/j.jtho.2020.02.010"
+            jsonlite::fromJSON(version$references)$pmid[1],
+            "32114094"
         )   
     }
 })

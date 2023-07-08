@@ -30,12 +30,33 @@ from ClinicalTrials.gov
 Download clinical trial version dates:
 
 ```{r}
-## Get all the dates when the registry entry for NCT02110043 changed
+## Get all the dates and status updates when the registry entry for
+## NCT02110043 changed
 
 clinicaltrials_gov_dates("NCT02110043")
-## [1] "2014-04-08" "2014-09-22" "2014-10-13" "2016-03-15" "2016-12-20"
-## [6] "2017-07-04" "2017-07-26" "2021-05-20"
+##  A tibble: 8 × 3
+##  version date       status               
+##     <int> <chr>      <chr>                
+## 1       0 2014-04-08 RECRUITING
+## 2       1 2014-09-22 RECRUITING
+## 3       2 2014-10-13 RECRUITING
+## 4       3 2016-03-15 RECRUITING
+## 5       4 2016-12-20 RECRUITING
+## 6       5 2017-07-04 RECRUITING
+## 7       6 2017-07-26 ACTIVE_NOT_RECRUITING
+## 8       7 2021-05-20 COMPLETED
+
+## Get all the dates when NCT02110043 had a change in overall status
+
+clinicaltrials_gov_dates("NCT02110043", status_change_only=TRUE)
+##   A tibble: 3 × 3
+##   version date       status               
+##     <int> <chr>      <chr>                
+## 1       0 2014-04-08 RECRUITING
+## 2       6 2017-07-26 ACTIVE_NOT_RECRUITING
+## 3       7 2021-05-20 COMPLETED
 ```
+
 Download clinical trial registry entry version data:
 
 ```{r}
@@ -45,7 +66,11 @@ version_data <- clinicaltrials_gov_version("NCT02110043", 4)
 
 ## Get the 2nd item (enrolment) for that version
 version_data$enrol
-## [1] "22 [Anticipated]"
+## [1] 22
+
+## Get the 3rd item (enrolment type) for that version
+version_data$enroltype
+## [1] "ESTIMATED"
 ```
 
 Mass-download clinical trial registry entry versions:

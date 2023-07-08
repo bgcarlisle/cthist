@@ -7,8 +7,8 @@ test_that("ClinicalTrials.gov contacts downloads correctly", {
         )
     } else {
         expect_equal(
-            jsonlite::fromJSON(version$contacts_data)$label[1],
-            "Central Contact Person:"
+            jsonlite::fromJSON(version$overall_contacts)$name[1],
+            "Agnes Flöel, Prof. Dr."
         )   
     }
 })

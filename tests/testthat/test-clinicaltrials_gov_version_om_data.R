@@ -7,8 +7,8 @@ test_that("ClinicalTrials.gov outcome measures downloads correctly", {
         ) 
     } else {
         expect_equal(
-            jsonlite::fromJSON(version$om_data)$content[1],
-            "Performance in LOCATO task (Visual-spatial learning and memory) after a combination of intensive visual-spatial training and tDCS\n[ Time Frame: immediately after end of a 3-day period of training in tDCS condition vs sham condition ]\n\nInvestigation whether the combination of intensive visual-spatial training (LOCATO task) and tDCS leads to improvement of visual-spatial learning and memory measured by performance in LOCATO task after end of a 3 day period of training compared to sham stimulation."
+            jsonlite::fromJSON(version$outcomes)$measure[1],
+            "Performance in LOCATO task (Visual-spatial learning and memory) after a combination of intensive visual-spatial training and tDCS"
         )
     }
 })

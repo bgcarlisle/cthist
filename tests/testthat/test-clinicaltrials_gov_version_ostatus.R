@@ -8,7 +8,7 @@ test_that("ClinicalTrials.gov overall status downloads correctly", {
     } else {
         expect_equal(
             version$ostatus,
-            "Recruiting"
+            "RECRUITING"
         )
     }
 })

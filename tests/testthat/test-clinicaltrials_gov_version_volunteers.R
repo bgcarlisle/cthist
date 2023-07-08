@@ -8,7 +8,7 @@ test_that("ClinicalTrials.gov 'accepts healthy volunteers' downloads correctly",
     } else {
         expect_equal(
             version$accepts_healthy_volunteers,
-            "No"
+            FALSE
         )
     }
 })

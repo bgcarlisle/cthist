@@ -4,7 +4,7 @@
 \alias{clinicaltrials_gov_version}
 \title{Download a registry entry version from ClinicalTrials.gov}
 \usage{
-clinicaltrials_gov_version(nctid, versionno = 1)
+clinicaltrials_gov_version(nctid, versionno = 0)
 }
 \arguments{
 \item{nctid}{A character string including a well-formed
@@ -12,20 +12,21 @@ ClinicalTrials.gov NCT Number, e.g. "NCT00942747". (A
 capitalized "NCT" followed by eight numerals with no spaces or
 hyphens.)}
 
-\item{versionno}{An integer version number, e.g. 3, where 1 is the
-earliest version of the trial in question, 2 is the next most
-recent, etc. If no version number is specified, the first
-version will be downloaded.}
+\item{versionno}{An integer version number, e.g. 3, where 0 is the
+earliest version of the trial in question, 1 is the next most
+recent, etc. (Please note that this differs from the convention
+used in cthist v. <= 1.4.2, in which 1 is the earliest version
+of the trial in question.) If no version number is specified,
+the first version will be downloaded.}
 }
 \value{
 A list containing the overall status, enrolment, start
 date, start date precision (month or day) primary completion
 date, primary completion date precision (month or day), primary
-completion date type, minimum age, maximum age, sex,
-gender-based, accepts healthy volunteers, inclusion/exclusion
-criteria, outcome measures, contacts, sponsors, reason why the
-trial stopped (if provided), whether results are posted, and
-references data
+completion date type, minimum age, maximum age, sex, accepts
+healthy volunteers, inclusion/exclusion criteria, outcome
+measures, contacts, sponsors, reason why the trial stopped (if
+provided), whether results are posted, and references data
 }
 \description{
 Download a registry entry version from ClinicalTrials.gov

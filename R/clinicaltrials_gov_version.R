@@ -5,19 +5,20 @@
 #'     capitalized "NCT" followed by eight numerals with no spaces or
 #'     hyphens.)
 #'
-#' @param versionno An integer version number, e.g. 3, where 1 is the
-#'     earliest version of the trial in question, 2 is the next most
-#'     recent, etc. If no version number is specified, the first
-#'     version will be downloaded.
+#' @param versionno An integer version number, e.g. 3, where 0 is the
+#'     earliest version of the trial in question, 1 is the next most
+#'     recent, etc. (Please note that this differs from the convention
+#'     used in cthist v. <= 1.4.2, in which 1 is the earliest version
+#'     of the trial in question.) If no version number is specified,
+#'     the first version will be downloaded.
 #'
 #' @return A list containing the overall status, enrolment, start
 #'     date, start date precision (month or day) primary completion
 #'     date, primary completion date precision (month or day), primary
-#'     completion date type, minimum age, maximum age, sex,
-#'     gender-based, accepts healthy volunteers, inclusion/exclusion
-#'     criteria, outcome measures, contacts, sponsors, reason why the
-#'     trial stopped (if provided), whether results are posted, and
-#'     references data
+#'     completion date type, minimum age, maximum age, sex, accepts
+#'     healthy volunteers, inclusion/exclusion criteria, outcome
+#'     measures, contacts, sponsors, reason why the trial stopped (if
+#'     provided), whether results are posted, and references data
 #'
 #' @export
 #'
@@ -31,7 +32,7 @@
 #'
 clinicaltrials_gov_version <- function(
                                        nctid,
-                                       versionno=1
+                                       versionno=0
                                        ) {
 
     out <- tryCatch({
@@ -58,623 +59,212 @@ clinicaltrials_gov_version <- function(
         }
         
         url <- paste0(
-            "https://classic.clinicaltrials.gov/ct2/history/",
+            "https://clinicaltrials.gov/api/int/studies/",
             nctid,
-            "?V_",
+            "/history/",
             versionno
         )
 
-        version <- rvest::read_html(url)
-        
-        ## Back up locale info
-        lct <- Sys.getlocale("LC_TIME")
-        ## Set locale so that months are parsed correctly on
-        ## non-English computers
-        Sys.setlocale("LC_TIME", "C")
+        ## Read the study version in to memory from the server
+        version <- jsonlite::read_json(url, simplifyVector=TRUE)
+        ## Make shorter variable names
+        prot <- version$study$protocolSection
 
+        
         ## Read the overall status
 
-        ostatus_rows <- version %>%
-            rvest::html_nodes("#StudyStatusBody tr") %>%
-            rvest::html_text() %>%
-            stringr::str_replace_all("\n", " ") %>%
-            stringr::str_replace_all("[  ]+", " ") %>%
-            trimws()
-
         ostatus <- NA
-        for (ostatus_row in ostatus_rows) {
-
-            ostatus_row <- ostatus_row %>%
-                stringr::str_extract("Overall Status: ([A-Za-z, ]+)") %>%
-                trimws()
-
-            if (! is.na(ostatus_row)) {
-                ostatus <- sub(
-                    "Overall Status: ([A-Za-z, ]+)",
-                    "\\1",
-                    ostatus_row
-                )
-            }
-        }
+        ostatus <- prot$statusModule$overallStatus
 
         ## Read the "why stopped"
 
-        ostatus_rows <- version %>%
-            rvest::html_nodes("#StudyStatusBody tr") %>%
-            rvest::html_text2() %>%
-            trimws()
-
         whystopped <- NA
-        for (ostatus_row in ostatus_rows) {
-            
-            ostatus_row <- ostatus_row %>%
-                stringr::str_extract("Overall Status:\t([A-Za-z, ]+) \\[(.*)+\\]")
-
-            if (! is.na(ostatus_row)) {
-                whystopped <- sub(
-                    "Overall Status:\t([A-Za-z, ]+) \\[(.*)+\\]",
-                    "\\2",
-                    ostatus_row
-                ) %>%
-                    trimws()
-                
-            }
-            
+        if (! is.null(prot$statusModule$whyStopped)) {
+            whystopped <- prot$statusModule$whyStopped
         }
-
+        
         ## Read the enrolment and type
 
-        enrol_rows <- version %>%
-            rvest::html_nodes("#StudyDesignBody tr") %>%
-            rvest::html_text() %>%
-            stringr::str_replace_all("\n", " ") %>%
-            stringr::str_replace_all("[  ]+", " ") %>%
-            trimws()
-
         enrol <- NA
-        for (enrol_row in enrol_rows) {
+        enrol <- prot$designModule$enrollmentInfo$count
 
-            enrol_row <- enrol_row %>%
-                 stringr::str_extract("Enrollment: ([A-Za-z0-9 \\[\\]]+)")
-
-            if (! is.na(enrol_row)) {
-                enrol <- sub("Enrollment: ([A-Za-z0-9]+)", "\\1", enrol_row)
-            }
-        }
-
+        enroltype <- NA
+        enroltype <- prot$designModule$enrollmentInfo$type
+        
         ## Read the study start date
 
-        startdate_rows <- version %>%
-            rvest::html_nodes("#StudyStatusBody tr") %>%
-            rvest::html_text() %>%
-            stringr::str_replace_all("\n", " ") %>%
-            stringr::str_replace_all("[  ]+", " ") %>%
-            trimws()
-
-        startdate_raw <- NA
+        startdate <- NA
         startdate_precision <- NA
 
-        for (startdate_row in startdate_rows) {
-            startdate_row <- startdate_row %>%
-                stringr::str_extract(
-                             "Study Start: ([A-Za-z0-9, ]+)"
-                         )
+        startdate <- prot$statusModule$startDateStruct$date
 
-            if (! is.na(startdate_row)) {
-                startdate_raw <- sub(
-                    "Study Start: ([A-Za-z0-9, ]+)",
-                    "\\1",
-                    startdate_row
-                )
-            }
-        }
-
-        startdate_full <- startdate_raw %>%
-            as.Date(format = "%B %d, %Y") %>%
-            format("%Y-%m-%d")
-
-        startdate_month <- startdate_raw %>%
-            paste(1) %>%
-            as.Date(format = "%B %Y %d") %>%
-            format("%Y-%m-%d")
-
-        if (! is.na(startdate_full)) {
-            startdate <- startdate_full
+        if (stringr::str_length(startdate) == 10) {
             startdate_precision <- "day"
         } else {
-            startdate <- startdate_month
-            if (! is.na(startdate)) {
-                startdate_precision <- "month"
-            }
+            startdate_precision <- "month"
+            startdate <- paste0(startdate, "-01")
         }
 
         ## Read the primary completion date
 
-        pcdate_rows <- version %>%
-            rvest::html_nodes("#StudyStatusBody tr") %>%
-            rvest::html_text() %>%
-            stringr::str_replace_all("\n", " ") %>%
-            stringr::str_replace_all("[  ]+", " ") %>%
-            trimws()
-
-        pcdate_raw <- NA
+        pcdate_raw <- prot$statusModule$primaryCompletionDateStruct
+        
+        pcdate <- NA
         pcdate_precision <- NA
+        pcdate_type <- NA
 
-        for (pcdate_row in pcdate_rows) {
-            pcdate_row <- pcdate_row %>%
-                stringr::str_extract(
-                             "Primary Completion: ([A-Za-z0-9, \\[\\]]+)"
-                         )
+        pcdate <- pcdate_raw$date
 
-            if (! is.na(pcdate_row)) {
-                pcdate_raw <- sub(
-                    "Primary Completion: ([A-Za-z0-9, ]+)",
-                    "\\1",
-                    pcdate_row
-                )
-            }
-        }
-
-        pcdate_full <- pcdate_raw %>%
-            stringr::str_extract("[A-Za-z0-9 ,]+") %>%
-            trimws() %>%
-            as.Date(format = "%B %d, %Y") %>%
-            format("%Y-%m-%d")
-
-        pcdate_month <- pcdate_raw %>%
-            stringr::str_extract("[A-Za-z0-9 ,]+") %>%
-            trimws() %>%
-            paste(1) %>%
-            as.Date(format = "%B %Y %d") %>%
-            format("%Y-%m-%d")
-
-        if (! is.na(pcdate_full)) {
-            pcdate <- pcdate_full
+        if (stringr::str_length(pcdate) == 10) {
             pcdate_precision <- "day"
         } else {
-            pcdate <- pcdate_month
-            if (! is.na(pcdate)) {
-                pcdate_precision <- "month"
-            }
+            pcdate_precision <- "month"
+            pcdate <- paste0(pcdate, "-01")
         }
 
-        pcdatetype <- pcdate_raw %>%
-            stringr::str_extract("\\[[A-Za-z]+\\]") %>%
-            stringr::str_extract("[A-Za-z]+")
-
+        pcdate_type <- pcdate_raw$type
+        
         ## Read the eligibility criteria
 
-        eligibility_rows <- version %>%
-            rvest::html_nodes("#EligibilityBody tr") %>%
-            rvest::html_text() %>%
-            stringr::str_replace_all("\n", " ") %>%
-            stringr::str_replace_all("[  ]+", " ") %>%
-            trimws()
+        elig <- prot$eligibilityModule
 
         min_age <- NA
-        for (elig_row in eligibility_rows) {
-            elig_row <- elig_row %>%
-                stringr::str_extract("Minimum Age: [0-9]+ Years")
-
-            if (! is.na(elig_row))  {
-                min_age <- sub(
-                    "Minimum Age: ([0-9]+) Years",
-                    "\\1",
-                    elig_row
-                )
-            }
-        }
-
-        max_age <- NA
-        for (elig_row in eligibility_rows) {
-            elig_row <- elig_row %>%
-                stringr::str_extract("Maximum Age: [0-9]+ Years")
-
-            if (! is.na(elig_row))  {
-                max_age <- sub(
-                    "Maximum Age: ([0-9]+) Years",
-                    "\\1",
-                    elig_row
-                )
-            }
-        }
-
-        sex <- NA
-        for (elig_row in eligibility_rows) {
-            elig_row <- elig_row %>%
-                stringr::str_extract("Sex: [A-Za-z]+")
-
-            if (! is.na(elig_row))  {
-                sex <- sub("Sex: ([A-Za-z]+)", "\\1", elig_row)
-            }
-        }
-
-        gender_based <- NA
-        for (elig_row in eligibility_rows) {
-            elig_row <- elig_row %>%
-                stringr::str_extract("Gender Based: [A-Za-z]+")
-
-            if (! is.na(elig_row))  {
-                gender_based <- sub(
-                    "Gender Based: ([A-Za-z]+)",
-                    "\\1",
-                    elig_row
-                )
-            }
-        }
-
-        accepts_healthy_volunteers <- NA
-        for (elig_row in eligibility_rows) {
-            elig_row <- elig_row %>%
-                stringr::str_extract(
-                             "Accepts Healthy Volunteers: [A-Za-z]+"
-                         )
-
-            if (! is.na(elig_row))  {
-                accepts_healthy_volunteers <- sub(
-                    "Accepts Healthy Volunteers: ([A-Za-z]+)",
-                    "\\1",
-                    elig_row
-                )
-            }
-        }
-
-        eligibility_rows <- version %>%
-            rvest::html_nodes("#EligibilityBody tr")
-
-        criteria <- NA
-        for (elig_row in eligibility_rows) {
-
-            elig_row_cells <- elig_row %>% rvest::html_nodes("td")
-
-            if (length(elig_row_cells) > 0) {
-
-                if (
-                    elig_row_cells[1] %>% rvest::html_text() ==
-                    "Criteria:"
-                ) {
-                    criteria <- elig_row_cells[2] %>%
-                        rvest::html_text2() %>%
-                        paste(collapse = " ")
-                }
-
-            }
-
-        }
-
-        criteria <- criteria %>%
-            jsonlite::toJSON()
-
-        ## Read the outcome measures
-
-        om_rows <- version %>%
-            rvest::html_nodes("#OutcomeMeasuresBody tr")
-
-        if (length(om_rows) == 0) {
-            om_rows <- version %>%
-                rvest::html_nodes("#ProtocolOutcomeMeasuresBody tr")
-        }
-
-        om_data <- tibble::tribble(
-                               ~section, ~label, ~content
-                           )
-
-        outcomes_link <- NA
-        outcomes_link <-  version %>%
-            rvest::html_node("#ProtocolOutcomeMeasuresBody a") %>%
-            rvest::html_text()
-
-        if (! is.na(outcomes_link)) {
-            new_om_data <- tibble::tribble(
-                                       ~section, ~label, ~content,
-                                       outcomes_link, NA, NA
-                                   )
-            
-            om_data <- dplyr::bind_rows(om_data, new_om_data)
+        if (! is.null(elig$minimumAge)) {
+            min_age <- elig$minimumAge
         }
         
-        omsection <- NA
-        omlabel <- NA
-        omcontent <- NA
-        for (om_row in om_rows) {
+        max_age <- NA
+        if (! is.null(elig$maximumAge)){
+            max_age <- elig$maximumAge
+        }
+        
+        sex <- NA
+        if (! is.null(elig$sex)){
+            sex <- elig$sex
+        }
+        
+        accepts_healthy_volunteers <- NA
+        accepts_healthy_volunteers <- elig$healthyVolunteers
 
-            om_row_cells <- om_row %>% rvest::html_nodes("td")
+        criteria <- NA
+        criteria <- elig$eligibilityCriteria
+        
+        ## Read the outcome measures
 
-            if (length(om_row_cells) > 0) {
+        om <- version$study$protocolSection$outcomesModule
 
-                if (length(om_row_cells) == 2) {
+        primary_om <- om$primaryOutcomes %>%
+            tibble::tibble() %>%
+            dplyr::mutate(ordinal = "Primary")
 
-                    if (om_row_cells[2] %>% rvest::html_text() == ""){
-                        omsection <- om_row_cells[1] %>%
-                            rvest::html_text() %>%
-                            trimws()
+        cols <- c("measure", "timeFrame", "description")
+        add <- cols[! cols %in% names(primary_om)]
 
-                    } else {
-                        omlabel <- om_row_cells[1] %>%
-                            rvest::html_text() %>%
-                            trimws()
+        if (length(add) != 0) {
+            primary_om[add] <- NA
+        }
+        
+        primary_om <- primary_om %>%
+            dplyr::select(
+                       "ordinal",
+                       "measure",
+                       "timeFrame",
+                       "description"
+                   )
 
-                        omcontent <- om_row_cells[2] %>%
-                            rvest::html_text2() %>%
-                            trimws()
+        if (! is.null(om$secondaryOutcomes)) {
+            secondary_om <- om$secondaryOutcomes %>%
+                tibble::tibble() %>%
+                dplyr::mutate(ordinal = "Secondary")
 
-                        new_om_data <- tibble::tribble(
-                                         ~section, ~label, ~content,
-                                         omsection, omlabel, omcontent
-                                       )
+            cols <- c("measure", "timeFrame", "description")
+            add <- cols[! cols %in% names(secondary_om)]
 
-                        om_data <- dplyr::bind_rows(
-                                              om_data,
-                                              new_om_data
-                                          )
-                    }
-
-                } else {
-
-                    omlabel <- om_row_cells[1] %>%
-                        rvest::html_node("p.mcp-comment-title") %>%
-                        rvest::html_text()
-
-                    omcontent <- om_row_cells[1] %>%
-                        rvest::html_nodes("li") %>%
-                        rvest::html_text2() %>%
-                        paste(collapse = " ")
-
-                    new_om_data <- tibble::tribble(
-                                     ~section, ~label, ~content,
-                                     omsection, omlabel, omcontent
-                                   )
-
-                    om_data <- dplyr::bind_rows(om_data, new_om_data)
-                }
-
+            if (length(add) != 0) {
+                secondary_om[add] <- NA
             }
 
+            secondary_om <- secondary_om %>%
+                dplyr::select(
+                           "ordinal",
+                           "measure",
+                           "timeFrame",
+                           "description"
+                       )
+            
+            outcomes <- primary_om %>%
+                dplyr::bind_rows(secondary_om)
+        } else {
+            outcomes <- primary_om
         }
 
-        om_data <- om_data %>%
+
+        om_data <- outcomes %>%
             jsonlite::toJSON()
 
         ## Read the Contacts
 
-        cl_rows <- version %>%
-            rvest::html_nodes("#ContactsLocationsBody tr")
+        conlm <- version$study$protocolSection$contactsLocationsModule
+        
+        overall_contacts <- conlm$overallOfficials %>%
+            tibble::tibble() %>%
+            jsonlite::toJSON()
 
-        contacts_data <- tibble::tribble(
-            ~label, ~content
-        )
-
-        cl_label <- NA
-        cl_content <- NA
-        contact_section <- TRUE
-        for (cl_row in cl_rows) {
-
-            cl_row_cells <- cl_row %>%
-                rvest::html_nodes("td")
-
-            if (length(cl_row_cells) > 0) {
-
-                ## Contacts and locations are in the same table, so this
-                ## switches off processing once we hit the locations rows
-                if (cl_row_cells[1] %>% rvest::html_text() == "Locations:") {
-                    contact_section <- FALSE
-                }
-
-                if (contact_section) {
-                    ## If we're still in the contact section ...
-
-                    if (cl_row_cells[1] %>% rvest::html_text() != "") {
-                        ## First cell isn't empty
-
-                        cl_label <- cl_row_cells[1] %>%
-                            rvest::html_text2() %>%
-                            trimws()
-
-                    }
-
-                    cl_content <- cl_row_cells[2] %>%
-                        rvest::html_text2() %>%
-                        trimws()
-
-                    contacts_data <- contacts_data %>%
-                        dplyr::bind_rows(
-                            tibble::tribble(
-                                ~label, ~content,
-                                cl_label, cl_content
-                            )
-                        )
-
-                }
-
-            }
-
-        }
-
-        contacts_data <- contacts_data %>%
+        central_contacts <- conlm$centralContacts %>%
+            tibble::tibble() %>%
             jsonlite::toJSON()
 
         ## Read the sponsor/collaborators
 
-        sc_rows <- version %>%
-            rvest::html_nodes("#SponsorCollaboratorsBody tr")
+        spocm <- prot$sponsorCollaboratorsModule
 
-        sponsor_data <- tibble::tribble(
-            ~label, ~content
-        )
+        responsible_party <- spocm$responsibleParty %>%
+            jsonlite::toJSON()
 
-        sc_label <- NA
-        sc_content <- NA
-
-        for (sc_row in sc_rows) {
-
-            sc_row_cells <- sc_row %>%
-                rvest::html_nodes("td")
-
-            if (length(sc_row_cells) > 0) {
-
-                if (sc_row_cells[1] %>% rvest::html_text() != "") {
-                    ## First cell isn't empty
-
-                    sc_label <- sc_row_cells[1] %>%
-                        rvest::html_text2() %>%
-                        trimws()
-                }
-
-                sc_content <- sc_row_cells[2] %>%
-                    rvest::html_text2() %>%
-                    trimws()
-
-                sponsor_data <- sponsor_data %>%
-                    dplyr::bind_rows(
-                        tibble::tribble(
-                            ~label, ~content,
-                            sc_label, sc_content
-                        )
-                    )
-
-            }
-
-        }
-
-        sponsor_data <- sponsor_data %>%
+        lead_sponsor <- spocm$leadSponsor %>%
+            jsonlite::toJSON()
+        
+        collaborators <- spocm$collaborators %>%
+            tibble::tibble() %>%
             jsonlite::toJSON()
 
         ## Check for the presence of study results
 
-        study_results_section_heading <- version %>%
-            rvest::html_nodes(
-            xpath='//*[@id="Results"]/../div[@class="sectionDivider"]'
-            )
-
-        results_posted <- FALSE
+        results_posted <- NA
+        results_posted <- version$study$hasResults
         
-        if (length(study_results_section_heading) > 0) {
-            if (rvest::html_text2(study_results_section_heading) ==
-                "Study Results"
-                ) {
-                results_posted <- TRUE
-            }
-            
-        }
-
         ## Read References
 
-        ref_rows <- version %>%
-            rvest::html_nodes("#ReferencesBody tr")
-
-        references_data <- tibble::tribble(
-                                       ~label,
-                                       ~content,
-                                       ~doi,
-                                       ~pmid,
-                                       ~type
-                                   )
-
-        ref_label <- NA
-        ref_content <- NA
-        ref_doi <- NA
-        ref_pmid <- NA
-        ref_type <- NA
-
-        for (ref_row in ref_rows) {
-            
-            ref_row_cells <- ref_row %>%
-                rvest::html_nodes("td")
-
-            if (length(ref_row_cells) > 0) {
-
-                if (rvest::html_text(ref_row_cells[1]) != "") {
-                    ## First cell isn't empty
-
-                    ref_label <- ref_row_cells[1] %>%
-                        rvest::html_text2() %>%
-                        trimws()
-                    
-                }
-
-                ref_content <- ref_row_cells[2] %>%
-                    rvest::html_text2() %>%
-                    trimws()
-
-                if (ref_label == "Citations:" & ref_content != "") {
-                    ## If we're looking at citations
-                    ref_doi <- stringr::str_match(
-                        ref_content,
-                        "doi: ([^\\s]+)\\. "
-                    )[2]
-
-                    ref_pmid <- stringr::str_match(
-                        ref_content,
-                        "PubMed ([0-9]+)$"
-                    )[2]
-
-                    ref_type <- stringr::str_match(
-                        ref_content,
-                        "^\\[([A-Za-z ]+)\\] "
-                    )[2]
-                    
-                } else {
-                    ref_doi <- NA
-                    ref_pmid <- NA
-                    ref_type <- NA
-                }
-
-                if (ref_content != "") {
-                    references_data <- references_data %>%
-                        dplyr::bind_rows(
-                                   tibble::tribble(
-                                               ~label,
-                                               ~content,
-                                               ~doi,
-                                               ~pmid,
-                                               ~type,
-                                               ref_label,
-                                               ref_content,
-                                               ref_doi,
-                                               ref_pmid,
-                                               ref_type
-                                           )
-                               )
-                }
-
-                
-            }
-            
-        }
-
-        if (nrow(references_data) > 0) {
-            references_data <- references_data %>%
-                jsonlite::toJSON()
-        } else {
-            references_data <- NA
-        }
+        references_data <- prot$referencesModule$references %>%
+            tibble::tibble() %>%
+            jsonlite::toJSON()
         
         ## Now, put all these data points together
 
         data <- list(
             ostatus = ostatus,
             enrol = enrol,
+            enroltype = enroltype,
             startdate = startdate,
             startdate_precision = startdate_precision,
             pcdate = pcdate,
             pcdate_precision = pcdate_precision,
-            pcdatetype = pcdatetype,
+            pcdate_type = pcdate_type,
             min_age = min_age,
             max_age = max_age,
             sex = sex,
-            gender_based = gender_based,
             accepts_healthy_volunteers = accepts_healthy_volunteers,
             criteria = criteria,
-            om_data = om_data,
-            contacts_data = contacts_data,
-            sponsor_data = sponsor_data,
+            outcomes = om_data,
+            overall_contacts = overall_contacts,
+            central_contacts = central_contacts,
+            responsible_party = responsible_party,
+            lead_sponsor = lead_sponsor,
+            collaborators = collaborators,
             whystopped = whystopped,
             results_posted = results_posted,
             references = references_data
         )
-
-        ## Restore original locale info
-        Sys.setlocale("LC_TIME", lct)
 
         return(data)
 

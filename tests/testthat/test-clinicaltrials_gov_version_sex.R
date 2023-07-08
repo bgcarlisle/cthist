@@ -8,7 +8,7 @@ test_that("ClinicalTrials.gov sex downloads correctly", {
     } else {
         expect_equal(
             version$sex,
-            "All"
+            "ALL"
         )
     }
 })
