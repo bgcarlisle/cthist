@@ -53,7 +53,7 @@ clinicaltrials_gov_version <- function(
         }
    
         ## Check that the site is reachable
-        if (httr::http_error("https://classic.clinicaltrials.gov")) {
+        if (httr::http_error("https://clinicaltrials.gov")) {
             message("Unable to connect to clinicaltrials.gov")
             return ("Error")
         }
