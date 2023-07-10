@@ -19,8 +19,9 @@
 #'     healthy volunteers, inclusion/exclusion criteria, outcome
 #'     measures, overall contacts, central contacts, responsible
 #'     party, lead sponsor, collaborators, reason why the trial
-#'     stopped (if provided), whether results are posted, and
-#'     references data
+#'     stopped (if provided), whether results are posted, references
+#'     data, organization indentifiers and other secondary trial
+#'     identifiers.
 #'
 #' @export
 #'
@@ -240,6 +241,16 @@ clinicaltrials_gov_version <- function(
         references_data <- prot$referencesModule$references %>%
             tibble::tibble() %>%
             jsonlite::toJSON()
+
+        ## Read secondary identifiers
+
+        orgstudyid <- NA
+        orgstudyid <- prot$identificationModule$orgStudyIdInfo$id
+
+        secondaryids <- NA
+        secondaryids <- prot$identificationModule$secondaryIdInfos %>%
+            tibble::tibble() %>%
+            jsonlite::toJSON()
         
         ## Now, put all these data points together
 
@@ -265,7 +276,9 @@ clinicaltrials_gov_version <- function(
             collaborators = collaborators,
             whystopped = whystopped,
             results_posted = results_posted,
-            references = references_data
+            references = references_data,
+            orgstudyid = orgstudyid,
+            secondaryids = secondaryids
         )
 
         return(data)

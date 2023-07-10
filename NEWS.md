@@ -1,3 +1,10 @@
+# cthist 2.1.0
+
+* Added download for organization study ID and secondary ID's
+* Added unit tests for all functions added since v 1.4.2
+
+--
+
 # cthist 2.0.1
 
 * Minor changes to documentation to better reflect downloaded data
