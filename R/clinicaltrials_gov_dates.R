@@ -1,4 +1,4 @@
-#' Download a vector of dates on which a ClinicalTrials.gov registry
+#' Download a table of dates on which a ClinicalTrials.gov registry
 #' entry was updated
 #'
 #' @param nctid A character string including a well-formed
@@ -9,9 +9,10 @@
 #' @param status_change_only If TRUE, returns only the dates marked
 #'     with a Recruitment Status change, default FALSE.
 #'
-#' @return A character vector of ISO-8601 formatted dates
-#'     corresponding to the dates on which there were clinical trial
-#'     history version updates.
+#' @return A table with three columns: the version number (starting
+#'     from 0), the ISO-8601 formatted date on which there were
+#'     clinical trial history version updates, and the trial's overall
+#'     status on that date.
 #'
 #' @export
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/clinicaltrials_gov_dates.R
 \name{clinicaltrials_gov_dates}
 \alias{clinicaltrials_gov_dates}
-\title{Download a vector of dates on which a ClinicalTrials.gov registry
+\title{Download a table of dates on which a ClinicalTrials.gov registry
 entry was updated}
 \usage{
 clinicaltrials_gov_dates(nctid, status_change_only = FALSE)
@@ -17,12 +17,13 @@ hyphens.)}
 with a Recruitment Status change, default FALSE.}
 }
 \value{
-A character vector of ISO-8601 formatted dates
-corresponding to the dates on which there were clinical trial
-history version updates.
+A table with three columns: the version number (starting
+from 0), the ISO-8601 formatted date on which there were
+clinical trial history version updates, and the trial's overall
+status on that date.
 }
 \description{
-Download a vector of dates on which a ClinicalTrials.gov registry
+Download a table of dates on which a ClinicalTrials.gov registry
 entry was updated
 }
 \examples{
