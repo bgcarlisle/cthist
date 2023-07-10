@@ -1,3 +1,9 @@
+# cthist 2.0.1
+
+* Minor changes to documentation to better reflect downloaded data
+
+---
+
 # cthist 2.0.0
 
 * Upgrade to allow compatibility with 2023 ClinicalTrials.gov website

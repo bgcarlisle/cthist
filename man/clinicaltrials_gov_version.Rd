@@ -25,8 +25,10 @@ date, start date precision (month or day) primary completion
 date, primary completion date precision (month or day), primary
 completion date type, minimum age, maximum age, sex, accepts
 healthy volunteers, inclusion/exclusion criteria, outcome
-measures, contacts, sponsors, reason why the trial stopped (if
-provided), whether results are posted, and references data
+measures, overall contacts, central contacts, responsible
+party, lead sponsor, collaborators, reason why the trial
+stopped (if provided), whether results are posted, and
+references data
 }
 \description{
 Download a registry entry version from ClinicalTrials.gov

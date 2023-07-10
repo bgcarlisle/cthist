@@ -101,10 +101,13 @@ clinicaltrials_gov_download(c("NCT02110043", "NCT03281616"), "versions.csv")
 * Primary completion date
 * Enrolment
 * Enrolment type
-* Outcome measures
 * Inclusion and exclusion criteria
-* Contacts
-* Sponsors
+* Outcome measures
+* Overall contacts
+* Cetral contacts
+* Responsible party
+* Lead sponsor
+* Collaborators
 * "Why stopped?"
 * Results reported
 * References
