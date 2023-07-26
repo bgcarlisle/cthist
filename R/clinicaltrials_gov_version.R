@@ -116,16 +116,17 @@ clinicaltrials_gov_version <- function(
         pcdate_precision <- NA
         pcdate_type <- NA
 
-        pcdate <- pcdate_raw$date
 
-        if (stringr::str_length(pcdate) == 10) {
-            pcdate_precision <- "day"
-        } else {
-            pcdate_precision <- "month"
-            pcdate <- paste0(pcdate, "-01")
+        if (! is_null(pcdate_raw$date)) {
+            pcdate <- pcdate_raw$date
+            if (stringr::str_length(pcdate) == 10) {
+                pcdate_precision <- "day"
+            } else {
+                pcdate_precision <- "month"
+                pcdate <- paste0(pcdate, "-01")
+            }
+            pcdate_type <- pcdate_raw$type
         }
-
-        pcdate_type <- pcdate_raw$type
         
         ## Read the eligibility criteria
 
