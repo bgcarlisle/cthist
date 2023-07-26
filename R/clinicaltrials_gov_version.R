@@ -117,7 +117,7 @@ clinicaltrials_gov_version <- function(
         pcdate_type <- NA
 
 
-        if (! is_null(pcdate_raw$date)) {
+        if (! is.null(pcdate_raw$date)) {
             pcdate <- pcdate_raw$date
             if (stringr::str_length(pcdate) == 10) {
                 pcdate_precision <- "day"
