@@ -1,3 +1,11 @@
+# cthist 2.1.1
+
+* Fix minor errors in documentation
+* Fix bug where missing primary completion dates in trial record would
+  produce an error
+
+---
+
 # cthist 2.1.0
 
 * Added download for organization study ID and secondary ID's
