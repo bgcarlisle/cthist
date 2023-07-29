@@ -1,3 +1,10 @@
+# cthist 2.1.2
+
+* Fix bug where missing start dates in trial record would produce an
+  error
+
+---
+
 # cthist 2.1.1
 
 * Fix minor errors in documentation

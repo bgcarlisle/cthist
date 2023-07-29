@@ -99,13 +99,15 @@ clinicaltrials_gov_version <- function(
         startdate <- NA
         startdate_precision <- NA
 
-        startdate <- prot$statusModule$startDateStruct$date
+        startdate_raw <- prot$statusModule$startDateStruct$date
 
-        if (stringr::str_length(startdate) == 10) {
-            startdate_precision <- "day"
-        } else {
-            startdate_precision <- "month"
-            startdate <- paste0(startdate, "-01")
+        if (! is.null(startdate_raw)) {
+            if (stringr::str_length(startdate_raw) == 10) {
+                startdate_precision <- "day"
+            } else {
+                startdate_precision <- "month"
+                startdate <- paste0(startdate_raw, "-01")
+            }
         }
 
         ## Read the primary completion date
