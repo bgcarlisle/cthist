@@ -17,7 +17,8 @@ earliest version of the trial in question, 1 is the next most
 recent, etc. (Please note that this differs from the convention
 used in cthist v. <= 1.4.2, in which 1 is the earliest version
 of the trial in question.) If no version number is specified,
-the first version will be downloaded.}
+the first version will be downloaded. If -1 (negative one) is
+specified, the latest version will be downloaded.}
 }
 \value{
 A list containing the overall status, enrolment, start

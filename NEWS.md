@@ -1,3 +1,10 @@
+# cthist 2.1.3
+
+* Add support for downloading the latest version of a clinical trial
+  only
+
+---
+
 # cthist 2.1.2
 
 * Fix bug where missing start dates in trial record would produce an

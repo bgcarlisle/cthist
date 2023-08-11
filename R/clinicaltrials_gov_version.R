@@ -10,7 +10,8 @@
 #'     recent, etc. (Please note that this differs from the convention
 #'     used in cthist v. <= 1.4.2, in which 1 is the earliest version
 #'     of the trial in question.) If no version number is specified,
-#'     the first version will be downloaded.
+#'     the first version will be downloaded. If -1 (negative one) is
+#'     specified, the latest version will be downloaded.
 #'
 #' @return A list containing the overall status, enrolment, start
 #'     date, start date precision (month or day) primary completion
@@ -59,6 +60,12 @@ clinicaltrials_gov_version <- function(
         if (httr::http_error("https://clinicaltrials.gov")) {
             message("Unable to connect to clinicaltrials.gov")
             return ("Error")
+        }
+
+        ## Get the version number if versionno is -1 (latest)
+        if (versionno == -1) {
+            dates <- clinicaltrials_gov_dates(nctid)
+            versionno <- max(dates$version)
         }
         
         url <- paste0(
