@@ -111,6 +111,7 @@ clinicaltrials_gov_version <- function(
         if (! is.null(startdate_raw)) {
             if (stringr::str_length(startdate_raw) == 10) {
                 startdate_precision <- "day"
+                startdate <- startdate_raw
             } else {
                 startdate_precision <- "month"
                 startdate <- paste0(startdate_raw, "-01")

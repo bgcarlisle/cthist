@@ -1,3 +1,10 @@
+# cthist 2.1.4
+
+* Fix bug in which start date would erroneously return NA in some
+  cases
+
+---
+
 # cthist 2.1.3
 
 * Add support for downloading the latest version of a clinical trial
