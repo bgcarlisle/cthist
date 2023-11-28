@@ -22,6 +22,10 @@
 #'     printed during download. FALSE by default, messages printed for
 #'     every version downloaded showing progress.
 #'
+#' @param latest A boolean TRUE or FALSE. If TRUE, only the latest
+#'     version of the registry entry will be downloaded, if FALSE, all
+#'     versions will be downloaded. FALSE by default.
+#'
 #' @return If an output filename is specified, on successful
 #'     completion, this function returns TRUE and otherwise returns
 #'     FALSE. If an output filename is not specified, on successful
@@ -55,7 +59,8 @@
 clinicaltrials_gov_download <- function(
                                         nctids,
                                         output_filename=NA,
-                                        quiet=FALSE
+                                        quiet=FALSE,
+                                        latest=FALSE
                                         ) {
     
     ## If output_filename is not specified, write to tempfile() and
@@ -182,109 +187,118 @@ clinicaltrials_gov_download <- function(
         ) %>%
             dplyr::pull("date")
 
-        versionno <- 0
+        if (! latest) {
+            versionno <- 0
+        } else {
+            versionno <- length(versions) - 1
+        }
+        
         for (version in versions) {
 
-            ## Repeat attempts to download a version up to 10 times in
-            ## case of error
-            versiondata <- NA
-            version_retry <- 0
+            if (! latest | version == max(versions)) {
+                
+                ## Repeat attempts to download a version up to 10 times in
+                ## case of error
+                versiondata <- NA
+                version_retry <- 0
 
-            while (
+                while (
                 (is.na(versiondata[1]) |
-                versiondata[1] == "Error") &
+                 versiondata[1] == "Error") &
                 version_retry < 10
-            ) {
+                ) {
 
-                if (version_retry > 0 & ! quiet) {
-                    message("Trying again ...")
+                    if (version_retry > 0 & ! quiet) {
+                        message("Trying again ...")
+                    }
+
+                    versiondata <- clinicaltrials_gov_version(
+                        nctid, versionno
+                    )
+                    
+                    version_retry <- version_retry + 1
+                    
                 }
 
-                versiondata <- clinicaltrials_gov_version(
-                    nctid, versionno
-                )
-                
-                version_retry <- version_retry + 1
-                
-            }
+                if (version_retry > 1 & ! quiet) {
+                    message("Recovered from error successfully")
+                }
 
-            if (version_retry > 1 & ! quiet) {
-                message("Recovered from error successfully")
-            }
+                tibble::tribble(
+                            ~nctid,
+                            ~version_number,
+                            ~total_versions,
+                            ~version_date,
+                            ~overall_status,
+                            ~study_start_date,
+                            ~study_start_date_precision,
+                            ~primary_completion_date,
+                            ~primary_completion_date_precision,
+                            ~primary_completion_date_type,
+                            ~enrolment,
+                            ~enrolment_type,
+                            ~min_age,
+                            ~max_age,
+                            ~sex,
+                            ~accepts_healthy_volunteers,
+                            ~criteria,
+                            ~outcome_measures,
+                            ~overall_contacts,
+                            ~central_contacts,
+                            ~responsible_party,
+                            ~lead_sponsor,
+                            ~collaborator,
+                            ~whystopped,
+                            ~results_posted,
+                            ~references,
+                            ~orgstudyid,
+                            ~secondaryids,
+                            nctid,
+                            versionno,
+                            length(versions),
+                            version,
+                            versiondata$ostatus,
+                            versiondata$startdate,
+                            versiondata$startdate_precision,
+                            versiondata$pcdate,
+                            versiondata$pcdate_precision,
+                            versiondata$pcdate_type,
+                            versiondata$enrol,
+                            versiondata$enroltype,
+                            versiondata$min_age,
+                            versiondata$max_age,
+                            versiondata$sex,
+                            versiondata$accepts_healthy_volunteers,
+                            versiondata$criteria,
+                            versiondata$outcomes,
+                            versiondata$overall_contacts,
+                            versiondata$central_contacts,
+                            versiondata$responsible_party,
+                            versiondata$lead_sponsor,
+                            versiondata$collaborators,
+                            versiondata$whystopped,
+                            versiondata$results_posted,
+                            versiondata$references,
+                            versiondata$orgstudyid,
+                            versiondata$secondaryids
+                        ) %>%
+                    readr::write_csv(
+                               file = output_filename, append = TRUE
+                           )
 
-            tibble::tribble(
-                ~nctid,
-                ~version_number,
-                ~total_versions,
-                ~version_date,
-                ~overall_status,
-                ~study_start_date,
-                ~study_start_date_precision,
-                ~primary_completion_date,
-                ~primary_completion_date_precision,
-                ~primary_completion_date_type,
-                ~enrolment,
-                ~enrolment_type,
-                ~min_age,
-                ~max_age,
-                ~sex,
-                ~accepts_healthy_volunteers,
-                ~criteria,
-                ~outcome_measures,
-                ~overall_contacts,
-                ~central_contacts,
-                ~responsible_party,
-                ~lead_sponsor,
-                ~collaborator,
-                ~whystopped,
-                ~results_posted,
-                ~references,
-                ~orgstudyid,
-                ~secondaryids,
-                nctid,
-                versionno,
-                length(versions),
-                version,
-                versiondata$ostatus,
-                versiondata$startdate,
-                versiondata$startdate_precision,
-                versiondata$pcdate,
-                versiondata$pcdate_precision,
-                versiondata$pcdate_type,
-                versiondata$enrol,
-                versiondata$enroltype,
-                versiondata$min_age,
-                versiondata$max_age,
-                versiondata$sex,
-                versiondata$accepts_healthy_volunteers,
-                versiondata$criteria,
-                versiondata$outcomes,
-                versiondata$overall_contacts,
-                versiondata$central_contacts,
-                versiondata$responsible_party,
-                versiondata$lead_sponsor,
-                versiondata$collaborators,
-                versiondata$whystopped,
-                versiondata$results_posted,
-                versiondata$references,
-                versiondata$orgstudyid,
-                versiondata$secondaryids
-            ) %>%
-                readr::write_csv(
-                           file = output_filename, append = TRUE
-                       )
-
-            if (length(versions) > 2 & ! quiet) {
-                message(
-                    paste0(
-                        nctid, " - ", (versionno + 1), " of ",
-                        length(versions)
+                if (length(versions) > 2 & ! quiet) {
+                    message(
+                        paste0(
+                            nctid, " - ", (versionno + 1), " of ",
+                            length(versions)
+                        )
                     )
-                )
+                }
+
+                versionno <- versionno + 1
+
             }
-
-            versionno <- versionno + 1
-
+            
         }
 
         input$notdone[input$nctid == nctid] <- FALSE
@@ -343,7 +357,12 @@ clinicaltrials_gov_download <- function(
     check <- check %>%
         dplyr::left_join(dl_counts, by = "nctid")
 
-    incomplete_dl_n <- sum(check$total_versions != check$dl_versions)
+    if (! latest) {
+        incomplete_dl_n <- sum(check$total_versions != check$dl_versions)
+    } else {
+        incomplete_dl_n <- sum(input$notdone)
+    }
+    
     all_dl_complete <- incomplete_dl_n == 0
 
 
