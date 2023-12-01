@@ -6,12 +6,18 @@
 \alias{cthist-package}
 \title{cthist: Clinical Trial Registry History}
 \description{
-Retrieves historical versions of clinical trial registry entries from \url{https://ClinicalTrials.gov}. Package functionality and implementation is documented in Carlisle (2022) \doi{10.1371/journal.pone.0270909}.
+Retrieves historical versions of clinical trial registry entries from \url{https://ClinicalTrials.gov}. Package functionality and implementation for v 1.0.0 is documented in Carlisle (2022) \doi{10.1371/journal.pone.0270909}.
 }
 \details{
 This package provides 3 functions for mass-downloading
 historical clinical trial registry entry data from
 ClinicalTrials.gov
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{The functions for downloading clinical trial registry data from
+DRKS that were provided in versions 1.0.0 to 1.3.0 have been
+deprecated due to the re-writing of drks.de in a manner that
+broke the previous implementation of web-scraping
+}\if{html}{\out{</div>}}
 
 clinicaltrials_gov_dates() downloads the dates on which
 clinical trial registry entries were updated from

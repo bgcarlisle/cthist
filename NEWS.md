@@ -1,3 +1,11 @@
+# cthist 2.1.6
+
+* Fixed bug where download will throw an error in cases where a record
+  has secondary outcome measures specified, but not primary outcome
+  measures
+
+---
+
 # cthist 2.1.5
 
 * Added argument `latest` to function `clinicaltrials_gov_download` to

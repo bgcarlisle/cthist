@@ -2,6 +2,11 @@
 #'     historical clinical trial registry entry data from
 #'     ClinicalTrials.gov
 #'
+#'     The functions for downloading clinical trial registry data from
+#'     DRKS that were provided in versions 1.0.0 to 1.3.0 have been
+#'     deprecated due to the re-writing of drks.de in a manner that
+#'     broke the previous implementation of web-scraping
+#'
 #' @details clinicaltrials_gov_dates() downloads the dates on which
 #'     clinical trial registry entries were updated from
 #'     ClinicalTrials.gov

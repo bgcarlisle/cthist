@@ -169,7 +169,7 @@ clinicaltrials_gov_version <- function(
         add <- cols[! cols %in% names(primary_om)]
 
         if (length(add) != 0) {
-            primary_om[add] <- NA
+            primary_om[add] <- as.character(NA)
         }
         
         primary_om <- primary_om %>%
@@ -189,7 +189,7 @@ clinicaltrials_gov_version <- function(
             add <- cols[! cols %in% names(secondary_om)]
 
             if (length(add) != 0) {
-                secondary_om[add] <- NA
+                secondary_om[add] <- as.character(NA)
             }
 
             secondary_om <- secondary_om %>%
