@@ -82,27 +82,22 @@ clinicaltrials_gov_version <- function(
 
         
         ## Read the overall status
-
         ostatus <- NA
         ostatus <- prot$statusModule$overallStatus
 
         ## Read the "why stopped"
-
         whystopped <- NA
         if (! is.null(prot$statusModule$whyStopped)) {
             whystopped <- prot$statusModule$whyStopped
         }
         
         ## Read the enrolment and type
-
         enrol <- NA
         enrol <- prot$designModule$enrollmentInfo$count
-
         enroltype <- NA
         enroltype <- prot$designModule$enrollmentInfo$type
         
         ## Read the study start date
-
         startdate <- NA
         startdate_precision <- NA
 
@@ -125,7 +120,6 @@ clinicaltrials_gov_version <- function(
         pcdate <- NA
         pcdate_precision <- NA
         pcdate_type <- NA
-
 
         if (! is.null(pcdate_raw$date)) {
             pcdate <- pcdate_raw$date
