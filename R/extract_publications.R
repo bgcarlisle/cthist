@@ -47,6 +47,26 @@ extract_publications <- function(
                                  ) {
     out <- tryCatch({
 
+        ## Check that types is one of the allowed ones
+        if (mean(types %in% c("RESULT", "BACKGROUND", "DERIVED")) != 1) {
+            stop("You tried to filter for a citation type that isn't allowed")
+        }
+
+        ## Check that the data frame contains the necessary columns
+        if (
+            mean(
+                c(
+                    "nctid",
+                    "version_number",
+                    "total_versions",
+                    "version_date",
+                    "references"
+                ) %in% colnames(df)
+            ) != 1
+        ) {
+            stop("Missing required column(s) in data frame")
+        }
+
         df_processed <- df %>%
             dplyr::filter(.data$references != "[]") %>%
             dplyr::filter(! is.na(.data$references)) %>%
