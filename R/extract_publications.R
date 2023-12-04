@@ -33,8 +33,8 @@
 #' @examples
 #'
 #' \donttest{
-#' clinicaltrials_gov_download("NCT00942747", latest=TRUE) %>%
-#'   extract_publications()
+#' hv <- clinicaltrials_gov_download("NCT00942747", latest=TRUE)
+#' extract_publications(hv)
 #' }
 
 extract_publications <- function(

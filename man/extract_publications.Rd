@@ -37,7 +37,7 @@ nested JSON-encoded data in the \code{references} column provided by
 \examples{
 
 \donttest{
-clinicaltrials_gov_download("NCT00942747", latest=TRUE) \%>\%
-  extract_publications()
+hv <- clinicaltrials_gov_download("NCT00942747", latest=TRUE)
+extract_publications(hv)
 }
 }

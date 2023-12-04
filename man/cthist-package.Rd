@@ -9,8 +9,8 @@
 Retrieves historical versions of clinical trial registry entries from \url{https://ClinicalTrials.gov}. Package functionality and implementation for v 1.0.0 is documented in Carlisle (2022) \doi{10.1371/journal.pone.0270909}.
 }
 \details{
-This package provides 3 functions for mass-downloading
-historical clinical trial registry entry data from
+This package provides 4 functions for mass-downloading and
+interpreting historical clinical trial registry entry data from
 ClinicalTrials.gov
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{The functions for downloading clinical trial registry data from
@@ -30,6 +30,11 @@ ClinicalTrials.gov
 clinicaltrials_gov_download() mass-downloads clinical
 trial registry entry versions for one or many trials on
 ClinicalTrials.gov
+
+extract_publications() interprets a data frame provided by
+clinicaltrials_gov_download() and provides a new data frame
+with one row per publication of the type specified indexed by
+ClinicalTrials.gov per clinical trial registry history version.
 }
 \references{
 Carlisle, BG. Analysis of clinical trial registry entry

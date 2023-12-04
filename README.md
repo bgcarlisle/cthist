@@ -25,9 +25,9 @@ library(cthist)
 This package provides 3 for downloading historical clinical trial data
 from ClinicalTrials.gov
 
-## ClinicalTrials.gov functions
+## Functions provided by `cthist`
 
-Download clinical trial version dates:
+### Download clinical trial version dates:
 
 ```{r}
 ## Get all the dates and status updates when the registry entry for
@@ -57,7 +57,7 @@ clinicaltrials_gov_dates("NCT02110043", status_change_only=TRUE)
 ## 3       7 2021-05-20 COMPLETED
 ```
 
-Download clinical trial registry entry version data:
+### Download clinical trial registry entry version data:
 
 ```{r}
 ## Get the 4th version of NCT02110043
@@ -73,7 +73,7 @@ version_data$enroltype
 ## [1] "ESTIMATED"
 ```
 
-Mass-download clinical trial registry entry versions:
+### Mass-download clinical trial registry entry versions:
 
 ```{r}
 ## Download all data for all versions of NCT02110043 and store in
@@ -92,27 +92,67 @@ and save to disk:
 clinicaltrials_gov_download(c("NCT02110043", "NCT03281616"), "versions.csv")
 ```
 
+### Extract publications index on downloaded trial versions
+
+The function `clinicaltrials_gov_download` downloads a data frame of
+versions of a trial's history, with the `references` column containing
+a nested JSON-encoded data frame of the publications that were indexed
+by ClinicalTrials.gov.
+
+The function `extract_publications` interprets a data frame of the
+type returned by `clinicaltrials_gov_download` and returns a new data
+frame that contains only publications of the type specified ("RESULT",
+"BACKGROUND", or "DERIVED").
+
+This function will provide one row for every publication of the type
+specified that was indexed on ClinicalTrials.gov for every version of
+the trial registry record contained on the data frame provided.
+
+```{r}
+## Download only the latest clinical trial registry entries for the 
+## specified NCT numbers and extract PMID's for indexed RESULT 
+## publications
+
+clinicaltrials_gov_download(
+  c("NCT05784103", "NCT05780281"), 
+  latest=TRUE
+) %>%
+  extract_publications(type="RESULT") %>%
+  select(nctid, pmid)
+
+# A tibble: 2 × 2
+  nctid       pmid    
+  <chr>       <chr>   
+1 NCT05784103 28183823
+2 NCT05780281 34928698
+```
+
 ## What data is extracted?
 
-* Version number (1, 2, 3, etc.)
-* Version date (ISO-8601)
-* Overall status
-* Start date
-* Primary completion date
-* Enrolment
-* Enrolment type
-* Inclusion and exclusion criteria
-* Outcome measures
-* Overall contacts
-* Cetral contacts
-* Responsible party
-* Lead sponsor
-* Collaborators
-* "Why stopped?"
-* Results reported
-* References
-* Organization study ID
-* Secondary IDs
+| Variable                          |          Data type |
+|:----------------------------------|-------------------:|
+| Version number (0, 1, 2, etc.)    |             Double |
+| Version date (ISO-8601)           |               Date |
+| Overall status                    |          Character |
+| Start date                        |               Date |
+| Start date precision              |          Character |
+| Primary completion date           |               Date |
+| Primary completion date precision |               Date |
+| Primary completion date type      |          Character |
+| Enrolment                         |             Double |
+| Enrolment type                    |          Character |
+| Inclusion and exclusion criteria  |   Character (HTML) |
+| Outcome measures                  | JSON-encoded table |
+| Overall contacts                  | JSON-encoded table |
+| Central contacts                  | JSON-encoded table |
+| Responsible party                 | JSON-encoded table |
+| Lead sponsor                      | JSON-encoded table |
+| Collaborators                     | JSON-encoded table |
+| "Why stopped?"                    |          Character |
+| Results posted                    |            Logical |
+| References                        | JSON-encoded table |
+| Organization study ID             |          Character |
+| Secondary IDs                     | JSON-encoded table |
 
 ## Note regarding ClinicalTrials.gov July 2023 website re-write
 
@@ -122,7 +162,7 @@ the updated website are presented differently from the way they were
 scraped from the old version, there will be some changes. E.g. the
 overall status field is now in all-caps.
 
-## DRKS.de
+## DRKS.de functions deprecated
 
 **Update as of 2022-12-11**
 
