@@ -47,7 +47,7 @@ extract_publications <- function(
                                  ) {
     out <- tryCatch({
 
-        df %>%
+        df_processed <- df %>%
             dplyr::filter(.data$references != "[]") %>%
             dplyr::filter(! is.na(.data$references)) %>%
             dplyr::select(
@@ -70,12 +70,17 @@ extract_publications <- function(
                                 )
             ) %>%
             dplyr::select(! "references") %>%
-            tidyr::unnest("rtable") %>%
+            tidyr::unnest("rtable")
+
+        if (nrow(df_processed) == 0) {
+            stop("No indexed clinical trial publications found")
+        }
+
+        df_processed %>%
             dplyr::filter(
-                .data$type %in% types
-            ) %>%
-            return()
-        
+                       .data$type %in% types
+                   ) %>%
+            return()            
         
     },
     error = function(cond) {
