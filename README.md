@@ -92,7 +92,7 @@ and save to disk:
 clinicaltrials_gov_download(c("NCT02110043", "NCT03281616"), "versions.csv")
 ```
 
-### Extract publications index on downloaded trial versions
+### Extract publications indexed on downloaded trial versions
 
 The function `clinicaltrials_gov_download` downloads a data frame of
 versions of a trial's history, with the `references` column containing

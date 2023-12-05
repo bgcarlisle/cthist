@@ -40,5 +40,4 @@ Download a registry entry version from ClinicalTrials.gov
 \donttest{
 version <- clinicaltrials_gov_version("NCT00942747", 1)
 }
-
 }
