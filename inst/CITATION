@@ -1,0 +1,11 @@
+bibentry(
+  bibtype  = "Article",
+  title    = "Analysis of clinical trial registry entry histories using the novel R package cthist",
+  author   = "Benjamin Gregory Carlisle",
+  journal  = "PLOS ONE",
+  year     = "2022",
+  volume   = "17",
+  number   = "7",
+  pages    = "e0270909",
+  doi      = "10.1371/journal.pone.0270909"
+)

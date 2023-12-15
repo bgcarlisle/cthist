@@ -1,3 +1,9 @@
+# cthist 2.1.8
+
+* Added proper citation information linking to the PLOS ONE paper
+
+---
+
 # cthist 2.1.7
 
 * Added new function `extract_publications` to extract publications by
