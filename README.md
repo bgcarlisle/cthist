@@ -148,6 +148,7 @@ clinicaltrials_gov_download(
 | Responsible party                 | JSON-encoded table |
 | Lead sponsor                      | JSON-encoded table |
 | Collaborators                     | JSON-encoded table |
+| Locations                         | JSON-encoded table |
 | "Why stopped?"                    |          Character |
 | Results posted                    |            Logical |
 | References                        | JSON-encoded table |

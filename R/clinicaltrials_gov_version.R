@@ -19,10 +19,10 @@
 #'     completion date type, minimum age, maximum age, sex, accepts
 #'     healthy volunteers, inclusion/exclusion criteria, outcome
 #'     measures, overall contacts, central contacts, responsible
-#'     party, lead sponsor, collaborators, reason why the trial
-#'     stopped (if provided), whether results are posted, references
-#'     data, organization indentifiers and other secondary trial
-#'     identifiers.
+#'     party, lead sponsor, collaborators, locations, reason why the
+#'     trial stopped (if provided), whether results are posted,
+#'     references data, organization indentifiers and other secondary
+#'     trial identifiers.
 #'
 #' @export
 #'
@@ -236,6 +236,12 @@ clinicaltrials_gov_version <- function(
             tibble::tibble() %>%
             jsonlite::toJSON()
 
+        ## Read the study locations
+
+        locs <- prot$contactsLocationsModule$locations %>%
+            tibble::tibble() %>%
+            jsonlite::toJSON()
+
         ## Check for the presence of study results
 
         results_posted <- NA
@@ -279,6 +285,7 @@ clinicaltrials_gov_version <- function(
             responsible_party = responsible_party,
             lead_sponsor = lead_sponsor,
             collaborators = collaborators,
+            locations = locs,
             whystopped = whystopped,
             results_posted = results_posted,
             references = references_data,

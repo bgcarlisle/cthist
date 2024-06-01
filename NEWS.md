@@ -1,3 +1,9 @@
+# cthist 2.1.9
+
+* Added `locations` data download
+
+---
+
 # cthist 2.1.8
 
 * Added proper citation information linking to the PLOS ONE paper
