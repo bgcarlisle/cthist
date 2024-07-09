@@ -1,3 +1,11 @@
+# cthist 2.1.10
+
+* Added `earliest` argument to `clinicaltrials_gov_download` to allow
+  a user to specify that they would like to download only the earliest
+  version of a trial record
+
+---
+
 # cthist 2.1.9
 
 * Added `locations` data download

@@ -9,6 +9,7 @@ clinicaltrials_gov_download(
   nctids,
   output_filename = NA,
   quiet = FALSE,
+  earliest = FALSE,
   latest = FALSE
 )
 }
@@ -26,9 +27,15 @@ be returned by the function as a data frame.}
 printed during download. FALSE by default, messages printed for
 every version downloaded showing progress.}
 
+\item{earliest}{A boolean TRUE or FALSE. If TRUE, only the earliest
+version of the registry entry will be downloaded, if FALSE, all
+versions will be downloaded. FALSE by default. Can be combined
+with latest.}
+
 \item{latest}{A boolean TRUE or FALSE. If TRUE, only the latest
 version of the registry entry will be downloaded, if FALSE, all
-versions will be downloaded. FALSE by default.}
+versions will be downloaded. FALSE by default. Can be combined
+with earliest.}
 }
 \value{
 If an output filename is specified, on successful

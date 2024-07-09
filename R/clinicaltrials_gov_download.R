@@ -22,9 +22,15 @@
 #'     printed during download. FALSE by default, messages printed for
 #'     every version downloaded showing progress.
 #'
+#' @param earliest A boolean TRUE or FALSE. If TRUE, only the earliest
+#'     version of the registry entry will be downloaded, if FALSE, all
+#'     versions will be downloaded. FALSE by default. Can be combined
+#'     with latest.
+#'
 #' @param latest A boolean TRUE or FALSE. If TRUE, only the latest
 #'     version of the registry entry will be downloaded, if FALSE, all
-#'     versions will be downloaded. FALSE by default.
+#'     versions will be downloaded. FALSE by default. Can be combined
+#'     with earliest.
 #'
 #' @return If an output filename is specified, on successful
 #'     completion, this function returns TRUE and otherwise returns
@@ -60,6 +66,7 @@ clinicaltrials_gov_download <- function(
                                         nctids,
                                         output_filename=NA,
                                         quiet=FALSE,
+                                        earliest=FALSE,
                                         latest=FALSE
                                         ) {
     
@@ -85,7 +92,7 @@ clinicaltrials_gov_download <- function(
     
     output_cols <- "ciiDcDcDcciccccccccccccccccc"
 
-    if (!file.exists(output_filename)) {
+    if (! file.exists(output_filename)) {
 
         tibble::tibble(
             nctid = character(),
@@ -188,15 +195,14 @@ clinicaltrials_gov_download <- function(
         ) %>%
             dplyr::pull("date")
 
-        if (! latest) {
-            versionno <- 0
-        } else {
-            versionno <- length(versions) - 1
-        }
+        versionno <- 0
         
         for (version in versions) {
-
-            if (! latest | version == max(versions)) {
+            if (
+                latest & version == max(versions) |
+                earliest & version == versions[1] |
+                ! latest & ! earliest
+            ) {
                 
                 ## Repeat attempts to download a version up to 10 times in
                 ## case of error
@@ -298,9 +304,9 @@ clinicaltrials_gov_download <- function(
                     )
                 }
 
-                versionno <- versionno + 1
-
             }
+
+            versionno <- versionno + 1
             
         }
 
@@ -360,7 +366,7 @@ clinicaltrials_gov_download <- function(
     check <- check %>%
         dplyr::left_join(dl_counts, by = "nctid")
 
-    if (! latest) {
+    if (! latest & ! earliest) {
         incomplete_dl_n <- sum(check$total_versions != check$dl_versions)
     } else {
         incomplete_dl_n <- sum(input$notdone)
