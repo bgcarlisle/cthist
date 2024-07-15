@@ -22,8 +22,8 @@ install_github("bgcarlisle/cthist")
 library(cthist)
 ```
 
-This package provides 3 for downloading historical clinical trial data
-from ClinicalTrials.gov
+This package provides 5 for downloading and interpreting historical
+clinical trial data from ClinicalTrials.gov
 
 ## Functions provided by `cthist`
 
@@ -125,6 +125,42 @@ clinicaltrials_gov_download(
   <chr>       <chr>   
 1 NCT05784103 28183823
 2 NCT05780281 34928698
+```
+
+### Calculate overall status lengths
+
+The function `clinicaltrials_gov_download` downloads a data frame of
+versions of a trial's history, with the `overall_status` column
+indicating the status of the trial on the date the entry is updated,
+which is specified in the `version_date` column.
+
+The function `overall_status_lengths` interprets a data frame of the
+type returned by `clinicaltrials_gov_download` and returns a new data
+frame that contains a list of the NCT numbers and all the overall
+statuses that the trial in question passed through, and for how many
+days, optionally, within a specified timeframe.
+
+```{r}
+## Download the clinical trial registry entries for the specified NCT
+## number(s) and calculate the number of
+
+clinicaltrials_gov_download(
+    c("NCT04338971", "NCT03461211")
+) %>%
+    overall_status_lengths(
+        start_date = "2020-01-01",
+        end_date = "2022-12-31"
+    )
+
+# A tibble: 5 × 3
+# Groups:   nctid [2]
+  nctid       overall_status          days    
+  <chr>       <chr>                   <drtn>  
+1 NCT03461211 ACTIVE_NOT_RECRUITING   406 days
+2 NCT03461211 COMPLETED               668 days
+3 NCT03461211 ENROLLING_BY_INVITATION  21 days
+4 NCT04338971 COMPLETED               488 days
+5 NCT04338971 WITHHELD                511 days
 ```
 
 ## What data is extracted?

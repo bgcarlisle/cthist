@@ -1,3 +1,12 @@
+# cthist 2.1.11
+
+* Added `overall_status_lengths()`, a function that interprets a
+  downloaded data frame of historical versions and tallies up the days
+  that each clinical trial registry entry spent in each overall status
+  within the time frame specified.
+
+---
+
 # cthist 2.1.10
 
 * Added `earliest` argument to `clinicaltrials_gov_download` to allow
