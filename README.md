@@ -142,7 +142,9 @@ days, optionally, within a specified timeframe.
 
 ```{r}
 ## Download the clinical trial registry entries for the specified NCT
-## number(s) and calculate the number of
+## number(s) and calculate the number of days that each registry entry
+## spends in a reported overall status within a prescribed time
+## interval of interest (in this case, the years 2020-2022, inclusive)
 
 clinicaltrials_gov_download(
     c("NCT04338971", "NCT03461211")
