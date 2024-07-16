@@ -24,6 +24,11 @@
 #'     with one row per publication of the type specified indexed by
 #'     ClinicalTrials.gov per clinical trial registry history version.
 #'
+#' @details overall_status_lengths() interprets a data frame provided
+#'     by clinicaltrials_gov_download() or clinicaltrials_gov_dates()
+#'     and provides a new data frame that indicates how many days were
+#'     spent in each overall status.
+#'
 #' @references Carlisle, BG. Analysis of clinical trial registry entry
 #'     histories using the novel R package cthist. medRxiv, 2022. doi:
 #'     10.1101/2022.01.20.22269538

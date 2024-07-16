@@ -35,6 +35,11 @@ extract_publications() interprets a data frame provided by
 clinicaltrials_gov_download() and provides a new data frame
 with one row per publication of the type specified indexed by
 ClinicalTrials.gov per clinical trial registry history version.
+
+overall_status_lengths() interprets a data frame provided
+by clinicaltrials_gov_download() or clinicaltrials_gov_dates()
+and provides a new data frame that indicates how many days were
+spent in each overall status.
 }
 \references{
 Carlisle, BG. Analysis of clinical trial registry entry

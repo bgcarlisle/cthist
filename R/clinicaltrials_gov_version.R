@@ -65,7 +65,7 @@ clinicaltrials_gov_version <- function(
         ## Get the version number if versionno is -1 (latest)
         if (versionno == -1) {
             dates <- clinicaltrials_gov_dates(nctid)
-            versionno <- max(dates$version)
+            versionno <- max(dates$version_number)
         }
         
         url <- paste0(

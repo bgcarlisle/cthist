@@ -5,16 +5,19 @@
 \title{Download a table of dates on which a ClinicalTrials.gov registry
 entry was updated}
 \usage{
-clinicaltrials_gov_dates(nctid, status_change_only = FALSE)
+clinicaltrials_gov_dates(nctids, status_change_only = FALSE, quiet = TRUE)
 }
 \arguments{
-\item{nctid}{A character string including a well-formed
-ClinicalTrials.gov NCT Number, e.g. "NCT00942747". (A
-capitalized "NCT" followed by eight numerals with no spaces or
-hyphens.)}
+\item{nctids}{A list of well-formed NCT numbers,
+e.g. c("NCT00942747", "NCT03281616"). (A capitalized "NCT"
+followed by eight numerals with no spaces or hyphens.)}
 
 \item{status_change_only}{If TRUE, returns only the dates marked
 with a Recruitment Status change, default FALSE.}
+
+\item{quiet}{A boolean TRUE or FALSE. If TRUE, no messages will be
+printed during download. TRUE by default, messages printed for
+every registry entry downloaded showing progress.}
 }
 \value{
 A table with three columns: the version number (starting

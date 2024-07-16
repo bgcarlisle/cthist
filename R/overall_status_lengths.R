@@ -2,15 +2,16 @@
 #' days a trial had any given overall status
 #'
 #' This function takes a data frame of the type produced by
-#' `clinicaltrials_gov_download()` and interprets it to determine, for
-#' each clinical trial registry entry, how many days were spent in
-#' each overall status (e.g. "RECRUITING", "ACTIVE, NOT RECRUITING",
-#' etc.); upper and lower date bounds can also be applied, to allow
-#' for returning only those dates that fall within a time range of
-#' interest.
+#' `clinicaltrials_gov_download()` or `clinicaltrials_gov_dates()` and
+#' interprets it to determine, for each clinical trial registry entry,
+#' how many days were spent in each overall status (e.g. "RECRUITING",
+#' "ACTIVE, NOT RECRUITING", etc.); upper and lower date bounds can
+#' also be applied, to allow for returning only those dates that fall
+#' within a time range of interest.
 #'
 #' @param historical_versions A data frame of the type produced by
-#'     `clinicaltrials_gov_download())`. Must include a row for every
+#'     `clinicaltrials_gov_download()` or
+#'     `clinicaltrials_gov_dates()`. Must include a row for every
 #'     historical version, with the `nctid` column specifying the
 #'     clinical trial registry entry, the `overall_status` column
 #'     indicating the status of the trial, and the `version_date`
@@ -44,6 +45,7 @@ overall_status_lengths <- function (
                                     ) {
 
     historical_versions <- historical_versions %>%
+        dplyr::mutate("version_date" = lubridate::as_date(.data$version_date)) %>%
         dplyr::group_by(.data$nctid) %>%
         dplyr::mutate(version_enddate = dplyr::lead(.data$version_date))
 

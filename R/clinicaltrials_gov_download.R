@@ -193,7 +193,7 @@ clinicaltrials_gov_download <- function(
             nctid,
             FALSE
         ) %>%
-            dplyr::pull("date")
+            dplyr::pull("version_date")
 
         versionno <- 0
         
