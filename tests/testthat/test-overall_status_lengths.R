@@ -6,8 +6,8 @@ test_that("Overall status lengths parse correctly", {
         end_date = "2021-10-31"
     )
     completed <- oslengths %>%
-        filter(overall_status == "COMPLETED") %>%
-        pull(days) %>%
+        dplyr::filter(overall_status == "COMPLETED") %>%
+        dplyr::pull(days) %>%
         sum() %>%
         as.numeric()
 
