@@ -94,15 +94,15 @@ clinicaltrials_gov_dates <- function(
                 tibble::tibble() %>%
                 dplyr::mutate("nctid" = nctid) %>%
                 dplyr::mutate("total_versions" = dplyr::n()) %>%
-                dplyr::rename("version_number" = .data$version) %>%
-                dplyr::rename("version_date" = .data$date) %>%
-                dplyr::rename("overall_status" = .data$status) %>%
+                dplyr::rename("version_number" = "version") %>%
+                dplyr::rename("version_date" = "date") %>%
+                dplyr::rename("overall_status" = "status") %>%
                 dplyr::select(
-                           .data$nctid,
-                           .data$version_number,
-                           .data$total_versions,
-                           .data$version_date,
-                           .data$overall_status
+                           "nctid",
+                           "version_number",
+                           "total_versions",
+                           "version_date",
+                           "overall_status"
                        )
 
             if (status_change_only) {
