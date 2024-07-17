@@ -57,6 +57,7 @@ clinicaltrials_gov_dates("NCT02110043", status_change_only=TRUE)
 ## 1 NCT02110043              0              8 2014-04-08   RECRUITING           
 ## 2 NCT02110043              6              8 2017-07-26   ACTIVE_NOT_RECRUITING
 ## 3 NCT02110043              7              8 2021-05-20   COMPLETED            
+```
 
 ### Download clinical trial registry entry version data:
 
