@@ -1,7 +1,7 @@
 # cthist
 
-This package provides functions for mass-downloading historical
-clinical trial registry entry data.
+This package provides functions for mass-downloading and interpreting
+historical clinical trial registry entry data.
 
 ## How to install
 
@@ -22,10 +22,10 @@ install_github("bgcarlisle/cthist")
 library(cthist)
 ```
 
-This package provides 5 for downloading and interpreting historical
-clinical trial data from ClinicalTrials.gov
-
 ## Functions provided by `cthist`
+
+This package provides 5 functions for downloading and interpreting
+historical clinical trial data from ClinicalTrials.gov
 
 ### Download clinical trial version dates:
 
@@ -33,29 +33,30 @@ clinical trial data from ClinicalTrials.gov
 ## Get all the dates and status updates when the registry entry for
 ## NCT02110043 changed
 
-clinicaltrials_gov_dates("NCT02110043")
-##  A tibble: 8 × 3
-##  version date       status               
-##     <int> <chr>      <chr>                
-## 1       0 2014-04-08 RECRUITING
-## 2       1 2014-09-22 RECRUITING
-## 3       2 2014-10-13 RECRUITING
-## 4       3 2016-03-15 RECRUITING
-## 5       4 2016-12-20 RECRUITING
-## 6       5 2017-07-04 RECRUITING
-## 7       6 2017-07-26 ACTIVE_NOT_RECRUITING
-## 8       7 2021-05-20 COMPLETED
+clinicaltrials_gov_dates(c("NCT02110043", "NCT03281616"))
+## A tibble: 10 × 5
+##    nctid       version_number total_versions version_date overall_status       
+##    <chr>                <int>          <int> <chr>        <chr>                
+##  1 NCT02110043              0              8 2014-04-08   RECRUITING           
+##  2 NCT02110043              1              8 2014-09-22   RECRUITING           
+##  3 NCT02110043              2              8 2014-10-13   RECRUITING           
+##  4 NCT02110043              3              8 2016-03-15   RECRUITING           
+##  5 NCT02110043              4              8 2016-12-20   RECRUITING           
+##  6 NCT02110043              5              8 2017-07-04   RECRUITING           
+##  7 NCT02110043              6              8 2017-07-26   ACTIVE_NOT_RECRUITING
+##  8 NCT02110043              7              8 2021-05-20   COMPLETED            
+##  9 NCT03281616              0              2 2017-09-11   COMPLETED            
+## 10 NCT03281616              1              2 2017-09-18   COMPLETED            
 
 ## Get all the dates when NCT02110043 had a change in overall status
 
 clinicaltrials_gov_dates("NCT02110043", status_change_only=TRUE)
-##   A tibble: 3 × 3
-##   version date       status               
-##     <int> <chr>      <chr>                
-## 1       0 2014-04-08 RECRUITING
-## 2       6 2017-07-26 ACTIVE_NOT_RECRUITING
-## 3       7 2021-05-20 COMPLETED
-```
+## A tibble: 3 × 5
+##   nctid       version_number total_versions version_date overall_status       
+##   <chr>                <int>          <int> <chr>        <chr>                
+## 1 NCT02110043              0              8 2014-04-08   RECRUITING           
+## 2 NCT02110043              6              8 2017-07-26   ACTIVE_NOT_RECRUITING
+## 3 NCT02110043              7              8 2021-05-20   COMPLETED            
 
 ### Download clinical trial registry entry version data:
 
