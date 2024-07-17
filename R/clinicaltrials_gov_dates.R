@@ -108,7 +108,7 @@ clinicaltrials_gov_dates <- function(
             if (status_change_only) {
                 ## Download only the dates that are marked with a
                 ## Recruitment Status change
-                status_runs <- rle(newdates$status)
+                status_runs <- rle(newdates$overall_status)
 
                 newdates <- newdates %>%
                     dplyr::mutate(
@@ -117,10 +117,10 @@ clinicaltrials_gov_dates <- function(
                                    status_runs$lengths
                                )
                            ) %>%
-                    dplyr::group_by("status_run") %>%
+                    dplyr::group_by(.data$status_run) %>%
                     dplyr::slice_head() %>%
                     dplyr::ungroup() %>%
-                    dplyr::select(! "status_run")
+                    dplyr::select(! .data$status_run)
             }
 
             dates <- dates %>%
