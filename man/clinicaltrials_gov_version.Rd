@@ -29,7 +29,7 @@ healthy volunteers, inclusion/exclusion criteria, outcome
 measures, overall contacts, central contacts, responsible
 party, lead sponsor, collaborators, locations, reason why the
 trial stopped (if provided), whether results are posted,
-references data, organization indentifiers and other secondary
+references data, organization identifiers and other secondary
 trial identifiers.
 }
 \description{

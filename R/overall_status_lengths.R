@@ -28,7 +28,7 @@
 #'
 #' @param carry_forward_last_status Boolean TRUE or FALSE.
 #'
-#' @return A data frame with two columns: `nctid`, whcih contains all
+#' @return A data frame with two columns: `nctid`, which contains all
 #'     the distinct NCT numbers from the historical_versions data
 #'     frame provided, and `days`, which contains the number of
 #'

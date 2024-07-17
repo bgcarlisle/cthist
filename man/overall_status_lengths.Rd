@@ -14,7 +14,8 @@ overall_status_lengths(
 }
 \arguments{
 \item{historical_versions}{A data frame of the type produced by
-\verb{clinicaltrials_gov_download())}. Must include a row for every
+\code{clinicaltrials_gov_download()} or
+\code{clinicaltrials_gov_dates()}. Must include a row for every
 historical version, with the \code{nctid} column specifying the
 clinical trial registry entry, the \code{overall_status} column
 indicating the status of the trial, and the \code{version_date}
@@ -32,16 +33,16 @@ is before the given end date will be counted.}
 \item{carry_forward_last_status}{Boolean TRUE or FALSE.}
 }
 \value{
-A data frame with two columns: \code{nctid}, whcih contains all
+A data frame with two columns: \code{nctid}, which contains all
 the distinct NCT numbers from the historical_versions data
 frame provided, and \code{days}, which contains the number of
 }
 \description{
 This function takes a data frame of the type produced by
-\code{clinicaltrials_gov_download()} and interprets it to determine, for
-each clinical trial registry entry, how many days were spent in
-each overall status (e.g. "RECRUITING", "ACTIVE, NOT RECRUITING",
-etc.); upper and lower date bounds can also be applied, to allow
-for returning only those dates that fall within a time range of
-interest.
+\code{clinicaltrials_gov_download()} or \code{clinicaltrials_gov_dates()} and
+interprets it to determine, for each clinical trial registry entry,
+how many days were spent in each overall status (e.g. "RECRUITING",
+"ACTIVE, NOT RECRUITING", etc.); upper and lower date bounds can
+also be applied, to allow for returning only those dates that fall
+within a time range of interest.
 }
