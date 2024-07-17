@@ -1,7 +1,7 @@
 # cthist
 
-This package provides functions for mass-downloading historical
-clinical trial registry entry data.
+This package provides functions for mass-downloading and interpreting
+historical clinical trial registry entry data.
 
 ## How to install
 
@@ -22,10 +22,10 @@ install_github("bgcarlisle/cthist")
 library(cthist)
 ```
 
-This package provides 3 for downloading historical clinical trial data
-from ClinicalTrials.gov
-
 ## Functions provided by `cthist`
+
+This package provides 5 functions for downloading and interpreting
+historical clinical trial data from ClinicalTrials.gov
 
 ### Download clinical trial version dates:
 
@@ -33,28 +33,30 @@ from ClinicalTrials.gov
 ## Get all the dates and status updates when the registry entry for
 ## NCT02110043 changed
 
-clinicaltrials_gov_dates("NCT02110043")
-##  A tibble: 8 × 3
-##  version date       status               
-##     <int> <chr>      <chr>                
-## 1       0 2014-04-08 RECRUITING
-## 2       1 2014-09-22 RECRUITING
-## 3       2 2014-10-13 RECRUITING
-## 4       3 2016-03-15 RECRUITING
-## 5       4 2016-12-20 RECRUITING
-## 6       5 2017-07-04 RECRUITING
-## 7       6 2017-07-26 ACTIVE_NOT_RECRUITING
-## 8       7 2021-05-20 COMPLETED
+clinicaltrials_gov_dates(c("NCT02110043", "NCT03281616"))
+## A tibble: 10 × 5
+##    nctid       version_number total_versions version_date overall_status       
+##    <chr>                <int>          <int> <chr>        <chr>                
+##  1 NCT02110043              0              8 2014-04-08   RECRUITING           
+##  2 NCT02110043              1              8 2014-09-22   RECRUITING           
+##  3 NCT02110043              2              8 2014-10-13   RECRUITING           
+##  4 NCT02110043              3              8 2016-03-15   RECRUITING           
+##  5 NCT02110043              4              8 2016-12-20   RECRUITING           
+##  6 NCT02110043              5              8 2017-07-04   RECRUITING           
+##  7 NCT02110043              6              8 2017-07-26   ACTIVE_NOT_RECRUITING
+##  8 NCT02110043              7              8 2021-05-20   COMPLETED            
+##  9 NCT03281616              0              2 2017-09-11   COMPLETED            
+## 10 NCT03281616              1              2 2017-09-18   COMPLETED            
 
 ## Get all the dates when NCT02110043 had a change in overall status
 
 clinicaltrials_gov_dates("NCT02110043", status_change_only=TRUE)
-##   A tibble: 3 × 3
-##   version date       status               
-##     <int> <chr>      <chr>                
-## 1       0 2014-04-08 RECRUITING
-## 2       6 2017-07-26 ACTIVE_NOT_RECRUITING
-## 3       7 2021-05-20 COMPLETED
+## A tibble: 3 × 5
+##   nctid       version_number total_versions version_date overall_status       
+##   <chr>                <int>          <int> <chr>        <chr>                
+## 1 NCT02110043              0              8 2014-04-08   RECRUITING           
+## 2 NCT02110043              6              8 2017-07-26   ACTIVE_NOT_RECRUITING
+## 3 NCT02110043              7              8 2021-05-20   COMPLETED            
 ```
 
 ### Download clinical trial registry entry version data:
@@ -125,6 +127,44 @@ clinicaltrials_gov_download(
   <chr>       <chr>   
 1 NCT05784103 28183823
 2 NCT05780281 34928698
+```
+
+### Calculate overall status lengths
+
+The function `clinicaltrials_gov_download` downloads a data frame of
+versions of a trial's history, with the `overall_status` column
+indicating the status of the trial on the date the entry is updated,
+which is specified in the `version_date` column.
+
+The function `overall_status_lengths` interprets a data frame of the
+type returned by `clinicaltrials_gov_download` and returns a new data
+frame that contains a list of the NCT numbers and all the overall
+statuses that the trial in question passed through, and for how many
+days, optionally, within a specified timeframe.
+
+```{r}
+## Download the clinical trial registry entries for the specified NCT
+## number(s) and calculate the number of days that each registry entry
+## spends in a reported overall status within a prescribed time
+## interval of interest (in this case, the years 2020-2022, inclusive)
+
+clinicaltrials_gov_download(
+    c("NCT04338971", "NCT03461211")
+) %>%
+    overall_status_lengths(
+        start_date = "2020-01-01",
+        end_date = "2022-12-31"
+    )
+
+# A tibble: 5 × 3
+# Groups:   nctid [2]
+  nctid       overall_status          days    
+  <chr>       <chr>                   <drtn>  
+1 NCT03461211 ACTIVE_NOT_RECRUITING   406 days
+2 NCT03461211 COMPLETED               668 days
+3 NCT03461211 ENROLLING_BY_INVITATION  21 days
+4 NCT04338971 COMPLETED               488 days
+5 NCT04338971 WITHHELD                511 days
 ```
 
 ## What data is extracted?

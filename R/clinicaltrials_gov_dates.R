@@ -1,13 +1,16 @@
 #' Download a table of dates on which a ClinicalTrials.gov registry
 #' entry was updated
 #'
-#' @param nctid A character string including a well-formed
-#'     ClinicalTrials.gov NCT Number, e.g. "NCT00942747". (A
-#'     capitalized "NCT" followed by eight numerals with no spaces or
-#'     hyphens.)
+#' @param nctids A list of well-formed NCT numbers,
+#'     e.g. c("NCT00942747", "NCT03281616"). (A capitalized "NCT"
+#'     followed by eight numerals with no spaces or hyphens.)
 #'
 #' @param status_change_only If TRUE, returns only the dates marked
 #'     with a Recruitment Status change, default FALSE.
+#'
+#' @param quiet A boolean TRUE or FALSE. If TRUE, no messages will be
+#'     printed during download. TRUE by default, messages printed for
+#'     every registry entry downloaded showing progress.
 #'
 #' @return A table with three columns: the version number (starting
 #'     from 0), the ISO-8601 formatted date on which there were
@@ -26,20 +29,18 @@
 #' }
 #'
 clinicaltrials_gov_dates <- function(
-                                     nctid,
-                                     status_change_only=FALSE
+                                     nctids,
+                                     status_change_only=FALSE,
+                                     quiet=TRUE
                                      ) {
     out <- tryCatch({
 
-        ## Check that TRN is well-formed
-        assertthat::assert_that(
-                        is.character(nctid),
-                        grepl(
-                            "^NCT\\d{8}$",
-                            nctid
-                        )
-                    )
-
+        
+        ## Check that all TRNs are well-formed
+        if (sum(grepl("^NCT\\d{8}$", nctids)) != length(nctids)) {
+            stop("Input contains TRNs that are not well-formed")
+        }
+        
         ## Check that `status_change_only` is logical
         assertthat::assert_that(is.logical(status_change_only))
    
@@ -49,35 +50,83 @@ clinicaltrials_gov_dates <- function(
             return ("Error")
         }
 
-        url <- paste0(
-            "https://clinicaltrials.gov/api/int/studies/",
-            nctid,
-            "?history=true"
-        )
+        dates <- tibble::tribble(
+                             ~nctid,
+                             ~version_number,
+                             ~total_versions,
+                             ~version_date,
+                             ~overall_status
+                         )
 
-        index <- jsonlite::read_json(url, simplifyVector=TRUE)
+        nctno <- 0
+        
+        for (nctid in nctids) {
 
-        dates <- index$history$changes %>%
-            tibble::tibble() %>%
-            dplyr::select(! "moduleLabels")
+            nctno <- nctno + 1
 
-        if (status_change_only) {
-            ## Download only the dates that are marked with a
-            ## Recruitment Status change
-            status_runs <- rle(dates$status)
+            if (! quiet) {
+                message(
+                    paste0(
+                        "Downloading ",
+                        nctid,
+                        " - ",
+                        nctno,
+                        " of ",
+                        length(nctids),
+                        " (",
+                        floor(100 * nctno / length(nctids)),
+                        "%)"
+                    )
+                )
+            }
+
+            url <- paste0(
+                "https://clinicaltrials.gov/api/int/studies/",
+                nctid,
+                "?history=true"
+            )
+
+            index <- NA
+            index <- jsonlite::read_json(url, simplifyVector=TRUE)
+
+            newdates <- NA
+            newdates <- index$history$changes %>%
+                tibble::tibble() %>%
+                dplyr::mutate("nctid" = nctid) %>%
+                dplyr::mutate("total_versions" = dplyr::n()) %>%
+                dplyr::rename("version_number" = .data$version) %>%
+                dplyr::rename("version_date" = .data$date) %>%
+                dplyr::rename("overall_status" = .data$status) %>%
+                dplyr::select(
+                           .data$nctid,
+                           .data$version_number,
+                           .data$total_versions,
+                           .data$version_date,
+                           .data$overall_status
+                       )
+
+            if (status_change_only) {
+                ## Download only the dates that are marked with a
+                ## Recruitment Status change
+                status_runs <- rle(newdates$overall_status)
+
+                newdates <- newdates %>%
+                    dplyr::mutate(
+                               status_run = rep(
+                                   seq_along(status_runs$lengths),
+                                   status_runs$lengths
+                               )
+                           ) %>%
+                    dplyr::group_by(.data$status_run) %>%
+                    dplyr::slice_head() %>%
+                    dplyr::ungroup() %>%
+                    dplyr::select(! .data$status_run)
+            }
 
             dates <- dates %>%
-                dplyr::mutate(
-                    status_run = rep(
-                        seq_along(status_runs$lengths),
-                        status_runs$lengths
-                    )
-                ) %>%
-                dplyr::group_by("status_run") %>%
-                dplyr::slice_head() %>%
-                dplyr::ungroup() %>%
-                dplyr::select(! "status_run")
+                dplyr::bind_rows(newdates)
         }
+
         
         return(dates)
 
