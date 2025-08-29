@@ -1,3 +1,9 @@
+# cthist 2.1.12
+
+* Minor change to unit tests to accommodate server-side formatting
+  issues (ClinicalTrials.gov started putting line breaks in its HTML
+  and the local test for download integrity didn't expect them)
+
 # cthist 2.1.11
 
 * Added `overall_status_lengths`, a function that interprets a
