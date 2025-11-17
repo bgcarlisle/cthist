@@ -3,6 +3,10 @@
 This package provides functions for mass-downloading and interpreting
 historical clinical trial registry entry data.
 
+This R package is proudly 100% artificial intelligence-free. It does
+not include AI, does not require AI integration, and none of the code
+or documentation was written using AI.
+
 ## How to install
 
 To install the stable version of `cthist` through CRAN:
