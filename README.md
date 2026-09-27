@@ -1,3 +1,8 @@
+**Known issue (2026-09-26): I am aware that the package is currently
+not functioning. There has been a change on the part of
+ClinicalTrials.gov. I am currently in contact with the NLM to resolve
+this.**
+
 # cthist
 
 This package provides functions for mass-downloading and interpreting
